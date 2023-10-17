@@ -1,0 +1,18 @@
+{
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build"
+    },
+    "devDependencies": {
+        "axios": "^1.1.2",
+        "laravel-vite-plugin": "^0.8.0",
+        "vite": "^4.0.0"
+    },
+    "dependencies": {
+        "@fancyapps/fancybox": "^3.5.7",
+        "@fancyapps/ui": "^5.0.24",
+        "sweetalert2": "^11.7.32"
+    }
+}
