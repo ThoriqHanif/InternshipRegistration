@@ -236,7 +236,7 @@
                                             <div class="form-group">
                                                 <label for="filefoto" class="form-control-label">Pas Foto<span class="text-danger"> *</span></label>
                                                 <div class="custom-file">
-                                                    <input class="custom-file-input @error('photo') is-invalid @enderror" type="file" id="filefoto" name="photo" accept=".pdf, .docx, .png">
+                                                    <input class="custom-file-input @error('photo') is-invalid @enderror" type="file" id="filefoto" name="photo" accept=".jpg, .jpeg, .png, .webp">
                                                     <label class="custom-file-label" for="fileSurat">Choose file</label>
                                                 </div>
                                                 @error('photo')

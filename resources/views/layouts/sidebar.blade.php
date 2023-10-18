@@ -11,8 +11,19 @@
           <!-- Sidebar user panel (optional) -->
           <div class="user-panel mt-3 pb-3 mb-3 d-flex">
               <div class="image">
-                  <img src="{{ asset('img/profile1.jpg') }}" class="img-circle elevation-2"
-                      alt="User Image">
+                @if (auth()->check() && auth()->user()->role == 'user')
+                @auth
+                @if (auth()->user()->intern)
+                <img src="{{ asset('files/photo/' . auth()->user()->intern->first()->photo) }}" class=" elevation-2" alt="User Image" width="300px" height="150px">
+                @else
+                    <!-- Tampilkan foto default atau pesan jika tidak ada foto -->
+                    <img src="{{ asset('img/profile1.jpg') }}" class="img-circle elevation-2" alt="User Image">
+                @endif
+            @endauth
+            @endif
+            @if (auth()->check() && auth()->user()->role == 'admin')
+            <img src="{{ asset('img/profile1.jpg') }}" class="img-circle elevation-2" alt="User Image">
+            @endif
               </div>
               <div class="info">
                 <span class="ms-1 font-weight-bold text-white">
