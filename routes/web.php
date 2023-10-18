@@ -36,7 +36,6 @@ Route::post('/logout', [LoginController::class, 'logout']);
 
 
 Route::middleware(['auth', 'admin'])->group(function () {
-    Route::resource('intern', InternController::class);
     Route::resource('users', UserController::class);
     // Route::resource('timetable', TimeTableController::class);
     Route::get('/admin/profile', [ProfileController::class, 'admin']);
@@ -50,6 +49,8 @@ Route::middleware(['auth', 'admin'])->group(function () {
 });
 
 Route::middleware(['auth'])->group(function () {
+    Route::resource('intern', InternController::class);
+
     Route::resource('position', PositionController::class);
 });
 

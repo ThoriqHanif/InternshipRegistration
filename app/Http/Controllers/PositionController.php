@@ -14,8 +14,8 @@ class PositionController extends Controller
     public function index()
     {
         //
-        $position = Position::paginate(10);
-        return view('pages.admin.position.index')->with('position', $position);
+        $positions = Position::paginate(1); // Mengambil data posisi dengan pagination
+        return view('pages.admin.position.index', compact('positions'));
     }
 
     /**
@@ -34,7 +34,7 @@ class PositionController extends Controller
     public function store(StorePositionRequest $request)
     {
         //
-        $requirements = $request->input('requirements', []); 
+        $requirements = $request->input('requirements', []);
         if (!empty($requirements)) {
             $requirementsString = implode(', ', $requirements);
         } else {
@@ -63,7 +63,6 @@ class PositionController extends Controller
             'description' => $position->description,
             'requirements' => $position->requirements,
         ]);
-        
     }
 
     /**
@@ -79,7 +78,7 @@ class PositionController extends Controller
             'requirements' => $position->requirements,
         ]);
         $requirements = explode(', ', $position->requirements);
-    
+
         return view('pages.admin.position.edit', compact('position', 'requirements'));
     }
 
@@ -92,19 +91,19 @@ class PositionController extends Controller
 
         $data = Position::find($id);
 
-    $data->name = $request->input('name');
-    $data->description = $request->input('description');
-    
-    // Proses pembaruan kolom "requirements" sesuai kebutuhan Anda
-    // Misalnya, Anda dapat menggunakan implode untuk menggabungkan nilai checkbox
-    $requirements = $request->input('requirements', []);
-    $requirementsString = implode(', ', $requirements);
-    $data->requirements = $requirementsString;
+        $data->name = $request->input('name');
+        $data->description = $request->input('description');
 
-    // Simpan perubahan
-    $data->save();
+        // Proses pembaruan kolom "requirements" sesuai kebutuhan Anda
+        // Misalnya, Anda dapat menggunakan implode untuk menggabungkan nilai checkbox
+        $requirements = $request->input('requirements', []);
+        $requirementsString = implode(', ', $requirements);
+        $data->requirements = $requirementsString;
 
-    return redirect('position')->with('success', 'Berhasil memperbarui Posisi Magang');
+        // Simpan perubahan
+        $data->save();
+
+        return redirect('position')->with('success', 'Berhasil memperbarui Posisi Magang');
     }
 
     /**

@@ -130,15 +130,44 @@
                       </p>
                   </a>
                   </li>
-                  <li class="nav-item">
-                  <a class="nav-link {{ str_contains(request()->url(), 'report') == true ? 'active' : '' }} "
-                      href="{{url('#')}}">
-                      <i class="nav-icon fas fa-folder-open"></i>
-                      <p>
-                          Report Management
-                      </p>
-                  </a>
+                  <li class="nav-header">Master Data</li>
+                  <li class="nav-item {{ request()->is('intern*', 'position*') ? 'menu-open' : '' }}">
+                      <a href="#"
+                          class="nav-link {{ request()->is('intern*', 'position*') ? 'active' : '' }}">
+                          <i class="nav-icon fas fa-folder-open"></i>
+                          <p>
+                              Management Data
+                              <i class="right fas fa-angle-left"></i>
+                          </p>
+                      </a>
+                      <ul class="nav nav-treeview">
+                          <li class="nav-item">
+                              <a class="nav-link {{ request()->is('intern*') ? 'active' : '' }}" href="{{url('intern')}}">
+                                  <i class="nav-icon fas fa-list-ul"></i>
+                                  <p>
+                                      Intern Management
+                                  </p>
+                              </a>
+                          </li>
+                          <li class="nav-item">
+                              <a class="nav-link {{ request()->is('position*') ? 'active' : '' }}" href="{{url('position')}}">
+                                  <i class="nav-icon fas fa-briefcase"></i>
+                                  <p>
+                                      Position Management
+                                  </p>
+                              </a>
+                          </li>
+                          <li class="nav-item">
+                            <a class="nav-link {{ request()->is('report*') ? 'active' : '' }}" href="{{url('reports')}}">
+                                <i class="nav-icon fas fa-clipboard"></i>
+                                <p>
+                                    Report Management
+                                </p>
+                            </a>
+                        </li>
+                      </ul>
                   </li>
+                  
                   <li class="nav-header">Account Pages</li>
                 <li class="nav-item">
                   <a class="nav-link {{ request()->is('profile*') ? 'active' : '' }}" href="{{ url('profile') }}">

@@ -96,9 +96,22 @@
               </table>
             </div>
             <!-- /.card-body -->
-            <div class="card-footer clearfix">
-                {{ $user->links() }}
-            </div>
+           <div class="card-footer clearfix">
+                                <ul class="pagination pagination-sm m-0 float-right">
+                                    <li class="page-item {{ $user->onFirstPage() ? 'disabled' : '' }}">
+                                        <a class="page-link" href="{{ $user->previousPageUrl() }}">&laquo;</a>
+                                    </li>
+                                    @for ($i = 1; $i <= $user->lastPage(); $i++)
+                                        <li class="page-item {{ $i == $user->currentPage() ? 'active' : '' }}">
+                                            <a class="page-link" href="{{ $user->url($i) }}">{{ $i }}</a>
+                                        </li>
+                                    @endfor
+                                    <li
+                                        class="page-item {{ $user->currentPage() == $user->lastPage() ? 'disabled' : '' }}">
+                                        <a class="page-link" href="{{ $user->nextPageUrl() }}">&raquo;</a>
+                                    </li>
+                                </ul>
+                            </div>
           </div>
         </div>
         

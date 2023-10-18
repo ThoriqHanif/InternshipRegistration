@@ -19,14 +19,23 @@ class InternController extends Controller
      */
     public function index(Request $request)
     {
-        //
-        $statusFilter = $request->query('status');
+        // Cek apakah pengguna adalah admin
+        if (auth()->check() && auth()->user()->role == 'admin') {
+            $statusFilter = $request->query('status');
 
-        // Query data berdasarkan filter status
-        if ($statusFilter) {
-            $intern = Intern::where('status', $statusFilter)->paginate(10);
+            // Query data berdasarkan filter status jika ada
+            if ($statusFilter) {
+                $intern = Intern::where('status', $statusFilter)->paginate(10);
+            } else {
+                // Jika tidak ada filter, tampilkan semua data dengan paginasi
+                $intern = Intern::paginate(1);
+            }
+        } elseif (auth()->check() && auth()->user()->role == 'user') {
+            // Jika pengguna adalah 'user', tampilkan hanya data dengan status 'diterima'
+            $intern = Intern::where('status', 'diterima')->paginate(1);
         } else {
-            $intern = Intern::paginate(10);
+            // Jika pengguna belum masuk, mungkin Anda ingin menangani ini secara berbeda, misalnya, arahkan mereka ke halaman login.
+            return redirect('/login');
         }
 
         return view('pages.admin.intern.index', compact('intern'));
@@ -286,7 +295,7 @@ class InternController extends Controller
         $data = Intern::find($id);
 
         // Validasi status yang diizinkan (misalnya: "diterima" atau "ditolak")
-        
+
         if ($data->status === 'pending' && $request->input('status') !== 'pending' && !$data->status_changed) {
             // Hanya izinkan pembaruan status jika status sebelumnya adalah 'pending' dan belum pernah diubah sebelumnya
             $username = $data->username;
