@@ -7,11 +7,11 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>Data Posisi Magang</h1>
+                        <h1>Position Management</h1>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="#">Data</a></li>
+                            <li class="breadcrumb-item"><a href="#">Master Data</a></li>
                             <li class="breadcrumb-item active">Posisition Management</li>
                         </ol>
                     </div>
@@ -24,7 +24,6 @@
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-header">
-                                <h3 class="card-title">Position Managament</h3>
                                 @if (auth()->check() && auth()->user()->role == 'admin')
                                 <a class="btn btn-md btn-success float-right" href="{{ route('position.create') }}"> +
                                     Posisi</a>
@@ -33,6 +32,7 @@
                             <!-- /.card-header -->
                             <div class="card-body">
                                 @include('components.alert')
+                                <div class="table-responsive">
                                 <table class="table table-bordered">
                                     <thead>
                                         <tr>
@@ -44,12 +44,15 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        @php
+                                        $pageNumber = ($positions->currentPage() - 1) * $positions->perPage();
+                                        @endphp
                                         @foreach ($positions as $key => $item)
                                             <tr>
                                                 <td>
                                                     <div class="d-flex px-3 py-1">
                                                         <div class="d-flex flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm">{{ $key + 1 }}</h6>
+                                                            <h6 class="mb-0 text-sm">{{ $pageNumber + $key + 1 }}</h6>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -70,15 +73,15 @@
                                                     <td class="align-middle text-center">
                                                         <div class="">
                                                             <a href="{{ route('position.show', $item->id) }}"
-                                                                style="width: 60px"
+                                                                
                                                                 class="btn btn-sm bg-primary text-white font-weight-bold text-xs"
-                                                                data-toggle="tooltip" data-original-title="Edit Posisi">
+                                                                data-toggle="tooltip" data-placement="top" title="Detail Posisi">
                                                                 <li class="fas fa-eye"></li>
                                                             </a>
                                                             <a href="{{ route('position.edit', $item->id) }}"
-                                                                style="width: 60px"
+                                                                
                                                                 class="btn btn-sm bg-warning text-white font-weight-bold text-xs"
-                                                                data-toggle="tooltip" data-original-title="Edit Posisi">
+                                                                data-toggle="tooltip" data-placement="top" title="Edit Posisi">
                                                                 <li class="fas fa-edit"></li>
                                                             </a>
                                                             <form style="display: inline"
@@ -87,7 +90,7 @@
                                                                 @method('DELETE')
                                                                 <button type="submit"
                                                                     class="btn btn-sm btn-danger delete-button"
-                                                                    id="delete" style="width: 60px">
+                                                                    id="delete" data-toggle="tooltip" data-placement="top" title="Hapus Posisi">
                                                                     <li class="fas fa-trash"></li>
                                                                 </button>
                                                             </form>
@@ -113,6 +116,7 @@
                                         @endforeach
                                     </tbody>
                                 </table>
+                                </div>
                             </div>
                             <!-- /.card-body -->
                             <div class="card-footer clearfix">

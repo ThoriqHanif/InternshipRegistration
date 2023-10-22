@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Intern;
 use App\Http\Requests\StoreInternRequest;
 use App\Http\Requests\UpdateInternRequest;
+use App\Mail\InternStatus;
 use App\Models\Position;
 use App\Models\User;
 use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use ZipArchive;
 
@@ -293,41 +295,49 @@ class InternController extends Controller
     public function update(UpdateInternRequest $request, $id)
     {
         $data = Intern::find($id);
-
+        $status = $request->input('status');
         // Validasi status yang diizinkan (misalnya: "diterima" atau "ditolak")
 
-        if ($data->status === 'pending' && $request->input('status') !== 'pending' && !$data->status_changed) {
-            // Hanya izinkan pembaruan status jika status sebelumnya adalah 'pending' dan belum pernah diubah sebelumnya
-            $username = $data->username;
-            $password = 'intern' . $username;
+        if ($data->status !== $status) {
+            // Status berubah
+            if ($status === 'diterima') {
+                if ($data->status !== 'diterima') {
+                    $username = $data->username;
+                    $password = 'intern' . $username;
 
-            $data->status = $request->input('status');
-            $data->status_changed = true; // Tandai bahwa status telah diubah dari 'pending' // Menambahkan kolom "status_changed" ke model Intern
+                    $user = User::create([
+                        'name' => $data->username,
+                        'email' => $data->email,
+                        'role' => 'user',
+                        'password' => $password,
+                    ]);
 
-            if ($request->input('status') === 'diterima') {
-                // Buat akun user baru berdasarkan data pemagang
-                $user = User::create([
-                    'name' => $data->username,
-                    'email' => $data->email,
-                    'role' => 'user',
-                    'password' => $password,
-                ]);
+                    // Relasikan pemagang dengan user
+                    $data->user_id = $user->id;
+                    // $data->save();
 
-                // Relasikan pemagang dengan user
-                $data->user_id = $user->id;
-            } elseif ($request->input('status') === 'ditolak') {
-                // Jika status diubah menjadi "ditolak," hapus pengguna terkait jika status sebelumnya adalah "diterima"
-                if ($data->user && $data->status === 'diterima') {
+                    // Kirim email pemberitahuan
+                    Mail::to($user->email)->send(new InternStatus($data, 'diterima', $password));
+                }
+            } elseif ($status === 'ditolak') {
+                // Jika status sebelumnya adalah 'diterima' dan status sekarang adalah 'ditolak',
+                // periksa apakah ada pemagang yang masih merujuk ke pengguna
+                if ($data->status === 'diterima' && $data->user) {
+                    // Sebelum menghapus pengguna, periksa pemang yang merujuk ke pengguna ini
+                    $relatedInterns = Intern::where('user_id', $data->user_id)->get();
+                    foreach ($relatedInterns as $relatedIntern) {
+                        // Set user_id menjadi null pada pemagang yang terkait
+                        $relatedIntern->user_id = null;
+                        $relatedIntern->save();
+
+                        Mail::to($data->email)->send(new InternStatus($data, 'ditolak'));
+                    }
                     $data->user->delete();
-                    $data->user_id = null; // Hapus relasi dengan user
                 }
             }
+
+            $data->status = $status; // Update status sesuai dengan status baru
         }
-
-        // $request->validate([
-        //     'status' => 'required|in:diterima,ditolak',
-        // ]);
-
 
         // Status tidak berubah, Anda dapat memperbarui data lainnya seperti nama, alamat, dll
         $data->update([
@@ -406,139 +416,6 @@ class InternController extends Controller
 
         return redirect('intern')->with('success', 'Berhasil memperbarui Maganger');
     }
-
-    // public function update(UpdateInternRequest $request, $id)
-    // {
-    //     $data = Intern::find($id);
-
-    //     // Periksa apakah status diubah dari "pending" ke "diterima" atau "ditolak"
-    //     if ($request->input('status') !== $data->status && $data->status === 'pending') {
-    //         // Hanya izinkan perubahan status jika status sebelumnya adalah "pending"
-
-    //         // Lakukan logika perubahan status di sini
-    //         if ($request->input('status') === 'diterima') {
-    //             // Buat akun user baru berdasarkan data pemagang
-    //             $username = $data->username;
-    //             $password = 'intern' . $username;
-
-    //             $user = User::create([
-    //                 'name' => $data->username,
-    //                 'email' => $data->email,
-    //                 'role' => 'user',
-    //                 'password' => $password,
-    //             ]);
-
-    //             // Relasikan pemagang dengan user
-    //             $data->user_id = $user->id;
-    //         } elseif ($request->input('status') === 'ditolak') {
-    //             // Ubah status menjadi "ditolak"
-    //             $data->status = 'ditolak';
-    //         }
-
-    //         // Tandai bahwa status telah diubah dari "pending"
-    //         $data->status_changed = true;
-    //         // $data->status = $request->input('status');
-
-    //     }
-    //     // Periksa apakah status berubah
-    //     if ($request->input('status') !== $data->status) {
-    //         // Jika ya, periksa apakah status yang diizinkan (diterima atau ditolak)
-    //         $request->validate([
-    //             'status' => 'in:diterima,ditolak',
-    //         ]);
-    //     }
-
-    //     // else {
-    //     //     // Periksa apakah status berubah
-    //     //     if ($request->input('status') !== $data->status) {
-    //     //         // Jika ya, periksa apakah status yang diizinkan (diterima atau ditolak)
-    //     //         $request->validate([
-    //     //             'status' => 'in:diterima,ditolak',
-    //     //         ]);
-    //     //     }
-    //     // }
-    //     // dd($request->input('status'), $data->status);
-
-
-    //     // Perbarui data lain seperti nama, alamat, nomor telepon, dll.
-
-    //     $data->update([
-    //         'full_name' => $request->input('full_name'),
-    //         'username' => $request->input('username'),
-    //         'email' => $request->input('email'),
-    //         'phone_number' => $request->input('phone_number'),
-    //         'address' => $request->input('address'),
-    //         'gender' => $request->input('gender'),
-    //         'school' => $request->input('school'),
-    //         'major' => $request->input('major'),
-    //         'start_date' => $request->input('start_date'),
-    //         'end_date' => $request->input('end_date'),
-    //         'position_id' => $request->input('position_id'),
-    //         // Tambahkan bidang-bidang lain yang ingin Anda perbarui di sini
-    //     ]);
-
-    //     if ($request->hasFile('cv')) {
-
-    //         // Simpan file CV yang baru
-    //         $cvFile = $request->file('cv');
-    //         $cvFileName = $cvFile->getClientOriginalName();
-    //         $cvFile->move(public_path('files/cv'), $cvFileName);
-
-    //         // Update kolom "cv" dalam database
-    //         $data->update(['cv' => $cvFileName]);
-    //     }
-
-    //     if ($request->hasFile('motivation_letter')) {
-
-
-    //         // Simpan file CV yang baru
-    //         $motivation_letterFile = $request->file('motivation_letter');
-    //         $motivation_letterFileName = $cvFile->getClientOriginalName();
-    //         $motivation_letterFile->move(public_path('files/motivation_letter'), $motivation_letterFileName);
-
-    //         // Update kolom "cv" dalam database
-    //         $data->update(['motivation_letter' => $motivation_letterFileName]);
-    //     }
-
-    //     if ($request->hasFile('cover_letter')) {
-
-    //         // Simpan file CV yang baru
-    //         $cover_letterFile = $request->file('cv');
-    //         $cover_letterFileName = $cover_letterFile->getClientOriginalName();
-    //         $cover_letterFile->move(public_path('files/cover_letter'), $cover_letterFileName);
-
-    //         // Update kolom "cv" dalam database
-    //         $data->update(['cover_letter' => $cover_letterFileName]);
-    //     }
-
-    //     if ($request->hasFile('portfolio')) {
-
-    //         // Simpan file CV yang baru
-    //         $portfolioFile = $request->file('portfolio');
-    //         $portfolioFileName = $portfolioFile->getClientOriginalName();
-    //         $portfolioFile->move(public_path('files/portfolio'), $portfolioFileName);
-
-    //         // Update kolom "cv" dalam database
-    //         $data->update(['portfolio' => $portfolioFileName]);
-    //     }
-
-    //     if ($request->hasFile('photo')) {
-
-    //         // Simpan file CV yang baru
-    //         $photoFile = $request->file('photo');
-    //         $photoFileName = $photoFile->getClientOriginalName();
-    //         $photoFile->move(public_path('files/photo'), $photoFileName);
-
-    //         // Update kolom "cv" dalam database
-    //         $data->update(['photo' => $photoFileName]);
-    //     }
-
-    //     // Simpan perubahan
-
-    //     $data->save();
-
-    //     return redirect('intern')->with('success', 'Berhasil memperbarui Maganger');
-    // }
 
 
 

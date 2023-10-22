@@ -41,7 +41,7 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="example-text-input" class="form-control-label">Email address<span class="text-danger"> *</span></label>
-                                                <input class="form-control @error('email') is-invalid @enderror" type="email" value="" name="email" placeholder="Masukkan Email">
+                                                <input class="form-control @error('email') is-invalid @enderror" type="email" value="{{ old('email') }}" name="email" placeholder="Masukkan Email">
                                                 @error('email')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                                     
@@ -51,7 +51,7 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="example-text-input" class="form-control-label">Nama Lengkap<span class="text-danger"> *</span></label>
-                                                <input class="form-control  @error('full_name') is-invalid @enderror" type="text" value="" name="full_name" placeholder="Masukkan Nama Lengkap">
+                                                <input class="form-control  @error('full_name') is-invalid @enderror" type="text" value="{{ old('full_name') }}" name="full_name" placeholder="Masukkan Nama Lengkap">
                                                 @error('full_name')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                                     
@@ -61,7 +61,7 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="example-text-input" class="form-control-label">Nama Panggilan<span class="text-danger"> *</span></label>
-                                                <input class="form-control  @error('username') is-invalid @enderror" type="text" value="" name="username" placeholder="Masukkan Nama Panggilan">
+                                                <input class="form-control  @error('username') is-invalid @enderror" type="text" value="{{ old('username') }}" name="username" placeholder="Masukkan Nama Panggilan">
                                                 @error('username')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                                     
@@ -71,7 +71,7 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="example-text-input" class="form-control-label">No Telephone<span class="text-danger"> *</span></label>
-                                                <input class="form-control @error('phone_number') is-invalid @enderror" type="number" value="" name="phone_number" placeholder="Masukkan Telp">
+                                                <input class="form-control @error('phone_number') is-invalid @enderror" type="number" value="{{ old('phone_number') }}" name="phone_number" placeholder="Masukkan Telp">
                                                 @error('phone_number')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                                     
@@ -101,7 +101,7 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="example-text-input" class="form-control-label">Asal Sekolah<span class="text-danger"> *</span></label>
-                                                <input class="form-control @error('school') is-invalid @enderror" type="text" value="" name="school" placeholder="Masukkan Asal Sekolah">
+                                                <input class="form-control @error('school') is-invalid @enderror" type="text" value="{{ old('school') }}" name="school" placeholder="Masukkan Asal Sekolah">
                                                 @error('school')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                                     
@@ -111,7 +111,7 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="example-text-input" class="form-control-label">Jurusan / Prodi<span class="text-danger"> *</span></label>
-                                                <input class="form-control @error('major') is-invalid @enderror" type="text" value="" name="major" placeholder="Masukkan Jurusan">
+                                                <input class="form-control @error('major') is-invalid @enderror" type="text" value="{{ old('major') }}" name="major" placeholder="Masukkan Jurusan">
                                                 @error('major')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                                     
@@ -126,7 +126,7 @@
                                             <div class="form-group">
                                                 <label for="example-text-input" class="form-control-label">Alamat<span class="text-danger"> *</span></label>
                                                 <textarea class="form-control @error('address') is-invalid @enderror" type="text"
-                                                    value="" name="address" placeholder="Masukkan Alamat"></textarea>
+                                                    value="" name="address" placeholder="Masukkan Alamat">{{ old('address') }}</textarea>
                                                     @error('address')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                                     
@@ -156,7 +156,7 @@
                                             <div class="form-group">
                                                 <label for="example-text-input" class="form-control-label">Tanggal Mulai<span class="text-danger"> *</span></label>
                                                 <div class="input-group date" id="datepicker">
-                                                    <input type="date" id="start_date" class=" form-control @error('start_date') is-invalid @enderror" id="date" name="start_date"/>
+                                                    <input type="date" id="start_date" class=" form-control @error('start_date') is-invalid @enderror" id="date" name="start_date" value="{{ old('start_date') }}"/>
                                                     @error('start_date')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                                     
@@ -168,7 +168,7 @@
                                             <div class="form-group">
                                                 <label for="example-text-input" class="form-control-label">Tanggal Selesai<span class="text-danger"> *</span></label>
                                                 <div class="input-group date" >
-                                                    <input type="date" id="end_date" class="form-control  @error('end_date') is-invalid @enderror" id="date" name="end_date"/>
+                                                    <input type="date" id="end_date" value="{{ old('end_date') }}" class="form-control  @error('end_date') is-invalid @enderror" id="date" name="end_date"/>
                                                     @error('end_date')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                                     
@@ -184,7 +184,7 @@
                                             <div class="form-group">
                                                 <label for="fileCV" class="form-control-label">CV<span class="text-danger"> *</span></label>
                                                 <div class="custom-file">
-                                                    <input class="custom-file-input @error('cv') is-invalid @enderror" type="file" id="fileCV" name="cv" accept=".pdf, .docx, .png">
+                                                    <input class="custom-file-input @error('cv') is-invalid @enderror" type="file" id="fileCV" name="cv" value="{{ old('cv') }}" accept=".pdf, .docx, .png">
                                                     <label class="custom-file-label" for="fileCV">Choose file</label>
                                                 </div>
                                                 @error('cv')
@@ -196,7 +196,7 @@
                                             <div class="form-group">
                                                 <label for="fileMotivation" class="form-control-label">Motivation Letter<span class="text-danger"> *</span></label>
                                                 <div class="custom-file">
-                                                    <input class="custom-file-input @error('motivation_letter') is-invalid @enderror" type="file" id="fileMotivation" name="motivation_letter" accept=".pdf, .docx, .png">
+                                                    <input class="custom-file-input @error('motivation_letter') is-invalid @enderror" type="file" value="{{ old('motivation_letter') }}" id="fileMotivation" name="motivation_letter" accept=".pdf, .docx, .png">
                                                     <label class="custom-file-label" for="fileCV">Choose file</label>
                                                 </div>
                                                 @error('motivation_letter')
@@ -208,7 +208,7 @@
                                             <div class="form-group">
                                                 <label for="fileSurat" class="form-control-label">Surat Pengantar</label>
                                                 <div class="custom-file">
-                                                    <input class="custom-file-input @error('cover_letter') is-invalid @enderror" type="file" id="fileSurat" name="cover_letter" accept=".pdf, .docx, .png">
+                                                    <input class="custom-file-input @error('cover_letter') is-invalid @enderror" type="file" id="fileSurat" value="{{ old('cover_letter') }}" name="cover_letter" accept=".pdf, .docx, .png">
                                                     <label class="custom-file-label" for="fileSurat">Choose file</label>
                                                 </div> 
                                                 @error('cover_letter')
@@ -220,7 +220,7 @@
                                             <div class="form-group">
                                                 <label for="fileSurat" class="form-control-label">Portfolio<span class="text-danger"> *</span></label>
                                                 <div class="custom-file">
-                                                    <input class="custom-file-input @error('portfolio') is-invalid @enderror" type="file" id="filePortfolio" name="portfolio" accept=".pdf, .docx, .png">
+                                                    <input class="custom-file-input @error('portfolio') is-invalid @enderror" type="file" id="filePortfolio" value="{{ old('portfolio') }}" name="portfolio" accept=".pdf, .docx, .png">
                                                     <label class="custom-file-label" for="fileSurat">Choose file</label>
                                                 </div>
                                                 @error('portfolio')
@@ -232,7 +232,7 @@
                                             <div class="form-group">
                                                 <label for="filefoto" class="form-control-label">Pas Foto<span class="text-danger"> *</span></label>
                                                 <div class="custom-file">
-                                                    <input class="custom-file-input @error('photo') is-invalid @enderror" type="file" id="filefoto" name="photo" accept=".jpg, .jpeg, .png, .webp">
+                                                    <input class="custom-file-input @error('photo') is-invalid @enderror" type="file" id="filefoto" name="photo" value="{{ old('photo') }}" accept=".jpg, .jpeg, .png, .webp">
                                                     <label class="custom-file-label" for="fileSurat">Choose file</label>
                                                 </div>
                                                 @error('photo')
@@ -279,6 +279,10 @@ document.addEventListener('DOMContentLoaded', function() {
     var startDateInput = document.getElementById('start_date');
     var endDateInput = document.getElementById('end_date');
 
+    // Parse tanggal hari ini
+    var today = new Date();
+    today.setHours(0, 0, 0, 0); // Atur jam ke tengah malam
+
     // Tambahkan event listener pada perubahan input tanggal selesai
     endDateInput.addEventListener('change', function() {
         // Parse tanggal mulai dan tanggal selesai ke dalam objek Date
@@ -289,74 +293,102 @@ document.addEventListener('DOMContentLoaded', function() {
         if (startDate > endDate) {
             Swal.fire({
                 icon: 'error',
-                title: 'Kesalahan',
-                text: 'Tanggal Selesai harus setelah Tanggal Mulai',
-                confirmButtonColor: '#3085d6',
+                title: 'Oopss...',
+                text: 'Tanggal selesai harus setelah tanggal mulai',
+                confirmButtonText: 'Ok'
+            });
+
+            endDateInput.value = '';
+        } else if (endDate < today) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oopss...',
+                text: 'Tanggal selesai tidak boleh kurang dari tanggal hari Ini',
                 confirmButtonText: 'Ok'
             });
 
             endDateInput.value = '';
         }
     });
+
+    // Tambahkan event listener pada perubahan input tanggal mulai
+    startDateInput.addEventListener('change', function() {
+        // Parse tanggal mulai ke dalam objek Date
+        var startDate = new Date(startDateInput.value);
+
+        // Bandingkan tanggal mulai dengan tanggal hari ini
+        if (startDate < today) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oopss...',
+                text: 'Tanggal mulai tidak boleh kurang dari tanggal hari Ini',
+                confirmButtonText: 'Ok'
+            });
+
+            startDateInput.value = '';
+        }
+    });
 });
+
+
 </script>
 
-<!-- Tambahkan kode berikut di bawah formulir Anda -->
+
+
 {{-- <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const form = document.querySelector('form');
-        form.addEventListener('submit', function(event) {
-            event.preventDefault(); // Mencegah pengiriman formulir langsung
-    
-            // Tampilkan pop-up loading
-            Swal.fire({
-                title: 'Menyimpan...',
-                allowOutsideClick: false,
-                onBeforeOpen: () => {
-                    Swal.showLoading();
-                },
-            });
-    
-            // Kirim formulir menggunakan AJAX atau pengiriman biasa, di sini kita asumsikan Anda menggunakannya dengan AJAX
-            const formData = new FormData(form);
-            fetch(form.getAttribute('action'), {
-                method: 'POST',
-                body: formData,
-            })
-            .then(response => response.json())
-            .then(data => {
-                // Sembunyikan pop-up loading
-                Swal.close();
-    
-                if (data.success) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Berhasil',
-                        text: 'Data berhasil disimpan.',
-                    });
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Gagal',
-                        text: 'Terjadi kesalahan saat menyimpan data.',
-                    });
-                }
-            })
-            .catch(error => {
-                // Sembunyikan pop-up loading
-                Swal.close();
-    
+    const form = document.querySelector('form');
+    const submitButton = document.getElementById('submitButton');
+
+    submitButton.addEventListener('click', function(event) {
+        event.preventDefault(); // Mencegah proses default pengiriman formulir
+
+        Swal.fire({
+            title: 'Saving your data...',
+            allowOutsideClick: false,
+            onBeforeOpen: () => {
+                Swal.showLoading();
+            },
+        });
+
+        // Handle pengiriman formulir dengan cara asinkron (gunakan AJAX)
+        const formData = new FormData(form);
+        fetch(form.getAttribute('action'), {
+            method: 'POST',
+            body: formData,
+        })
+        .then(response => response.json())
+        .then(data => {
+            Swal.close(); // Sembunyikan pop-up loading
+
+            if (data.success) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: 'Data berhasil dikirim.',
+                });
+            } else {
                 Swal.fire({
                     icon: 'error',
-                    title: 'Gagal',
-                    text: 'Terjadi kesalahan saat menyimpan data.',
+                    title: 'Error',
+                    text: 'Terjadi kesalahan saat mengirim data.',
                 });
+            }
+        })
+        .catch(error => {
+            Swal.close(); // Sembunyikan pop-up loading
+
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Terjadi kesalahan saat mengirim data.',
             });
         });
     });
-</script> --}}
+});
 
-<script>
+</script> --}}
+{{-- <script>
     document.addEventListener('DOMContentLoaded', function() {
         const form = document.querySelector('form');
         const submitButton = document.getElementById('submitButton');
@@ -368,6 +400,87 @@ document.addEventListener('DOMContentLoaded', function() {
                 onBeforeOpen: () => {
                     Swal.showLoading();
                 },
+            });
+
+            // Handle pengiriman formulir dengan cara asinkron
+            const formData = new FormData(form);
+            fetch(form.getAttribute('action'), {
+                method: 'POST',
+                body: formData,
+            })
+            .then(response => response.json())
+            .then(data => {
+                Swal.close(); // Sembunyikan pop-up loading
+
+                if (data.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text: 'Data berhasil dikirim.',
+                    });
+
+                    // Redirect ke halaman tertentu jika diperlukan
+                    // window.location.href = '/success-page';
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Terjadi kesalahan saat mengirim data.',
+                    });
+                }
+            })
+            .catch(error => {
+                Swal.close(); // Sembunyikan pop-up loading
+
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Terjadi kesalahan saat mengirim data.',
+                });
+            });
+        });
+    });
+</script> --}}
+
+{{-- <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.querySelector('form');
+        const submitButton = document.getElementById('submitButton');
+
+        submitButton.addEventListener('click', function(event) {
+            event.preventDefault(); // Mencegah pengiriman formulir langsung
+
+            Swal.fire({
+                title: 'Menyimpan data...',
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                onBeforeOpen: () => {
+                    Swal.showLoading();
+                },
+            });
+
+            // Izinkan formulir untuk disubmit
+            form.submit();
+        });
+    });
+</script> --}}
+
+
+{{-- !!!!! --}}
+<script>
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.querySelector('form');
+        const submitButton = document.getElementById('submitButton');
+
+        submitButton.addEventListener('click', function() {
+            Swal.fire({
+                title: 'Saving your data...',
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                onBeforeOpen: () => {
+                    Swal.showLoading();
+                },
             }).then(() => {
                 // Izinkan formulir untuk disubmit
                 form.submit();
@@ -375,6 +488,93 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 </script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.querySelector('form');
+    
+        form.addEventListener('submit', function(event) {
+            event.preventDefault(); // Mencegah pengiriman formulir langsung
+    
+            // Kirim formulir menggunakan AJAX
+            const formData = new FormData(form);
+            fetch(form.getAttribute('action'), {
+                method: 'POST',
+                body: formData,
+            })
+            .then(response => response.json())
+            .then(data => {
+                Swal.close(); // Sembunyikan pop-up loading
+    
+                if (data.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Good Job!',
+                        text: 'Data berhasil disimpan. Terimakasih telah mendaftarkan di Kadang Koding Indonesia',
+                    });
+    
+                    // Redirect atau lakukan tindakan lain setelah berhasil disimpan
+                    // window.location.href = '/success-page';
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oopss...',
+                        text: 'Terjadi kesalahan saat menyimpan data.',
+                    });
+                }
+            })
+            .catch(error => {
+                Swal.close(); // Sembunyikan pop-up loading
+    
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Terjadi kesalahan saat mengirim data.',
+                });
+            });
+        });
+    });
+    </script>
+{{-- <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.querySelector('form');
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault(); // Mencegah pengiriman formulir langsung
+
+            // Kirim formulir menggunakan AJAX
+            const formData = new FormData(form);
+            fetch(form.getAttribute('action'), {
+                method: 'POST',
+                body: formData,
+            })
+            .then(() => {
+                Swal.close(); // Sembunyikan pop-up loading
+
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: 'Terimakasih telah mendaftar, Pendaftaran segera kami proses',
+                });
+
+                // Redirect atau lakukan tindakan lain setelah berhasil disimpan
+                // window.location.href = '/success-page';
+            })
+            .catch(() => {
+                Swal.close(); // Sembunyikan pop-up loading
+
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Terjadi kesalahan saat mengirim data.',
+                });
+            });
+        });
+    });
+</script> --}}
+
+
+
+    
 
 {{-- <script>
     document.addEventListener('DOMContentLoaded', function() {

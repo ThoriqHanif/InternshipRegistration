@@ -6,13 +6,6 @@
     </div>
 </footer>
 
-  {{-- <!-- Control Sidebar -->
-  <aside class="control-sidebar control-sidebar-dark">
-    <!-- Control sidebar content goes here -->
-  </aside>
-  <!-- /.control-sidebar --> --}}
-
-<!-- ./wrapper -->
 
 <!-- jQuery -->
 <script src="{{asset('adminlte/plugins/jquery/jquery.min.js')}}"></script>
@@ -52,6 +45,8 @@
 <script src="{{asset('adminlte/plugins/bs-custom-file-input/bs-custom-file-input.min.js')}}"></script>
 <!-- AdminLTE App -->
 <script src="{{asset('adminlte/dist/js/adminlte.min.js')}}"></script>
+<script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
+
 <!-- AdminLTE for demo purposes -->
 {{-- <script src="{{asset  ('adminlte/dist/js/demo.js')}}"></script> --}}
 <!-- Page specific script -->

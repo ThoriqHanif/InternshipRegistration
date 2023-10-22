@@ -36,7 +36,7 @@
           </div>
 
           <!-- SidebarSearch Form -->
-          <div class="form-inline">
+          <div class="form-inline " hidden>
               <div class="input-group" data-widget="sidebar-search">
                   <input class="form-control form-control-sidebar" type="search" placeholder="Search"
                       aria-label="Search">
@@ -64,16 +64,6 @@
                   </li>
 
                   <li class="nav-header">Master Data</li>
-                  <li class="nav-item {{ request()->is('intern*', 'position*', 'user*') ? 'menu-open' : '' }}">
-                      <a href="#"
-                          class="nav-link {{ request()->is('intern*', 'position*', 'user*') ? 'active' : '' }}">
-                          <i class="nav-icon fas fa-folder-open"></i>
-                          <p>
-                              Management Data
-                              <i class="right fas fa-angle-left"></i>
-                          </p>
-                      </a>
-                      <ul class="nav nav-treeview">
                           <li class="nav-item">
                               <a class="nav-link {{ request()->is('intern*') ? 'active' : '' }}" href="{{url('intern')}}">
                                   <i class="nav-icon fas fa-list-ul"></i>
@@ -98,7 +88,7 @@
                                   </p>
                               </a>
                           </li>
-                          <li class="nav-item">
+                          <li class="nav-item" hidden>
                             <a class="nav-link {{ request()->is('report*') ? 'active' : '' }}" href="{{url('reports')}}">
                                 <i class="nav-icon fas fa-clipboard"></i>
                                 <p>
@@ -106,8 +96,6 @@
                                 </p>
                             </a>
                         </li>
-                      </ul>
-                  </li>
                   
                   <li class="nav-header">Account Pages</li>
                   <li class="nav-item">
@@ -130,17 +118,7 @@
                       </p>
                   </a>
                   </li>
-                  <li class="nav-header">Master Data</li>
-                  <li class="nav-item {{ request()->is('intern*', 'position*') ? 'menu-open' : '' }}">
-                      <a href="#"
-                          class="nav-link {{ request()->is('intern*', 'position*') ? 'active' : '' }}">
-                          <i class="nav-icon fas fa-folder-open"></i>
-                          <p>
-                              Management Data
-                              <i class="right fas fa-angle-left"></i>
-                          </p>
-                      </a>
-                      <ul class="nav nav-treeview">
+                  {{-- <li class="nav-header">Master Data</li>
                           <li class="nav-item">
                               <a class="nav-link {{ request()->is('intern*') ? 'active' : '' }}" href="{{url('intern')}}">
                                   <i class="nav-icon fas fa-list-ul"></i>
@@ -164,9 +142,7 @@
                                     Report Management
                                 </p>
                             </a>
-                        </li>
-                      </ul>
-                  </li>
+                        </li> --}}
                   
                   <li class="nav-header">Account Pages</li>
                 <li class="nav-item">

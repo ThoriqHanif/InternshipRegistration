@@ -88,9 +88,10 @@ class RegistrationController extends Controller
         $interns->portfolio = $portfolioFileName;
         $interns->photo = $photoFileName;
         $interns->status = $request->input('status', 'pending');
-
         $interns->save();
-        return redirect('/')->with('success', 'Terimakasih telah mendaftar, Pendaftaran segera kami proses');
+
+
+        return response()->json(['success' => true]);
     }
 
     /**

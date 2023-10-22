@@ -7,12 +7,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Simple Tables</h1>
+            <h1>User Management</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Simple Tables</li>
+              <li class="breadcrumb-item"><a href="#">Master Data</a></li>
+              <li class="breadcrumb-item active">User Managemenent</li>
             </ol>
           </div>
         </div>
@@ -24,12 +24,14 @@
         <div class="col-md-12">
           <div class="card">
             <div class="card-header">
-              <h3 class="card-title">User Managament</h3>
+              {{-- <h3 class="card-title">User Managament</h3> --}}
               <a class="btn btn-md btn-success float-right" href="{{ route('users.create') }}"> + User</a>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
+              
               @include('components.alert')
+              <div class="table-responsive">
               <table class="table table-bordered">
                 <thead>
                   <tr>
@@ -42,12 +44,15 @@
                   </tr>
                 </thead>
                 <tbody>
+                  @php
+                    $pageNumber = ($user->currentPage() - 1) * $user->perPage();
+                  @endphp
                     @foreach ($user as $key => $item)
                     <tr>
                         <td>
                             <div class="d-flex px-3 py-1">
                                 <div class="d-flex flex-column justify-content-center">
-                                    <h6 class="mb-0 text-sm">{{ $key + 1 }}</h6>
+                                    <h6 class="mb-0 text-sm">{{ $pageNumber + $key + 1 }}</h6>
                                 </div>
                             </div>
                         </td>
@@ -94,6 +99,7 @@
                     @endforeach
                 </tbody>
               </table>
+              </div>
             </div>
             <!-- /.card-body -->
            <div class="card-footer clearfix">

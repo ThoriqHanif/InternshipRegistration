@@ -12,8 +12,8 @@
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Data</a></li>
-              <li class="breadcrumb-item active">Users Management</li>
+              <li class="breadcrumb-item"><a href="#">Master Data</a></li>
+              <li class="breadcrumb-item active">User Management</li>
             </ol>
           </div>
         </div>
