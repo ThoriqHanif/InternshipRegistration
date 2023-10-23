@@ -25,35 +25,41 @@
     </div>
     @include('components.alert-login')
     <div class="card-body">
-      <p class="login-box-msg">Sign in to start your session</p>
+      <p class="login-box-msg">Pintu ke Dashboard. Selamat Datang!</p>
 
       <form action="{{ route('login') }}" method="post" class="mt-2">
         @csrf
         <div class="input-group mb-3">
-            <input type="email" id="form2Example17" class="form-control form-control-md @error('email') is-invalid @enderror"  name="email" placeholder="Email"/>
-           
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-envelope"></span>
             </div>
           </div>
+            <input type="email" id="form2Example17" class="form-control form-control-md @error('email') is-invalid @enderror"  name="email" placeholder="Email" />
+           
+          
           @error('email')
           <div class="invalid-feedback">{{ $message }}</div>
               
           @enderror
         </div>
         <div class="input-group mb-3">
-            <input type="password" id="form2Example27" class="form-control form-control-md @error('password') is-invalid @enderror" name="password" placeholder="Password"/>
-            
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-lock"></span>
             </div>
           </div>
+          <input type="password" id="form2Example27" class="form-control form-control-md @error('password') is-invalid @enderror" name="password" placeholder="Password" />
+          <div class="input-group-append" id="togglePassword">
+            <div class="input-group-text bg-white">
+              <i class="fas fa-eye sm" id="togglePasswordIcon"></i>
+            </div>
+          </div>
+          
+         
           @error('password')
-            <div class="invalid-feedback">{{ $message }}</div>
-                
-            @enderror
+          <div class="invalid-feedback">{{ $message }}</div>
+          @enderror
         </div>
         <div class="row">
           
@@ -83,5 +89,24 @@
 <script src="{{asset('adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
 <!-- AdminLTE App -->
 <script src="{{asset('adminlte/dist/js/adminlte.min.js')}}"></script>
+
+<script>
+  const passwordField = document.getElementById('form2Example27');
+  const togglePassword = document.getElementById('togglePassword');
+  const togglePasswordIcon = document.getElementById('togglePasswordIcon');
+
+  togglePassword.addEventListener('click', function () {
+    if (passwordField.type === 'password') {
+      passwordField.type = 'text';
+      togglePasswordIcon.classList.remove('fa-eye');
+      togglePasswordIcon.classList.add('fa-eye-slash');
+    } else {
+      passwordField.type = 'password';
+      togglePasswordIcon.classList.remove('fa-eye-slash');
+      togglePasswordIcon.classList.add('fa-eye');
+    }
+  });
+</script>
+
 </body>
 </html>

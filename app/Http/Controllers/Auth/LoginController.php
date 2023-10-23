@@ -18,8 +18,14 @@ class LoginController extends Controller
     {
         $this->validate($request, [
             'email' => 'required|email',
-            'password' => 'required',
+            'password' => 'required|min:6',
+        ],[
+            'email.required' => 'Email wajib diisi.',
+            'email.email' => 'Email harus valid.',
+            'password.required' => 'Password wajib diisi.',
+            'password.min' => 'Password minimal harus 6 karakter.'
         ]);
+        
     
         $credentials = $request->only('email', 'password');
     
@@ -36,7 +42,7 @@ class LoginController extends Controller
         }
 
         // Jika login gagal
-        return back()->withErrors(['email' => 'Email atau password salah.'])->withInput($request->only('email'));
+        return back()->withErrors(['email','password' => 'Email atau password salah.'])->withInput($request->only('email'));
     }
 
     public function logout(Request $request)
