@@ -34,11 +34,17 @@ class Intern extends Model
         'user_id',
     ];
 
+    // public function position()
+    // {
+    //     return $this->belongsTo(Position::class, 'position_id');
+    // }
+
     public function position()
     {
-        return $this->belongsTo(Position::class, 'position_id');
+        return $this->belongsTo(Position::class);
     }
 
+    
     protected static function boot()
     {
         parent::boot();

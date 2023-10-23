@@ -37,6 +37,13 @@
     <link rel="stylesheet" href="{{ asset('css/viewer.css') }}">
     <script src="{{ asset('js/viewer.js') }}"></script>
 
+    {{-- <link rel="stylesheet" href="//cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css"> --}}
+    {{-- <link href="https://cdn.datatables.net/v/bs5/dt-1.13.6/b-2.4.2/r-2.5.0/datatables.min.css" rel="stylesheet"> --}}
+
+    {{-- <link href="https://cdn.datatables.net/v/dt/dt-1.13.6/datatables.min.css" rel="stylesheet"> --}}
+    {{-- <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.css" /> --}}
+
+    <link href="https://cdn.datatables.net/v/bs5/dt-1.13.6/b-2.4.2/b-colvis-2.4.2/r-2.5.0/datatables.min.css" rel="stylesheet">
 
 
 </head>

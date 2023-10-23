@@ -33,26 +33,23 @@
                             <div class="card-body">
                                 @include('components.alert')
                                 <div class="table-responsive">
-                                <table class="table table-bordered">
+                                <table id="tablePosition" class="table table-bordered table-hover" >
                                     <thead>
                                         <tr>
                                             <th style="width: 10px">No</th>
                                             <th>Nama</th>
                                             <th>Deskripsi</th>
                                             <th>Syarat</th>
-                                            <th>Action</th>
+                                            <th style="width: 100px">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @php
-                                        $pageNumber = ($positions->currentPage() - 1) * $positions->perPage();
-                                        @endphp
-                                        @foreach ($positions as $key => $item)
+                                        {{-- @foreach ($positions as $key => $item)
                                             <tr>
                                                 <td>
                                                     <div class="d-flex px-3 py-1">
                                                         <div class="d-flex flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm">{{ $pageNumber + $key + 1 }}</h6>
+                                                            <h6 class="mb-0 text-sm">{{ $key + 1 }}</h6>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -113,13 +110,13 @@
                                                     </td>
                                                 @endif
                                             </tr>
-                                        @endforeach
+                                        @endforeach --}}
                                     </tbody>
                                 </table>
                                 </div>
                             </div>
                             <!-- /.card-body -->
-                            <div class="card-footer clearfix">
+                            {{-- <div class="card-footer clearfix">
                                 <ul class="pagination pagination-sm m-0 float-right">
                                     <li class="page-item {{ $positions->onFirstPage() ? 'disabled' : '' }}">
                                         <a class="page-link" href="{{ $positions->previousPageUrl() }}">&laquo;</a>
@@ -134,10 +131,13 @@
                                         <a class="page-link" href="{{ $positions->nextPageUrl() }}">&raquo;</a>
                                     </li>
                                 </ul>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                 </div>
         </section>
     </div>
 @endsection
+
+
+

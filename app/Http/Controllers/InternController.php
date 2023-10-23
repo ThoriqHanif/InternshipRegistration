@@ -12,6 +12,7 @@ use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use Yajra\DataTables\Facades\DataTables;
 use ZipArchive;
 
 class InternController extends Controller
@@ -22,25 +23,48 @@ class InternController extends Controller
     public function index(Request $request)
     {
         // Cek apakah pengguna adalah admin
-        if (auth()->check() && auth()->user()->role == 'admin') {
-            $statusFilter = $request->query('status');
+        // if (auth()->check() && auth()->user()->role == 'admin') {
+        //     $statusFilter = $request->query('status');
 
-            // Query data berdasarkan filter status jika ada
-            if ($statusFilter) {
-                $intern = Intern::where('status', $statusFilter)->paginate(10);
-            } else {
-                // Jika tidak ada filter, tampilkan semua data dengan paginasi
-                $intern = Intern::paginate(1);
-            }
-        } elseif (auth()->check() && auth()->user()->role == 'user') {
-            // Jika pengguna adalah 'user', tampilkan hanya data dengan status 'diterima'
-            $intern = Intern::where('status', 'diterima')->paginate(1);
-        } else {
-            // Jika pengguna belum masuk, mungkin Anda ingin menangani ini secara berbeda, misalnya, arahkan mereka ke halaman login.
-            return redirect('/login');
+        //     // Query data berdasarkan filter status jika ada
+        //     if ($statusFilter) {
+        //         $intern = Intern::where('status', $statusFilter)->paginate(10);
+        //     } else {
+        //         // Jika tidak ada filter, tampilkan semua data dengan paginasi
+        //         $intern = Intern::paginate(1);
+        //     }
+        // } elseif (auth()->check() && auth()->user()->role == 'user') {
+        //     // Jika pengguna adalah 'user', tampilkan hanya data dengan status 'diterima'
+        //     $intern = Intern::where('status', 'diterima')->paginate(1);
+        // } else {
+        //     // Jika pengguna belum masuk, mungkin Anda ingin menangani ini secara berbeda, misalnya, arahkan mereka ke halaman login.
+        //     return redirect('/login');
+        // }
+
+        // return view('pages.admin.intern.index', compact('intern'));
+
+        if ($request->ajax()) {
+            $interns = Intern::with('position')->select('interns.*');
+    
+            // Filter status jika ada
+            // if ($request->input('status') === 'diterima') {
+            //     $interns->where('status', 'diterima');
+            // } elseif ($request->input('status') === 'ditolak') {
+            //     $interns->where('status', 'ditolak');
+            // } elseif ($request->input('status') === 'pending') {
+            //     $interns->where('status', 'pending');
+            // }
+    
+            return DataTables::of($interns)
+                ->addColumn('action', function ($intern) {
+                    return view('pages.admin.intern.action', compact('intern'));
+                })
+                ->addIndexColumn()
+                ->rawColumns(['action'])
+                ->make(true);
         }
-
-        return view('pages.admin.intern.index', compact('intern'));
+    
+        return view('pages.admin.intern.index');
     }
 
     /**

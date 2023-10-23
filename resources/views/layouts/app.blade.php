@@ -56,6 +56,78 @@
     });
 </script>
 
+<script>
+    let tableUser = new DataTable('#tableUser', {
+        processing: true,
+        serverSide: true,
+        responsive: true,
+        ajax: {
+           url: "{{ route ('users.index')}}"
+        },
+        columns: [
+            { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
+            { data: 'name', name: 'name' },
+            { data: 'email', name: 'email' },
+            { data: 'role', name: 'role' },
+            { data: 'action', name: 'action' },
+
+            
+    ]
+    });
+</script>
+
+<script>
+    let tablePosition = new DataTable('#tablePosition', {
+        processing: true,
+        serverSide: true,
+        responsive: true,
+        ajax: {
+           url: "{{ route ('position.index')}}"
+        },
+        columns: [
+            { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
+            { data: 'name', name: 'name' },
+            { data: 'description', name: 'description' },
+            { data: 'requirements', name: 'requirements' },
+            { data: 'action', name: 'action' },            
+    ]
+    });
+</script>
+
+<script>
+    let tableIntern = new DataTable('#tableIntern', {
+        processing: true,
+        serverSide: true,
+        responsive: true,
+        ajax: {
+           url: "{{ route ('intern.index')}}",
+           data: function (d) {
+                d.status = $('#status').val(); // Mengambil nilai status dari dropdown
+            }
+        },
+        columns: [
+            { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
+            { data: 'full_name', name: 'full_name' },
+            { data: 'school', name: 'school' },
+            { data: 'position.name', name: 'position.name' },
+            { data: 'start_date', name: 'start_date' },
+            { data: 'end_date', name: 'end_date' },
+            { data: 'status', name: 'status' },
+            { data: 'action', name: 'action' },            
+    ],
+    });
+//     $('#status').change(function() {
+//     console.log('Status changed:', $(this).val()); // Ini akan mencetak nilai yang dipilih
+//     table.ajax.reload(); // Memuat ulang DataTable saat dropdown status berubah
+// });
+
+    
+</script>
+
+<script>
+    
+
+</script>
 
 
 

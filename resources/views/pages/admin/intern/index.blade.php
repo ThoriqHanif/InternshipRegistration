@@ -49,12 +49,12 @@
                                     @endif
                                 </div> --}}
                                 <div class="d-flex justify-content-between mb-3">
-                                    @if (auth()->check() && auth()->user()->role == 'admin')
+                                    {{-- @if (auth()->check() && auth()->user()->role == 'admin')
                                     <div class="filter-section d-flex align-items-center justify-content-between">
                                         <label for="status-filter" class="mr-2">Filter Status:</label>
 
                                         <div class="d-flex align-items-center">
-                                            <select id="status-filter" name="status" class="form-control" style="width: 200px">
+                                            <select id="status" name="status" class="form-control filter" style="width: 200px">
                                                 <option value="">All</option>
                                                 <option value="pending">Pending</option>
                                                 <option value="diterima">Diterima</option>
@@ -66,12 +66,12 @@
                                             <button id="reset-button" class="btn btn-sm btn-outline-secondary ml-2" style="width: 70px">Reset</button>
                                         </div>
                                     </div>
-                                    @endif
+                                    @endif --}}
                                 </div>
                                 
                                 @include('components.alert')
                                 <div class="table-responsive">
-                                <table class="table table-bordered">
+                                <table class="table table-bordered table-hover" id="tableIntern">
                                     <thead>
                                         <tr>
                                             <th style="width: 10px">No</th>
@@ -81,10 +81,13 @@
                                             <th>Tanggal Mulai</th>
                                             <th>Tanggal Selesai</th>
                                             <th>Status</th>
-                                            <th>Action</th>
+                                            <th style="width: 120px">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
+
+                                    </tbody>
+                                    {{-- <tbody>
                                         @php
                                         $pageNumber = ($intern->currentPage() - 1) * $intern->perPage();
                                         @endphp
@@ -119,12 +122,6 @@
                                                  <td class=" text-sm">
                                                     <p class="text-sm mb-0">{{ $item->status }}</p>
                                                 </td>
-                                                {{-- <td class="align-middle text-end">
-                            <div class="d-flex px-3 py-1 justify-content-center align-items-center">
-                                <a class="btn-sm bg-gradient-warning text-sm">Edit</p>
-                                <a class="btn btn-sm bg-danger text-sm ">Delete</p>
-                            </div>
-                        </td> --}}
                                                 @if (auth()->check() && auth()->user()->role == 'admin')
                                                     <td class="align-middle text-center">
                                                         <div class="">
@@ -173,12 +170,12 @@
                                                 @endif
                                             </tr>
                                         @endforeach
-                                    </tbody>
+                                    </tbody> --}}
                                 </table>
                                 </div>
                             </div>
                             <!-- /.card-body -->
-                            <div class="card-footer clearfix">
+                            {{-- <div class="card-footer clearfix">
                                 <ul class="pagination pagination-sm m-0 float-right">
                                     <li class="page-item {{ $intern->onFirstPage() ? 'disabled' : '' }}">
                                         <a class="page-link" href="{{ $intern->previousPageUrl() }}">&laquo;</a>
@@ -193,7 +190,7 @@
                                         <a class="page-link" href="{{ $intern->nextPageUrl() }}">&raquo;</a>
                                     </li>
                                 </ul>
-                            </div>
+                            </div> --}}
 
                         </div>
                     </div>
@@ -215,7 +212,6 @@
         window.location.href = '/intern';
     });
 </script> --}}
-
 
 
 

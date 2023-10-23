@@ -32,77 +32,24 @@
               
               @include('components.alert')
               <div class="table-responsive">
-              <table class="table table-bordered">
+              <table class="table table-bordered table-hover" id="tableUser">
                 <thead>
                   <tr>
                     <th style="width: 10px">No</th>
                     <th>Nama</th>
                     <th>Email</th>
                     <th>Role</th>
-                    {{-- <th>Password</th> --}}
-                    <th>Action</th>
+                    <th style="width: 100px">Action</th>
                   </tr>
                 </thead>
                 <tbody>
-                  @php
-                    $pageNumber = ($user->currentPage() - 1) * $user->perPage();
-                  @endphp
-                    @foreach ($user as $key => $item)
-                    <tr>
-                        <td>
-                            <div class="d-flex px-3 py-1">
-                                <div class="d-flex flex-column justify-content-center">
-                                    <h6 class="mb-0 text-sm">{{ $pageNumber + $key + 1 }}</h6>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="d-flex px-3 py-1">
-                                <div class="d-flex flex-column justify-content-center">
-                                    <h6 class="mb-0 text-sm">{{ $item ->name}}</h6>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <p class="text-sm mb-0">{{ $item->email }}</p>
-                        </td>
-                        <td class=" text-sm">
-                            <p class="text-sm mb-0">{{ $item->role}}</p>
-                        </td>
-                        {{-- <td class=" text-sm">
-                            <p class="text-sm mb-0">{{ $item->password }}</p>
-                        </td> --}}
-                        {{-- <td class="align-middle text-end">
-                            <div class="d-flex px-3 py-1 justify-content-center align-items-center">
-                                <a class="btn-sm bg-gradient-warning text-sm">Edit</p>
-                                <a class="btn btn-sm bg-danger text-sm ">Delete</p>
-                            </div>
-                        </td> --}}
-                        <td class="align-middle text-center">
-                            <div class="">
-                                <a href="{{ route('users.show', $item->id) }}" class="btn btn-sm bg-primary text-white font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Download Files"> 
-                                  <li class="fas fa-eye"></li>
-                              </a>
-                                <a href="{{ route('users.edit', $item->id) }}" class="btn btn-sm bg-warning  text-white font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit Posisi"> 
-                                     <li class="fas fa-edit"></li>
-                                 </a>
-                                 <form style="display: inline" action="{{ route ('users.destroy', $item->id)}}" method="POST" >
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-danger delete-button" id="delete"> <li class="fas fa-trash"></li></button>
-                                 </form>
-                                
-                            </div>
-                        </td>
-                    </tr>
-                    
-                    @endforeach
+                 
                 </tbody>
               </table>
               </div>
             </div>
             <!-- /.card-body -->
-           <div class="card-footer clearfix">
+           {{-- <div class="card-footer clearfix">
                                 <ul class="pagination pagination-sm m-0 float-right">
                                     <li class="page-item {{ $user->onFirstPage() ? 'disabled' : '' }}">
                                         <a class="page-link" href="{{ $user->previousPageUrl() }}">&laquo;</a>
@@ -117,7 +64,7 @@
                                         <a class="page-link" href="{{ $user->nextPageUrl() }}">&raquo;</a>
                                     </li>
                                 </ul>
-                            </div>
+                            </div> --}}
           </div>
         </div>
         
@@ -125,3 +72,8 @@
   </section>
 </div>
 @endsection
+
+
+
+
+

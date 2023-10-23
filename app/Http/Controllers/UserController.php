@@ -9,17 +9,37 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
+use Yajra\DataTables\Facades\DataTables;
 
 class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         //
-        $user = User::paginate(2);
-        return view('pages.admin.user.index')->with('user', $user);
+        if ($request->ajax()) {
+            $users = User::select('*');
+            return DataTables::of($users)
+                ->addColumn('action', function ($users) {
+                    return view('pages.admin.user.action', compact('users'));
+                })
+                ->addIndexColumn()
+                ->rawColumns(['action'])
+                ->make(true);
+        }
+    
+        return view('pages.admin.user.index');
+
+        // $users = User::orderBy('name','asc');
+        
+        // return DataTables::of($users)
+        // ->addIndexColumn()
+        // ->addColumn('action',function(){
+
+        // })
+        // ->make(true);
     }
 
     /**

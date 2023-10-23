@@ -5,17 +5,29 @@ namespace App\Http\Controllers;
 use App\Models\Position;
 use App\Http\Requests\StorePositionRequest;
 use App\Http\Requests\UpdatePositionRequest;
+use Illuminate\Http\Request;
+use Yajra\DataTables\Facades\DataTables;
 
 class PositionController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         //
-        $positions = Position::paginate(1); // Mengambil data posisi dengan pagination
-        return view('pages.admin.position.index', compact('positions'));
+        if ($request->ajax()) {
+            $positions = Position::select('*');
+            return DataTables::of($positions)
+                ->addColumn('action', function ($positions) {
+                    return view('pages.admin.position.action', compact('positions'));
+                })
+                ->addIndexColumn()
+                ->rawColumns(['action'])
+                ->make(true);
+        }
+    
+        return view('pages.admin.position.index');
     }
 
     /**
