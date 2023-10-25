@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UpdateProfileRequest;
 use App\Models\Intern;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -17,6 +18,7 @@ class ProfileController extends Controller
         $admin = $users->find(Auth::user()->id);
 
         return view('pages.admin.profile', [
+            'admin' => $admin,
             'id' => $admin->id,
             'email' => $admin->email,
             'name' => $admin->name,
@@ -31,15 +33,9 @@ class ProfileController extends Controller
     {
         $user = User::with('intern.position')->find(Auth::user()->id);
         $photoUrl = null;
-        // $photoUrl = asset('files/photo/' . $user->interns->photo);
 
         // Cari data intern terkait dengan pengguna yang sedang login
         $internData = $user->intern;
-
-        // Mengecek apakah data intern ditemukan dan memiliki foto
-        // if ($internData) {
-        //     $photoUrl = asset('public/files/photo/' . $internData->photo);
-        // }
 
         return view('pages.users.profile', [
             'user' => $user,
@@ -77,7 +73,7 @@ class ProfileController extends Controller
     // }
 
 
-    public function updateAdmin(Request $request, User $users)
+    public function updateAdmin(UpdateProfileRequest $request, User $users)
     {
         $data = $users::findOrFail(Auth::user()->id);
 
@@ -88,7 +84,7 @@ class ProfileController extends Controller
 
         if ($newName === $data->name && $newEmail === $data->email && empty($newPassword)) {
             // Tidak ada perubahan, berikan pesan kesalahan
-            return redirect('admin/profile')->with('error', 'Data yang Anda berikan tidak mengalami perubahan.');
+            return response()->json(['success' => false, 'message' => 'Data tidak ada yang berubah']);
         }
 
         $data->name = $request->input('name');
@@ -109,27 +105,24 @@ class ProfileController extends Controller
             }
 
             $data->save();
+            Session::flash('profile-updated', 'Data profile anda telah berubah.');
+            // Lakukan logout jika ada perubahan pada email atau password
+            Auth::logout();
 
             // Set a flash message for the user
-            Session::flash('error', 'Data Profile telah diubah. Anda telah logout.');
+            // Session::flash('success', 'Data Profile telah diubah. Anda telah logout.');
 
-            // Lakukan logout
-            Auth::logout();
             // Redirect to the login page
-            return redirect('login');
+            return response()->json(['success' => true]);
         } else {
-            // Jika tidak ada perubahan email atau password
-            $data->name = $request->input('name');
-            if ($data->save()) {
-                return response()->json(['success' => true]);
-            } else {
-                return response()->json(['success' => false]);
-            }
+            // Jika tidak ada perubahan email atau password, tidak perlu logout
+            return response()->json(['success' => true]);
         }
     }
 
-    public function updateUser(Request $request, User $users)
+    public function updateUser(UpdateProfileRequest $request, User $users)
     {
+
         $data = $users::findOrFail(Auth::user()->id);
 
         // Ambil data yang diperlukan dari request
@@ -139,7 +132,7 @@ class ProfileController extends Controller
 
         if ($newName === $data->name && $newEmail === $data->email && empty($newPassword)) {
             // Tidak ada perubahan, berikan pesan kesalahan
-            return redirect('profile')->with('error', 'Data yang Anda berikan tidak mengalami perubahan.');
+            return response()->json(['success' => false, 'message' => 'Data tidak ada yang berubah']);
         }
 
         $data->name = $request->input('name');
@@ -160,21 +153,19 @@ class ProfileController extends Controller
             }
 
             $data->save();
+            Session::flash('profile-updated', 'Data profile anda telah berubah.');
+            // Lakukan logout jika ada perubahan pada email atau password
+            Auth::logout();
 
             // Set a flash message for the user
-            Session::flash('error', 'Data Profile telah diubah. Anda telah logout.');
+            // Session::flash('success', 'Data Profile telah diubah. Anda telah logout.');
 
-            // Lakukan logout
-            Auth::logout();
             // Redirect to the login page
-            return redirect('login');
+            return response()->json(['success' => true]);
         } else {
-            // Jika tidak ada perubahan email atau password
-            $data->name = $request->input('name');
-            $data->save();
-
-            // Redirect to the login page
-            return redirect('profile')->with('success', 'Berhasil mengupdate data User');
+            // Jika tidak ada perubahan email atau password, tidak perlu logout
+            return response()->json(['success' => true]);
         }
+       
     }
 }

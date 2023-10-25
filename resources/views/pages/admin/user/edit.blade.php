@@ -676,25 +676,37 @@
                         });
                         
                     } else {
-                        // Tampilkan pesan "error" jika terjadi kesalahan saat update
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Oopss...',
-                            text: 'Terjadi kesalahan saat update data.',
-                        });
-                    }
-                },
-                error: function() {
-                    // Tutup pesan "loading" saat terjadi kesalahan saat melakukan AJAX
-                    Swal.close();
-
-                    // Tampilkan pesan "error" jika terjadi kesalahan saat melakukan AJAX
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oopss...',
-                        text: 'Terjadi kesalahan saat update data.',
-                    });
-                }
+                            // Jika validasi gagal, tampilkan pesan-pesan kesalahan
+                            if (response.errors) {
+                                var errorMessages = '';
+                                for (var key in response.errors) {
+                                    if (response.errors.hasOwnProperty(key)) {
+                                        errorMessages += response.errors[key][0] + '<br>';
+                                    }
+                                }
+                                Swal.fire('Gagal', errorMessages, 'error');
+                            } else {
+                                Swal.fire('Gagal', 'Terjadi kesalahan saat memperbarui data',
+                                    'error');
+                            }
+                        }
+                    },
+                    error: function(xhr) {
+                        Swal.close();
+                        if (xhr.status === 422) {
+                            // Menampilkan pesan validasi error SweetAlert
+                            var errorMessages = '';
+                            var errors = xhr.responseJSON.errors;
+                            for (var key in errors) {
+                                if (errors.hasOwnProperty(key)) {
+                                    errorMessages += errors[key][0] + '<br>';
+                                }
+                            }
+                            Swal.fire('Gagal', errorMessages, 'error');
+                        } else {
+                            Swal.fire('Gagal', 'Terjadi kesalahan saat update data.', 'error');
+                        }
+                    },
             });
         }
     });

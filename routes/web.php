@@ -38,9 +38,9 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');;
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::resource('users', UserController::class);
     // Route::resource('timetable', TimeTableController::class);
-    Route::get('/admin/profile', [ProfileController::class, 'admin']);
+    Route::get('/admin/profile', [ProfileController::class, 'admin'])->name('admin.profile');
     Route::get('/admin/dashboard', [DashboardController::class, 'admin']);
-    Route::put('/admin/profile', [ProfileController::class, 'updateAdmin']);
+    Route::put('/admin/profile', [ProfileController::class, 'updateAdmin'])->name('admin.profile.update');;
     Route::get('/intern/download/{id}', [InternController::class, 'download'])->name('intern.download');
 
     // Route::get('/report', function () {
@@ -56,8 +56,8 @@ Route::middleware(['auth'])->group(function () {
 
 Route::middleware(['auth', 'user'])->group(function () {
     Route::get('/user/dashboard', [DashboardController::class, 'user']);
-    Route::get('/profile', [ProfileController::class, 'user']);
-    Route::put('/profile', [ProfileController::class, 'updateUser']);
+    Route::get('/profile', [ProfileController::class, 'user'])->name('profile');
+    Route::put('/profile', [ProfileController::class, 'updateUser'])->name('profile.update');
     Route::get('/user/report', function () {
         return view('pages.user.report');
     });
