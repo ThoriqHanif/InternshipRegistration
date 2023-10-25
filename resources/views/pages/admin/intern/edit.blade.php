@@ -33,7 +33,8 @@
                             </div>
                             <!-- /.card-header -->
                             <!-- form start -->
-                            <form method="POST" action="{{ route('intern.update', $id) }}" enctype="multipart/form-data" id="formEditIntern">
+                            <form method="POST" action="{{ route('intern.update', $id) }}" enctype="multipart/form-data"
+                                id="formEditIntern">
                                 @csrf
                                 @method('PUT')
                                 <div class="">
@@ -150,7 +151,7 @@
                                                                         class="text-danger"> *</span></label>
                                                                 <input
                                                                     class="form-control @error('major') is-invalid @enderror"
-                                                                    type="text" value="{{ $major }}"
+                                                                    type="text" value="{{ old('major', $major) }}"
                                                                     name="major" placeholder="Masukkan Jurusan">
                                                                 @error('major')
                                                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -372,11 +373,17 @@
                                                         <p class="text-uppercase text-sm">Status Information</p>
                                                         <div class="col-md-6">
                                                             <div class="form-group">
-                                                                <label for="example-text-input" class="form-control-label">Status<span class="text-danger"> *</span></label>
-                                                                <select class="form-select form-control @error('status') is-invalid @enderror" name="status">
-                                                                    <option value="" selected disabled>Pilih Status</option>
+                                                                <label for="example-text-input"
+                                                                    class="form-control-label">Status<span
+                                                                        class="text-danger"> *</span></label>
+                                                                <select
+                                                                    class="form-select form-control @error('status') is-invalid @enderror"
+                                                                    name="status">
+                                                                    <option value="" selected disabled>Pilih Status
+                                                                    </option>
                                                                     @foreach ($st as $key => $value)
-                                                                        <option value="{{ $key }}" {{ $intern->status == $key ? 'selected' : '' }}>
+                                                                        <option value="{{ $key }}"
+                                                                            {{ $intern->status == $key ? 'selected' : '' }}>
                                                                             {{ $value }}
                                                                         </option>
                                                                     @endforeach
@@ -386,7 +393,7 @@
                                                                 @enderror
                                                             </div>
                                                         </div>
-                                                        
+
 
                                                     </div>
                                                     <div class="inline-block mt-3">
@@ -418,17 +425,17 @@
             // Dapatkan elemen input tanggal mulai dan tanggal selesai
             var startDateInput = document.getElementById('start_date');
             var endDateInput = document.getElementById('end_date');
-        
+
             // Parse tanggal hari ini
             var today = new Date();
             today.setHours(0, 0, 0, 0); // Atur jam ke tengah malam
-        
+
             // Tambahkan event listener pada perubahan input tanggal selesai
             endDateInput.addEventListener('change', function() {
                 // Parse tanggal mulai dan tanggal selesai ke dalam objek Date
                 var startDate = new Date(startDateInput.value);
                 var endDate = new Date(endDateInput.value);
-        
+
                 // Bandingkan tanggal dan lakukan validasi
                 if (startDate > endDate) {
                     Swal.fire({
@@ -437,7 +444,7 @@
                         text: 'Tanggal selesai harus setelah tanggal mulai',
                         confirmButtonText: 'Ok'
                     });
-        
+
                     endDateInput.value = '';
                 } else if (endDate < today) {
                     Swal.fire({
@@ -446,16 +453,16 @@
                         text: 'Tanggal selesai tidak boleh kurang dari tanggal hari Ini',
                         confirmButtonText: 'Ok'
                     });
-        
+
                     endDateInput.value = '';
                 }
             });
-        
+
             // Tambahkan event listener pada perubahan input tanggal mulai
             startDateInput.addEventListener('change', function() {
                 // Parse tanggal mulai ke dalam objek Date
                 var startDate = new Date(startDateInput.value);
-        
+
                 // Bandingkan tanggal mulai dengan tanggal hari ini
                 if (startDate < today) {
                     Swal.fire({
@@ -464,22 +471,20 @@
                         text: 'Tanggal mulai tidak boleh kurang dari tanggal hari Ini',
                         confirmButtonText: 'Ok'
                     });
-        
+
                     startDateInput.value = '';
                 }
             });
         });
-        
-        
-        </script>
-    
-      <script>
+    </script>
+
+    <script>
         $(document).ready(function() {
             $("#formEditIntern").on("submit", function(e) {
                 e.preventDefault();
 
                 var internId = "{{ $intern->id }}";
-                
+
                 // Tampilkan pesan "loading" saat akan mengirim permintaan AJAX
                 Swal.fire({
                     title: 'Mohon Tunggu!',
@@ -490,18 +495,19 @@
                         Swal.showLoading();
                     },
                 });
-    
+
                 // Kirim data ke server menggunakan AJAX
                 $.ajax({
                     type: 'POST',
-                    url: '{{ route('intern.update', ['intern' => ':internId']) }}'.replace(':internId', internId),
+                    url: '{{ route('intern.update', ['intern' => ':internId']) }}'.replace(
+                        ':internId', internId),
                     data: new FormData(this),
                     processData: false,
                     contentType: false,
                     success: function(response) {
                         // Tutup pesan "loading" saat berhasil
                         Swal.close();
-    
+
                         if (response.success) {
                             // Redirect ke halaman index dengan pesan "success"
                             Swal.fire({
@@ -513,29 +519,37 @@
                                 window.location.href = '{{ route('intern.index') }}';
                             });
                         } else {
-                            // Redirect ke halaman index dengan pesan "error"
-                            // window.location.href = '{{ route('intern.index') }}';
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Oopss...',
-                                text: 'Terjadi kesalahan saat update data.',
-                            }).then(function() {
-                                // Redirect ke halaman indeks setelah menutup SweetAlert
-                                window.location.href = '{{ route('intern.index') }}';
-                            });
+                            // Jika validasi gagal, tampilkan pesan-pesan kesalahan
+                            if (response.errors) {
+                                var errorMessages = '';
+                                for (var key in response.errors) {
+                                    if (response.errors.hasOwnProperty(key)) {
+                                        errorMessages += response.errors[key][0] + '<br>';
+                                    }
+                                }
+                                Swal.fire('Gagal', errorMessages, 'error');
+                            } else {
+                                Swal.fire('Gagal', 'Terjadi kesalahan saat memperbarui data',
+                                    'error');
+                            }
                         }
                     },
-                    error: function() {
-                        // Tutup pesan "loading" saat terjadi kesalahan saat melakukan AJAX
+                    error: function(xhr) {
                         Swal.close();
-    
-                        // Tampilkan pesan "error" jika terjadi kesalahan saat melakukan AJAX
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Oopss...',
-                            text: 'Terjadi kesalahan saat update data.',
-                        });
-                    }
+                        if (xhr.status === 422) {
+                            // Menampilkan pesan validasi error SweetAlert
+                            var errorMessages = '';
+                            var errors = xhr.responseJSON.errors;
+                            for (var key in errors) {
+                                if (errors.hasOwnProperty(key)) {
+                                    errorMessages += errors[key][0] + '<br>';
+                                }
+                            }
+                            Swal.fire('Gagal', errorMessages, 'error');
+                        } else {
+                            Swal.fire('Gagal', 'Terjadi kesalahan saat update data.', 'error');
+                        }
+                    },
                 });
             });
         });

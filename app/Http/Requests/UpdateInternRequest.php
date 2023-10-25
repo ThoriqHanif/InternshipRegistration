@@ -60,6 +60,7 @@ class UpdateInternRequest extends FormRequest
             'gender.required' => 'Harus memilih Jenis Kelamin',
             'school.required' => 'Sekolah tidak boleh kosong',
             'major.required' => 'Jurusan tidak boleh kosong',
+            'position_id.required' => 'Harus memilih posisi magang',
             'address.required' => 'Alamat tidak boleh kosong',
             'start_date.required' => 'Tanggal mulai tidak boleh kosong',
             'end_date.required' => 'Tanggal selesai tidak boleh kosong',
@@ -75,6 +76,7 @@ class UpdateInternRequest extends FormRequest
             'photo.mimes' => 'Format PAS Foto harus PNG, jpg, jpeg, atau webp',
         ];
     }
-
+    
+    
     
 }

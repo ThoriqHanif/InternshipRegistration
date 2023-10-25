@@ -8,10 +8,12 @@ use App\Http\Requests\UpdateInternRequest;
 use App\Mail\InternStatus;
 use App\Models\Position;
 use App\Models\User;
+use Dotenv\Validator;
 use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator as FacadesValidator;
 use Yajra\DataTables\Facades\DataTables;
 use ZipArchive;
 
@@ -45,7 +47,7 @@ class InternController extends Controller
 
         if ($request->ajax()) {
             $interns = Intern::with('position')->select('interns.*');
-    
+
             // Filter status jika ada
             // if ($request->input('status') === 'diterima') {
             //     $interns->where('status', 'diterima');
@@ -54,7 +56,7 @@ class InternController extends Controller
             // } elseif ($request->input('status') === 'pending') {
             //     $interns->where('status', 'pending');
             // }
-    
+
             return DataTables::of($interns)
                 ->addColumn('action', function ($intern) {
                     return view('pages.admin.intern.action', compact('intern'));
@@ -63,7 +65,7 @@ class InternController extends Controller
                 ->rawColumns(['action'])
                 ->make(true);
         }
-    
+
         return view('pages.admin.intern.index');
     }
 
@@ -322,6 +324,8 @@ class InternController extends Controller
     {
         $data = Intern::find($id);
         $status = $request->input('status');
+        $newPositionId = $request->input('position_id');
+
         // Validasi status yang diizinkan (misalnya: "diterima" atau "ditolak")
 
         if ($data->status !== $status) {
@@ -365,6 +369,24 @@ class InternController extends Controller
             $data->status = $status; // Update status sesuai dengan status baru
         }
 
+        if ($data->position_id != $newPositionId) {
+            // Periksa apakah posisi yang baru ada
+            $newPosition = Position::find($newPositionId);
+
+            if ($newPosition) {
+                // Hapus relasi dengan posisi lama
+                $oldPosition = Position::find($data->position_id);
+                if ($oldPosition) {
+                    $data->position()->dissociate();
+                    $data->save();
+                }
+
+                // Atur relasi dengan posisi baru
+                $data->position_id = $newPositionId;
+                $data->save();
+            }
+        }
+
         // Status tidak berubah, Anda dapat memperbarui data lainnya seperti nama, alamat, dll
         $data->update([
             'full_name' => $request->input('full_name'),
@@ -396,7 +418,7 @@ class InternController extends Controller
 
             // Simpan file CV yang baru
             $motivation_letterFile = $request->file('motivation_letter');
-            $motivation_letterFileName = $cvFile->getClientOriginalName();
+            $motivation_letterFileName = $motivation_letterFile->getClientOriginalName();
             $motivation_letterFile->move(public_path('files/motivation_letter'), $motivation_letterFileName);
 
             // Update kolom "cv" dalam database
@@ -473,11 +495,9 @@ class InternController extends Controller
 
         // Hapus data Interns dari database
         if ($intern->delete()) {
-            return redirect('intern')
-                ->with('success', 'Pemagang berhasil dihapus.');
+            return response()->json(['success' => true, 'message' => 'Posisi berhasil dihapus.']);
         } else {
-            return redirect('intern')
-                ->with('error', 'Gagal menghapus pemagang.');
+            return response()->json(['success' => false, 'message' => 'Posisi menghapus User.']);
         }
     }
 

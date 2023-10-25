@@ -22,4 +22,9 @@ class Position extends Model
     {
         return explode(', ', $this->requirements);
     }
+
+    public function interns()
+    {
+        return $this->hasMany(Intern::class);
+    }
 }

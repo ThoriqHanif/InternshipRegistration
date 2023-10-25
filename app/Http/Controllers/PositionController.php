@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Position;
 use App\Http\Requests\StorePositionRequest;
 use App\Http\Requests\UpdatePositionRequest;
+use App\Models\Intern;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -132,12 +133,17 @@ class PositionController extends Controller
         //
         $data = Position::findOrFail($id);
 
+        $relatedInterns = Intern::where('position_id', $data->position_id)->get();
+                    foreach ($relatedInterns as $relatedIntern) {
+                        // Set user_id menjadi null pada pemagang yang terkait
+                        $relatedIntern->position_id = null;
+                        $relatedIntern->save();
+
+                    }
         if ($data->delete()) {
-            return redirect()->route('position.index')
-                ->with('success', 'Posisi berhasil dihapus.');
+            return response()->json(['success' => true, 'message' => 'Posisi berhasil dihapus.']);
         } else {
-            return redirect()->route('position.index')
-                ->with('error', 'Gagal menghapus posisi.');
+            return response()->json(['success' => false, 'message' => 'Posisi menghapus User.']);
         }
     }
 }

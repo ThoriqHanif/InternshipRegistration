@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\UpdateUserRequest;
 use App\Models\Intern;
 use App\Models\Position;
 use App\Models\User;
@@ -55,7 +57,7 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreUserRequest $request)
     {
         //
         $request->validate([
@@ -141,7 +143,7 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id, User $users)
+    public function update(UpdateUserRequest $request, string $id, User $users)
     {
 
         // EDIT 3
@@ -204,122 +206,14 @@ class UserController extends Controller
 
 
 
-        // EDIT 2
-        // $data = $users::findOrFail($id);
-
-        // // Ambil data yang diperlukan dari request
-        // $data->name = $request->input('name');
-        // $newName = $request->input('name');
-        // $newEmail = $request->input('email');
-        // $newPassword = $request->input('password');
-        // $newRole = $request->input('role');
-
-        // $dataRoleChanged = false;
-
-        // if (Auth::user()->id == $id) {
-        //     if ( $newEmail !== $data->email || $newPassword || $newRole !== $data->role) {
-        //         // Email, password, atau role berubah, maka lakukan logout
-        //         Auth::logout();
-
-        //         // Redirect ke halaman login
-        //         return redirect('login');
-
-        //     } 
-        // } else {
-        //     // Jika tidak ada perubahan email atau password
-        //     $data->email = $request->input('email');
-        //     $data->name = $request->input('name');
-        //     $data->role = $request->input('role');
-        //     if ($data->save()) {
-        //         return response()->json(['success' => true]);
-        //     } else {
-        //         return response()->json(['success' => false]);
-        //     }
-
-        //     $password = $request->input('password');
-        //     if ($password) {
-        //         $data->password = Hash::make($password);
-        //         if ($data->save()) {
-        //             return response()->json(['success' => true]);
-        //         } else {
-        //             return response()->json(['success' => false]);
-        //         }
-        //     }
-        // }
-
-        // EDIT 1
-
-        // $data = $users::findOrFail($id);
-
-        // // Ambil data yang diperlukan dari request
-        // $data->name = $request->input('name');
-        // $newEmail = $request->input('email');
-        // $newPassword = $request->input('password');
-        // $newRole = $request->input('role');
-
-        // $dataRoleChanged = false;
-
-        // if (Auth::user()->id == $id) {
-        //     if ($newEmail !== $data->email || $newPassword) {
-        //         // Email atau password berubah, maka kita perlu memperbarui email dan/atau password
-
-        //         if ($newEmail !== $data->email) {
-        //             // Update email jika berubah
-        //             $data->email = $newEmail;
-        //         }
-
-        //         if ($newPassword) {
-        //             // Update password jika berubah
-        //             $data->password = Hash::make($newPassword);
-        //         }
-        //         if ($newRole !== $data->role) {
-
-        //             $data->role = $newRole;
-        //         }
-
-        //         $data->save();
-        //         // Set a flash message for the user
-        //         Session::flash('error', 'Data Profile telah diubah. Anda telah logout.');
-        //         // Lakukan logout
-        //         Auth::logout();
-        //         // Redirect to the login page
-        //         return redirect('login');
-        //     }
-        // } else {
-        //     // Jika tidak ada perubahan email atau password
-        //     $data->email = $request->input('email');
-
-        //     $data->role = $request->input('role');
-        //     $data->name = $request->input('name');
-        //     // $data->save();
-        //     if ($data->save()) {
-        //         return response()->json(['success' => true]);
-        //     } else {
-        //         return response()->json(['success' => false]);
-        //     }
-
-        //     $password = $request->input('password');
-        //     if ($password) {
-        //         $data->password = Hash::make($password);
-        //         // $data->save();
-        //         if ($data->save()) {
-        //             return response()->json(['success' => true]);
-        //         } else {
-        //             return response()->json(['success' => false]);
-        //         }
-        //     }
-        // }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
         $user = User::find($id);
 
         if (!$user) {
-            return redirect('users')->with('error', 'Pengguna tidak ditemukan.');
+            return response()->json(['success' => false, 'message' => 'Pengguna tidak ditemukan.']);
         }
 
         // Mengambil pemagang yang sudah dihapus secara lunak
@@ -333,9 +227,9 @@ class UserController extends Controller
 
         // Menghapus pengguna (user) setelah mengatur user_id pada pemagang
         if ($user->delete()) {
-            return redirect('users')->with('success', 'User berhasil dihapus.');
+            return response()->json(['success' => true, 'message' => 'User berhasil dihapus.']);
         } else {
-            return redirect('users')->with('error', 'Gagal menghapus User.');
+            return response()->json(['success' => false, 'message' => 'Gagal menghapus User.']);
         }
     }
 }
