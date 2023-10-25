@@ -139,9 +139,11 @@ class InternController extends Controller
         $interns->photo = $photoFileName;
         $interns->status = $request->input('status', 'pending');
 
-        $interns->save();
-
-        return redirect('intern')->with('success', 'Berhasil menambah Pemagang');
+        if ($interns->save()) {
+            return response()->json(['success' => true]);
+        } else {
+            return response()->json(['success' => false]);
+        }
     }
 
     /**
@@ -435,10 +437,11 @@ class InternController extends Controller
         }
 
         // Simpan perubahan
-        $data->save();
-        // $interns = Intern::all();
-
-        return redirect('intern')->with('success', 'Berhasil memperbarui Maganger');
+        if ($data->save()) {
+            return response()->json(['success' => true]);
+        } else {
+            return response()->json(['success' => false]);
+        }
     }
 
 

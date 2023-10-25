@@ -29,7 +29,7 @@
               </div>
               <!-- /.card-header -->
               <!-- form start -->
-              <form method="POST" action="{{url ('/')}}" enctype="multipart/form-data">
+              <form method="POST" action="{{url ('/')}}" enctype="multipart/form-data" id="registrationForm">
                 @csrf
                 <div class="">
                     <div class="row">
@@ -208,7 +208,7 @@
                                             <div class="form-group">
                                                 <label for="fileSurat" class="form-control-label">Surat Pengantar</label>
                                                 <div class="custom-file">
-                                                    <input class="custom-file-input @error('cover_letter') is-invalid @enderror" type="file" id="fileSurat" value="{{ old('cover_letter') }}" name="cover_letter" accept=".pdf, .docx, .png">
+                                                    <input class="custom-file-input optional @error('cover_letter') is-invalid @enderror" type="file" id="fileSurat" value="{{ old('cover_letter') }}" name="cover_letter" accept=".pdf, .docx, .png">
                                                     <label class="custom-file-label" for="fileSurat">Choose file</label>
                                                 </div> 
                                                 @error('cover_letter')
@@ -246,7 +246,10 @@
                                             </div>
                                     </div>
                                     <div class="inline-block mt-3">
-                                        <button type="submit" id="submitButton" class="btn btn-md btn-success">Simpan</button>
+                                        <button type="submit" id="submitButton" class="btn btn-md btn-success">
+                                            
+                                            Simpan
+                                        </button>
         
                                     </div>
                                    
@@ -327,6 +330,67 @@ document.addEventListener('DOMContentLoaded', function() {
 
             startDateInput.value = '';
         }
+    });
+});
+
+
+</script>
+
+<script>
+   $(document).ready(function () {
+    $("#registrationForm").on("submit", function (e) {
+        e.preventDefault();
+
+        // Tampilkan pesan "loading" saat memulai permintaan AJAX
+        var loadingAlert = Swal.fire({
+            title: 'Mohon Tunggu!',
+            html: 'Sedang memproses data...',
+            allowOutsideClick: false,
+            showConfirmButton: false,
+            willOpen: () => {
+                Swal.showLoading();
+            },
+        });
+
+        // Kirim data ke server menggunakan AJAX
+        $.ajax({
+            type: 'POST',
+            url: '{{ route('intern.store') }}',
+            data: new FormData(this),
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                // Tutup pesan "loading" saat berhasil
+                loadingAlert.close();
+
+                if (response.success) {
+                    // Tampilkan pesan "success" jika penyimpanan berhasil
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil!',
+                        text: 'Data berhasil disimpan. Terima kasih atas pendaftarannya di Kadang Koding Indonesia',
+                    });
+                } else {
+                    // Tampilkan pesan "gagal" jika terjadi kesalahan
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oopss...',
+                        text: 'Terjadi kesalahan saat menyimpan data.',
+                    });
+                }
+            },
+            error: function () {
+                // Tutup pesan "loading" saat terjadi kesalahan saat melakukan AJAX
+                loadingAlert.close();
+
+                // Tampilkan pesan "gagal" jika terjadi kesalahan saat melakukan AJAX
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oopss...',
+                    text: 'Terjadi kesalahan saat menyimpan data.',
+                });
+            }
+        });
     });
 });
 
@@ -467,28 +531,134 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 {{-- !!!!! --}}
-<script>
-    
-    document.addEventListener('DOMContentLoaded', function() {
-        const form = document.querySelector('form');
-        const submitButton = document.getElementById('submitButton');
 
-        submitButton.addEventListener('click', function() {
+    {{-- <script>$(document).ready(function () {
+        $("#registrationForm").on("submit", function (e) {
+            e.preventDefault();
+    
+            // Nonaktifkan form saat proses pengiriman data
+            $("#registrationForm").off("submit");
+    
+            // Tampilkan alert "loading" saat proses AJAX
             Swal.fire({
-                title: 'Saving your data...',
+                title: 'Please Wait!',
+                html: 'Uploading data...',
                 allowOutsideClick: false,
                 showConfirmButton: false,
-                onBeforeOpen: () => {
+                willOpen: () => {
                     Swal.showLoading();
                 },
-            }).then(() => {
-                // Izinkan formulir untuk disubmit
-                form.submit();
+            });
+    
+            // Kirim data ke server menggunakan AJAX
+            $.ajax({
+                type: 'POST',
+                url: '{{ route('intern.store') }}',
+                data: new FormData(this),
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    // Sembunyikan alert "loading" saat sukses
+                    Swal.close();
+                    if (response.success) {
+                        // Tampilkan alert "success" jika penyimpanan berhasil
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Good Job!',
+                            text: 'Data berhasil disimpan. Terimakasih telah mendaftar di Kadang Koding Indonesia',
+                        });
+                    } else {
+                        // Tampilkan alert "error" jika ada kesalahan
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oopss...',
+                            text: 'Terjadi kesalahan saat menyimpan data.',
+                        });
+                    }
+                },
+                error: function () {
+                    // Tampilkan alert "error" jika terjadi kesalahan saat melakukan AJAX
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oopss...',
+                        text: 'Terjadi kesalahan saat menyimpan data.',
+                    });
+                }
             });
         });
     });
-</script>
-<script>
+    </script> --}}
+
+
+{{-- <script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('form');
+    const submitButton = document.getElementById('submitButton');
+
+    submitButton.addEventListener('click', function(event) {
+        event.preventDefault(); // Mencegah pengiriman formulir langsung
+
+        // Validasi input
+        
+
+        Swal.fire({
+            title: 'Please Wait!',
+            html: 'Uploading data...',
+            allowOutsideClick: false,
+            showConfirmButton: false,
+            willOpen: () => {
+                Swal.showLoading();
+            },
+        });
+
+        setTimeout(function() {
+                form.submit(); // Submit the form after the delay
+            }, 1000);
+
+        // Tunggu hingga halaman selesai dimuat
+        window.addEventListener('load', function() {
+            // Mengirim permintaan AJAX
+            const formData = new FormData(form);
+            fetch(form.getAttribute('action'), {
+                method: 'POST',
+                body: formData,
+            })
+            .then(response => response.json())
+            .then(data => {
+                Swal.close(); // Sembunyikan pop-up loading
+
+                if (data.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success!',
+                        text: 'Data berhasil disimpan.',
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: 'Terjadi kesalahan saat menyimpan data.',
+                    });
+                }
+            })
+            .catch(error => {
+                Swal.close(); // Sembunyikan pop-up loading
+
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: 'Terjadi kesalahan saat mengirim data.',
+                });
+            });
+        });
+    });
+});
+
+
+</script> --}}
+
+
+{{-- <script>
     document.addEventListener('DOMContentLoaded', function() {
         const form = document.querySelector('form');
     
@@ -533,7 +703,9 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     });
-    </script>
+</script> --}}
+
+
 {{-- <script>
     document.addEventListener('DOMContentLoaded', function() {
         const form = document.querySelector('form');
