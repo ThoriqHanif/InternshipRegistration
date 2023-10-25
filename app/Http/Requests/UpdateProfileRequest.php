@@ -23,11 +23,11 @@ class UpdateProfileRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => [
-                'required',
-                 Rule::unique('users','email')->ignore($this->id, 'id'), 
-                'email',
-            ],
+            // 'email' => [
+            //     'required',
+            //      Rule::unique('users','email')->ignore($this->id, 'id'), 
+            //     'email',
+            // ],
             'name' => 'required',
         ];
     }
