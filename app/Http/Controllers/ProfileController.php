@@ -120,10 +120,11 @@ class ProfileController extends Controller
         } else {
             // Jika tidak ada perubahan email atau password
             $data->name = $request->input('name');
-            $data->save();
-
-            // Redirect to the login page
-            return redirect('admin/profile')->with('success', 'Berhasil mengupdate data User');
+            if ($data->save()) {
+                return response()->json(['success' => true]);
+            } else {
+                return response()->json(['success' => false]);
+            }
         }
     }
 

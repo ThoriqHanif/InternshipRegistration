@@ -33,7 +33,7 @@
                             </div>
                             <!-- /.card-header -->
                             <!-- form start -->
-                            <form method="POST" action="{{ route('position.update', $id) }}">
+                            <form method="POST" action="{{ route('position.update', $id) }}" id="formEditPosition">
                                 @csrf
                                 @method('PUT')
                                 <div class="">
@@ -117,4 +117,71 @@
         </section>
         <!-- /.content -->
     </div>
+
+    <script>
+        $(document).ready(function() {
+            $("#formEditPosition").on("submit", function(e) {
+                e.preventDefault();
+
+                var positionId = "{{ $position->id }}";
+                // Tampilkan pesan "loading" saat akan mengirim permintaan AJAX
+                Swal.fire({
+                    title: 'Mohon Tunggu!',
+                    html: 'Sedang memproses data...',
+                    allowOutsideClick: false,
+                    showConfirmButton: false,
+                    willOpen: () => {
+                        Swal.showLoading();
+                    },
+                });
+    
+                // Kirim data ke server menggunakan AJAX
+                $.ajax({
+                    type: 'POST',
+                    url: '{{ route('position.update', ['position' => ':positionId']) }}'.replace(':positionId', positionId),
+                    data: new FormData(this),
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        // Tutup pesan "loading" saat berhasil
+                        Swal.close();
+    
+                        if (response.success) {
+                            // Redirect ke halaman index dengan pesan "success"
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Berhasil!',
+                                text: 'Data berhasil diupdate.',
+                            }).then(function() {
+                                // Redirect ke halaman indeks setelah menutup SweetAlert
+                                window.location.href = '{{ route('position.index') }}';
+                            });
+                        } else {
+                            // Redirect ke halaman index dengan pesan "error"
+                            // window.location.href = '{{ route('position.index') }}';
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oopss...',
+                                text: 'Terjadi kesalahan saat update data.',
+                            }).then(function() {
+                            // Redirect ke halaman indeks setelah menutup SweetAlert
+                            window.location.href = '{{ route('position.index') }}';
+                        });
+                        }
+                    },
+                    error: function() {
+                        // Tutup pesan "loading" saat terjadi kesalahan saat melakukan AJAX
+                        Swal.close();
+    
+                        // Tampilkan pesan "error" jika terjadi kesalahan saat melakukan AJAX
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oopss...',
+                            text: 'Terjadi kesalahan saat update data.',
+                        });
+                    }
+                });
+            });
+        });
+    </script>
 @endsection

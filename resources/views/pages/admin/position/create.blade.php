@@ -33,7 +33,7 @@
                             </div>
                             <!-- /.card-header -->
                             <!-- form start -->
-                            <form method="POST" action="{{ route('position.store') }}">
+                            <form method="POST" action="{{ route('position.store') }}" id="formPosition">
                                 @csrf
                                 <div class="">
                                     <div class="row">
@@ -168,7 +168,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="inline-block mt-3">
-                                                        <button type="submit"
+                                                        <button type="submit" id="submitButton"
                                                             class="btn btn-md btn-success">Simpan</button>
                                                         <button type="button" class="btn btn-md btn-secondary"
                                                             onclick="window.history.back();">Cancel</button>
@@ -190,4 +190,70 @@
         </section>
         <!-- /.content -->
     </div>
+
+    <script>
+        $(document).ready(function() {
+            $("#formPosition").on("submit", function(e) {
+                e.preventDefault();
+
+                // Tampilkan pesan "loading" saat akan mengirim permintaan AJAX
+                Swal.fire({
+                    title: 'Mohon Tunggu!',
+                    html: 'Sedang memproses data...',
+                    allowOutsideClick: false,
+                    showConfirmButton: false,
+                    willOpen: () => {
+                        Swal.showLoading();
+                    },
+                });
+
+                // Kirim data ke server menggunakan AJAX
+                $.ajax({
+                    type: 'POST',
+                    url: '{{ route('position.store') }}',
+                    data: new FormData(this),
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        // Tutup pesan "loading" saat berhasil
+                        Swal.close();
+
+                        if (response.success) {
+                            // Redirect ke halaman index dengan pesan "success"
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Berhasil!',
+                                text: 'Data berhasil disimpan.',
+                            }).then(function() {
+                                // Redirect ke halaman indeks setelah menutup SweetAlert
+                                window.location.href = '{{ route('position.index') }}';
+                            });
+                        } else {
+                            // Redirect ke halaman index dengan pesan "error"
+                            // window.location.href = '{{ route('position.index') }}';
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oopss...',
+                                text: 'Terjadi kesalahan saat menyimpan data.',
+                            }).then(function() {
+                            // Redirect ke halaman indeks setelah menutup SweetAlert
+                            window.location.href = '{{ route('position.index') }}';
+                        });
+                        }
+                    },
+                    error: function() {
+                        // Tutup pesan "loading" saat terjadi kesalahan saat melakukan AJAX
+                        Swal.close();
+
+                        // Tampilkan pesan "error" jika terjadi kesalahan saat melakukan AJAX
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oopss...',
+                            text: 'Terjadi kesalahan saat menyimpan data.',
+                        });
+                    }
+                });
+            });
+        });
+    </script>
 @endsection

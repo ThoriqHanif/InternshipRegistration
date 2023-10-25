@@ -59,8 +59,11 @@ class PositionController extends Controller
         $positions->requirements = $requirementsString;
         // $positions->save();
 
-        $positions->save();
-        return redirect('position')->with('success', 'Berhasil menambah Posisi Magang');
+        if ($positions->save()) {
+            return response()->json(['success' => true]);
+        } else {
+            return response()->json(['success' => false]);
+        }
     }
 
     /**
@@ -84,6 +87,7 @@ class PositionController extends Controller
     {
         //
         return view('pages.admin.position.edit')->with([
+            'position' => $position,
             'id' => $position->id,
             'name' => $position->name,
             'description' => $position->description,
@@ -113,9 +117,11 @@ class PositionController extends Controller
         $data->requirements = $requirementsString;
 
         // Simpan perubahan
-        $data->save();
-
-        return redirect('position')->with('success', 'Berhasil memperbarui Posisi Magang');
+        if ($data->save()) {
+            return response()->json(['success' => true]);
+        } else {
+            return response()->json(['success' => false]);
+        }
     }
 
     /**
