@@ -24,6 +24,39 @@ class InternController extends Controller
      */
     public function index(Request $request)
     {
+
+        if ($request->ajax()) {
+            $interns = ($request->showDeleted == 1) ? Intern::onlyTrashed() : Intern::query();
+    
+            return DataTables::of($interns->with('position'))
+                ->addColumn('action', function ($intern) {
+                    if ($intern->trashed()) {
+                        return view('pages.admin.intern.action', compact('intern'));
+                    } else {
+                        return view('pages.admin.intern.action', compact('intern'));
+                    }
+                })
+                ->addIndexColumn()
+                ->rawColumns(['action'])
+                ->make(true);
+        }
+    
+        return view('pages.admin.intern.index');
+        
+        // if ($request->ajax()) {
+        //     $interns = Intern::with('position')->select('interns.*');
+            
+        //     return DataTables::of($interns)
+        //         ->addColumn('action', function ($intern) {
+        //             return view('pages.admin.intern.action', compact('intern'));
+        //         })
+        //         ->addIndexColumn()
+        //         ->rawColumns(['action'])
+        //         ->make(true);
+        // }
+
+        // return view('pages.admin.intern.index');
+
         // Cek apakah pengguna adalah admin
         // if (auth()->check() && auth()->user()->role == 'admin') {
         //     $statusFilter = $request->query('status');
@@ -43,12 +76,7 @@ class InternController extends Controller
         //     return redirect('/login');
         // }
 
-        // return view('pages.admin.intern.index', compact('intern'));
-
-        if ($request->ajax()) {
-            $interns = Intern::with('position')->select('interns.*');
-
-            // Filter status jika ada
+        // Filter status jika ada
             // if ($request->input('status') === 'diterima') {
             //     $interns->where('status', 'diterima');
             // } elseif ($request->input('status') === 'ditolak') {
@@ -57,18 +85,20 @@ class InternController extends Controller
             //     $interns->where('status', 'pending');
             // }
 
-            return DataTables::of($interns)
-                ->addColumn('action', function ($intern) {
-                    return view('pages.admin.intern.action', compact('intern'));
-                })
-                ->addIndexColumn()
-                ->rawColumns(['action'])
-                ->make(true);
-        }
-
-        return view('pages.admin.intern.index');
+        // return view('pages.admin.intern.index', compact('intern'));
     }
 
+    public function restore($id)
+    {
+        $intern = Intern::onlyTrashed()->find($id);
+        
+        if ($intern) {
+            $intern->restore();
+            return response()->json(['success' => true]);
+        } else {
+            return response()->json(['success' => false]);
+        }
+    }
     /**
      * Show the form for creating a new resource.
      */

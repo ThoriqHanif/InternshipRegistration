@@ -16,12 +16,16 @@ class PositionController extends Controller
      */
     public function index(Request $request)
     {
-        //
         if ($request->ajax()) {
-            $positions = Position::select('*');
+            $positions = ($request->showDeleted == 1) ? Position::onlyTrashed() : Position::query();
+    
             return DataTables::of($positions)
                 ->addColumn('action', function ($positions) {
-                    return view('pages.admin.position.action', compact('positions'));
+                    if ($positions->trashed()) {
+                        return view('pages.admin.position.action', compact('positions'));
+                    } else {
+                        return view('pages.admin.position.action', compact('positions'));
+                    }
                 })
                 ->addIndexColumn()
                 ->rawColumns(['action'])
@@ -29,6 +33,18 @@ class PositionController extends Controller
         }
     
         return view('pages.admin.position.index');
+    }
+
+    public function restore($id)
+    {
+        $positions = Position::onlyTrashed()->find($id);
+        
+        if ($positions) {
+            $positions->restore();
+            return response()->json(['success' => true]);
+        } else {
+            return response()->json(['success' => false]);
+        }
     }
 
     /**

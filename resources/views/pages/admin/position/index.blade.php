@@ -28,6 +28,8 @@
                                 <a class="btn btn-md btn-success float-right" href="{{ route('position.create') }}"> +
                                     Posisi</a>
                                     @endif
+                                <a class="btn btn-md btn-secondary float-left" onclick="showDeleted()" id="showDeletedButton">Lihat Arsip</a>
+
                             </div>
                             <!-- /.card-header -->
                             <div class="card-body">
@@ -41,6 +43,7 @@
                                             <th>Deskripsi</th>
                                             <th>Syarat</th>
                                             <th style="width: 100px">Action</th>
+                                           
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -137,6 +140,8 @@
                 </div>
         </section>
     </div>
+
+    
 @endsection
 
 

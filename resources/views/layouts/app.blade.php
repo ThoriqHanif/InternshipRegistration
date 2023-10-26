@@ -49,7 +49,7 @@
 </script>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function() {
         const viewer = new Viewer(document.getElementById('cv-link'), {
             inline: false,
         });
@@ -62,72 +62,162 @@
         serverSide: true,
         responsive: true,
         ajax: {
-           url: "{{ route ('users.index')}}"
+            url: "{{ route('users.index') }}"
         },
-        columns: [
-            { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
-            { data: 'name', name: 'name' },
-            { data: 'email', name: 'email' },
-            { data: 'role', name: 'role' },
-            { data: 'action', name: 'action' },
+        columns: [{
+                data: 'DT_RowIndex',
+                name: 'DT_RowIndex',
+                orderable: false,
+                searchable: false
+            },
+            {
+                data: 'name',
+                name: 'name'
+            },
+            {
+                data: 'email',
+                name: 'email'
+            },
+            {
+                data: 'role',
+                name: 'role'
+            },
+            {
+                data: 'action',
+                name: 'action'
+            },
 
-            
-    ]
+
+        ]
     });
 </script>
 
 <script>
+    function showDeleted() {
+        // Mengubah URL Ajax yang digunakan untuk mengambil data position
+        tablePosition.ajax.url("{{ route('position.index') }}?showDeleted=1").load();
+
+        // Mengganti teks tombol "Lihat Arsip" menjadi "Lihat Semua"
+        document.getElementById("showDeletedButton").innerHTML = "Lihat Semua";
+
+        // Mengganti atribut onclick tombol "Lihat Arsip" agar dapat membatalkan tampilan data yang dihapus
+        document.getElementById("showDeletedButton").setAttribute("onclick", "showAll()");
+    }
+
+    function showAll() {
+        // Mengembalikan URL Ajax ke pengaturan semula (tanpa menampilkan data yang dihapus)
+        tablePosition.ajax.url("{{ route('position.index') }}?showDeleted=0").load();
+
+        // Mengganti teks tombol "Lihat Semua" kembali menjadi "Lihat Arsip"
+        document.getElementById("showDeletedButton").innerHTML = "Lihat Arsip";
+
+        // Mengganti atribut onclick tombol "Lihat Semua" agar dapat memanggil kembali fungsi showDeleted()
+        document.getElementById("showDeletedButton").setAttribute("onclick", "showDeleted()");
+    }
+
     let tablePosition = new DataTable('#tablePosition', {
         processing: true,
         serverSide: true,
         responsive: true,
         ajax: {
-           url: "{{ route ('position.index')}}"
+            url: "{{ route('position.index') }}"
         },
-        columns: [
-            { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
-            { data: 'name', name: 'name' },
-            { data: 'description', name: 'description' },
-            { data: 'requirements', name: 'requirements' },
-            { data: 'action', name: 'action' },            
-    ]
+        columns: [{
+                data: 'DT_RowIndex',
+                name: 'DT_RowIndex',
+                orderable: false,
+                searchable: false
+            },
+            {
+                data: 'name',
+                name: 'name'
+            },
+            {
+                data: 'description',
+                name: 'description'
+            },
+            {
+                data: 'requirements',
+                name: 'requirements'
+            },
+            {
+                data: 'action',
+                name: 'action'
+            },
+        ]
     });
 </script>
 
 <script>
+    function showDeletedIntern() {
+        // Mengubah URL Ajax yang digunakan untuk mengambil data intern
+        tableIntern.ajax.url("{{ route('intern.index') }}?showDeleted=1").load();
+
+        // Mengganti teks tombol "Lihat Arsip" menjadi "Lihat Semua"
+        document.getElementById("showDeletedButtonIntern").innerHTML = "Lihat Semua";
+
+        // Mengganti atribut onclick tombol "Lihat Arsip" agar dapat membatalkan tampilan data yang dihapus
+        document.getElementById("showDeletedButtonIntern").setAttribute("onclick", "showAllIntern()");
+    }
+
+    function showAllIntern() {
+        // Mengembalikan URL Ajax ke pengaturan semula (tanpa menampilkan data yang dihapus)
+        tableIntern.ajax.url("{{ route('intern.index') }}?showDeleted=0").load();
+
+        // Mengganti teks tombol "Lihat Semua" kembali menjadi "Lihat Arsip"
+        document.getElementById("showDeletedButtonIntern").innerHTML = "Lihat Arsip";
+
+        // Mengganti atribut onclick tombol "Lihat Semua" agar dapat memanggil kembali fungsi showDeletedIntern()
+        document.getElementById("showDeletedButtonIntern").setAttribute("onclick", "showDeletedIntern()");
+    }
+
     let tableIntern = new DataTable('#tableIntern', {
         processing: true,
         serverSide: true,
         responsive: true,
         ajax: {
-           url: "{{ route ('intern.index')}}",
-           data: function (d) {
-                d.status = $('#status').val(); // Mengambil nilai status dari dropdown
-            }
+            url: "{{ route('intern.index') }}"
         },
-        columns: [
-            { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
-            { data: 'full_name', name: 'full_name' },
-            { data: 'school', name: 'school' },
-            { data: 'position.name', name: 'position.name' },
-            { data: 'start_date', name: 'start_date' },
-            { data: 'end_date', name: 'end_date' },
-            { data: 'status', name: 'status' },
-            { data: 'action', name: 'action' },            
-    ],
+        columns: [{
+                data: 'DT_RowIndex',
+                name: 'DT_RowIndex',
+                orderable: false,
+                searchable: false
+            },
+            {
+                data: 'full_name',
+                name: 'full_name'
+            },
+            {
+                data: 'school',
+                name: 'school'
+            },
+            {
+                data: 'position.name',
+                name: 'position.name'
+            },
+            {
+                data: 'start_date',
+                name: 'start_date'
+            },
+            {
+                data: 'end_date',
+                name: 'end_date'
+            },
+            {
+                data: 'status',
+                name: 'status'
+            },
+            {
+                data: 'action',
+                name: 'action'
+            },
+        ],
     });
-//     $('#status').change(function() {
-//     console.log('Status changed:', $(this).val()); // Ini akan mencetak nilai yang dipilih
-//     table.ajax.reload(); // Memuat ulang DataTable saat dropdown status berubah
-// });
-
-    
 </script>
 
-<script>
-    
 
-</script>
+<script></script>
 
 
 

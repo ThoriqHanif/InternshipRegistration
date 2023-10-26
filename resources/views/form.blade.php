@@ -29,7 +29,7 @@
               </div>
               <!-- /.card-header -->
               <!-- form start -->
-              <form method="POST" action="{{url ('/')}}" enctype="multipart/form-data" id="registrationForm">
+              <form method="POST" action="{{url ('/')}}" enctype="multipart/form-data" id="formRegist">
                 @csrf
                 <div class="">
                     <div class="row">
@@ -268,6 +268,82 @@
     </section>
     <!-- /.content -->
   </div>
+
+  <script>
+    $(document).ready(function() {
+        $("#formRegist").on("submit", function(e) {
+            e.preventDefault();
+
+            // Tampilkan pesan "loading" saat akan mengirim permintaan AJAX
+            Swal.fire({
+                title: 'Mohon Tunggu!',
+                html: 'Sedang memproses data...',
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                willOpen: () => {
+                    Swal.showLoading();
+                },
+            });
+
+            // Kirim data ke server menggunakan AJAX
+            $.ajax({
+                type: 'POST',
+                url: '{{ route('store') }}',
+                data: new FormData(this),
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    // Tutup pesan "loading" saat berhasil
+                    Swal.close();
+
+                    if (response.success) {
+                        // Redirect ke halaman index dengan pesan "success"
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil!',
+                            text: 'Data berhasil disimpan. Data akan kami proses secepatnya, Terimakasih.',
+                        }).then(function() {
+                            // Redirect ke halaman indeks setelah menutup SweetAlert
+                            window.location.href = '{{ route('index') }}';
+                        });
+                    }
+                    else {
+                            // Jika validasi gagal, tampilkan pesan-pesan kesalahan
+                            if (response.errors) {
+                                var errorMessages = '';
+                                for (var key in response.errors) {
+                                    if (response.errors.hasOwnProperty(key)) {
+                                        errorMessages += response.errors[key][0] + '<br>';
+                                    }
+                                }
+                                Swal.fire('Gagal', errorMessages, 'error');
+                            } else {
+                                Swal.fire('Gagal', 'Terjadi kesalahan saat menyimpan data',
+                                    'error');
+                            }
+                        }
+                    },
+                    error: function(xhr) {
+                        Swal.close();
+                        if (xhr.status === 422) {
+                            // Menampilkan pesan validasi error SweetAlert
+                            var errorMessages = '';
+                            var errors = xhr.responseJSON.errors;
+                            for (var key in errors) {
+                                if (errors.hasOwnProperty(key)) {
+                                    errorMessages += errors[key][0] + '<br>';
+                                }
+                            }
+                            Swal.fire('Gagal', errorMessages, 'error');
+                        } else {
+                            Swal.fire('Gagal', 'Terjadi kesalahan saat simpan data.', 'error');
+                        }
+                    },
+                });
+            });
+        });
+</script>
+
 @endsection
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -336,66 +412,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 </script>
 
-<script>
-   $(document).ready(function () {
-    $("#registrationForm").on("submit", function (e) {
-        e.preventDefault();
-
-        // Tampilkan pesan "loading" saat memulai permintaan AJAX
-        var loadingAlert = Swal.fire({
-            title: 'Mohon Tunggu!',
-            html: 'Sedang memproses data...',
-            allowOutsideClick: false,
-            showConfirmButton: false,
-            willOpen: () => {
-                Swal.showLoading();
-            },
-        });
-
-        // Kirim data ke server menggunakan AJAX
-        $.ajax({
-            type: 'POST',
-            url: '{{ route('intern.store') }}',
-            data: new FormData(this),
-            processData: false,
-            contentType: false,
-            success: function (response) {
-                // Tutup pesan "loading" saat berhasil
-                loadingAlert.close();
-
-                if (response.success) {
-                    // Tampilkan pesan "success" jika penyimpanan berhasil
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Berhasil!',
-                        text: 'Data berhasil disimpan. Terima kasih atas pendaftarannya di Kadang Koding Indonesia',
-                    });
-                } else {
-                    // Tampilkan pesan "gagal" jika terjadi kesalahan
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oopss...',
-                        text: 'Terjadi kesalahan saat menyimpan data.',
-                    });
-                }
-            },
-            error: function () {
-                // Tutup pesan "loading" saat terjadi kesalahan saat melakukan AJAX
-                loadingAlert.close();
-
-                // Tampilkan pesan "gagal" jika terjadi kesalahan saat melakukan AJAX
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oopss...',
-                    text: 'Terjadi kesalahan saat menyimpan data.',
-                });
-            }
-        });
-    });
-});
-
-
-</script>
 
 
 

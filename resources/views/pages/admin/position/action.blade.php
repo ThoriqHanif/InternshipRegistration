@@ -1,3 +1,4 @@
+@if (!$positions->trashed())
 <a href="{{ route('position.show', $positions->id) }}"
     class="btn btn-sm bg-primary text-white font-weight-bold text-xs" data-toggle="tooltip" data-placement="top" title="Detail Pemagang">
     <i class="fas fa-eye"></i>
@@ -13,6 +14,75 @@
         <i class="fas fa-trash"></i>
     </button>
 </form>
+@endif
+
+@if ($positions->trashed())
+<form style="display: inline" action="{{ route('position.restore', $positions->id) }}" method="POST" id="restoreForm">
+    @csrf
+    <button type="submit" class="btn btn-sm btn-success restore-button" data-toggle="tooltip" data-placement="top" title="Restore Posisi">
+        <i class="fas fa-undo"></i>
+    </button>
+</form>
+@endif
+
+<script>
+    $(document).ready(function() {
+        // Event handler untuk tombol restore
+        $('.restore-button').on('click', function(e) {
+            e.preventDefault();
+            var restoreButton = $(this);
+            var restoreForm = restoreButton.closest('#restoreForm');
+
+            Swal.fire({
+                title: 'Konfirmasi Restore',
+                text: 'Anda yakin ingin mengembalikan posisi ini?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, Restore',
+                cancelButtonText: 'Batal',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: 'Mohon Tunggu!',
+                        html: 'Sedang mengembalikan posisi...',
+                        allowOutsideClick: false,
+                        showConfirmButton: false,
+                        willOpen: () => {
+                            Swal.showLoading();
+                        },
+                    });
+
+                    $.ajax({
+                        type: 'POST',
+                        url: restoreForm.attr('action'),
+                        data: restoreForm.serialize(),
+                        success: function(response) {
+                            Swal.close();
+
+                            if (response.success) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Berhasil!',
+                                    text: 'Posisi berhasil di-restore.',
+                                }).then(function() {
+                                    // Refresh DataTable
+                                    tablePosition.ajax.reload();
+                                    window.location.href = '{{ route('position.index') }}';
+                                });
+                            } else {
+                                Swal.fire('Gagal', 'Gagal mengembalikan posisi', 'error');
+                            }
+                        },
+                        error: function() {
+                            Swal.close();
+                            Swal.fire('Gagal', 'Terjadi kesalahan saat mengembalikan posisi', 'error');
+                        }
+                    });
+                }
+            });
+        });
+    });
+</script>
 
 <script>
     $(document).ready(function() {
@@ -55,7 +125,8 @@
                                     title: 'Berhasil!',
                                     text: 'Data posisi berhasil dihapus.',
                                 }).then(function() {
-                                    window.location.href = '{{ route('position.index') }}';
+                                    tablePosition.ajax.reload();
+                                    // window.location.href = '{{ route('position.index') }}';
 
                                 });
                                 // Tambahkan kode lain yang sesuai, seperti memperbarui tampilan tabel.

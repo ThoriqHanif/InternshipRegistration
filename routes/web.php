@@ -42,6 +42,9 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/dashboard', [DashboardController::class, 'admin']);
     Route::put('/admin/profile', [ProfileController::class, 'updateAdmin'])->name('admin.profile.update');;
     Route::get('/intern/download/{id}', [InternController::class, 'download'])->name('intern.download');
+    Route::post('/intern/restore/{id}', [InternController::class, 'restore'])->name('intern.restore');
+
+    Route::post('/position/restore/{id}', [PositionController::class, 'restore'])->name('position.restore');
 
     // Route::get('/report', function () {
     //     return view('pages.admin.report.index');

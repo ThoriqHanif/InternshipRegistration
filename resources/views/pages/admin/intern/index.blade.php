@@ -27,6 +27,7 @@
                                 @if (auth()->check() && auth()->user()->role == 'admin')
                                 <a class="btn btn-md btn-success float-right" href="{{ route('intern.create') }}"> +
                                     Pemagang</a>
+                                    <a class="btn btn-md btn-secondary float-left" onclick="showDeletedIntern()" id="showDeletedButtonIntern">Lihat Arsip</a>
                                 @endif
                             </div>
                             <!-- /.card-header -->
@@ -174,23 +175,6 @@
                                 </table>
                                 </div>
                             </div>
-                            <!-- /.card-body -->
-                            {{-- <div class="card-footer clearfix">
-                                <ul class="pagination pagination-sm m-0 float-right">
-                                    <li class="page-item {{ $intern->onFirstPage() ? 'disabled' : '' }}">
-                                        <a class="page-link" href="{{ $intern->previousPageUrl() }}">&laquo;</a>
-                                    </li>
-                                    @for ($i = 1; $i <= $intern->lastPage(); $i++)
-                                        <li class="page-item {{ $i == $intern->currentPage() ? 'active' : '' }}">
-                                            <a class="page-link" href="{{ $intern->url($i) }}">{{ $i }}</a>
-                                        </li>
-                                    @endfor
-                                    <li
-                                        class="page-item {{ $intern->currentPage() == $intern->lastPage() ? 'disabled' : '' }}">
-                                        <a class="page-link" href="{{ $intern->nextPageUrl() }}">&raquo;</a>
-                                    </li>
-                                </ul>
-                            </div> --}}
 
                         </div>
                     </div>
