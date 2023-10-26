@@ -26,15 +26,24 @@ class InternController extends Controller
     {
 
         if ($request->ajax()) {
-            $interns = ($request->showDeleted == 1) ? Intern::onlyTrashed() : Intern::query();
+            $showDeleted = $request->input('showDeleted', 0);
+            $statusFilter = $request->input('status');
     
-            return DataTables::of($interns->with('position'))
+            $interns = Intern::with('position')->select('interns.*');
+    
+            if ($showDeleted) {
+                // Jika showDeleted bernilai 1, hanya tampilkan data yang diarsipkan
+                $interns->onlyTrashed();
+            }
+    
+            if ($statusFilter) {
+                // Jika filter status dipilih, tambahkan filter sesuai dengan nilai status
+                $interns->where('status', $statusFilter);
+            }
+    
+            return DataTables::of($interns)
                 ->addColumn('action', function ($intern) {
-                    if ($intern->trashed()) {
-                        return view('pages.admin.intern.action', compact('intern'));
-                    } else {
-                        return view('pages.admin.intern.action', compact('intern'));
-                    }
+                    return view('pages.admin.intern.action', compact('intern'));
                 })
                 ->addIndexColumn()
                 ->rawColumns(['action'])
@@ -42,10 +51,12 @@ class InternController extends Controller
         }
     
         return view('pages.admin.intern.index');
-        
+
+
+
         // if ($request->ajax()) {
         //     $interns = Intern::with('position')->select('interns.*');
-            
+
         //     return DataTables::of($interns)
         //         ->addColumn('action', function ($intern) {
         //             return view('pages.admin.intern.action', compact('intern'));
@@ -77,13 +88,13 @@ class InternController extends Controller
         // }
 
         // Filter status jika ada
-            // if ($request->input('status') === 'diterima') {
-            //     $interns->where('status', 'diterima');
-            // } elseif ($request->input('status') === 'ditolak') {
-            //     $interns->where('status', 'ditolak');
-            // } elseif ($request->input('status') === 'pending') {
-            //     $interns->where('status', 'pending');
-            // }
+        // if ($request->input('status') === 'diterima') {
+        //     $interns->where('status', 'diterima');
+        // } elseif ($request->input('status') === 'ditolak') {
+        //     $interns->where('status', 'ditolak');
+        // } elseif ($request->input('status') === 'pending') {
+        //     $interns->where('status', 'pending');
+        // }
 
         // return view('pages.admin.intern.index', compact('intern'));
     }
@@ -91,7 +102,7 @@ class InternController extends Controller
     public function restore($id)
     {
         $intern = Intern::onlyTrashed()->find($id);
-        
+
         if ($intern) {
             $intern->restore();
             return response()->json(['success' => true]);
@@ -202,7 +213,7 @@ class InternController extends Controller
         // Mendefinisikan alamat URL untuk file motivation letter dari direktori 'public/uploads/motivation_letter'
         if ($intern->motivation_letter) {
             // Jika surat pengantar sudah diunggah, atur $coverLetterUrl
-            $motivationLetterUrl = asset('files/motivation_lettter/' . $intern->motivation_letter);
+            $motivationLetterUrl = asset('files/motivation_letter/' . $intern->motivation_letter);
         } else {
             // Jika surat pengantar belum diunggah, atur $coverLetterUrl menjadi null
             $motivationLetterUrl = null;
@@ -395,6 +406,7 @@ class InternController extends Controller
                     $data->user->delete();
                 }
             }
+
 
             $data->status = $status; // Update status sesuai dengan status baru
         }

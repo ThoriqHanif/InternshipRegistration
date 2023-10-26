@@ -34,13 +34,13 @@
                 <p>Total Pendaftar</p>
               </div>
               <div class="icon">
-                <i class="ion ion-android-contact"></i>
+                <i class="ion ion-android-contacts"></i>
               </div>
               <a href="{{url('intern')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
-          <div class="col-lg-3 col-6">
+          {{-- <div class="col-lg-3 col-6">
             <!-- small box -->
             <div class="small-box bg-success">
               <div class="inner">
@@ -51,9 +51,9 @@
               <div class="icon">
                 <i class="ion ion-android-contacts"></i>
               </div>
-              <a href="/intern?status=diterima" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="" class="small-box-footer" id="totalPemagang">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
-          </div>
+          </div> --}}
           <!-- ./col -->
           <div class="col-lg-3 col-6">
             <!-- small box -->
@@ -66,7 +66,7 @@
               <div class="icon">
                 <i class="ion ion-briefcase"></i>
               </div>
-              <a href="{{url('intern')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="{{url('position')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
@@ -93,4 +93,5 @@
     <!-- /.content -->
   </div>
 
+  
 @endsection

@@ -22,7 +22,7 @@
             @endauth
             @endif
             @if (auth()->check() && auth()->user()->role == 'admin')
-            <img src="{{ asset('img/profile1.jpg') }}" class="img-circle elevation-2" alt="User Image">
+            <img src="{{ asset('img/admin.jpg') }}" class="img-circle elevation-2" alt="User Image">
             @endif
               </div>
               <div class="info">
@@ -109,7 +109,7 @@
                   @endif
               {{-- </ul> --}}
                 @if (auth()->check() && auth()->user()->role == 'user')
-                <li class="nav-item">
+                <li class="nav-item " hidden>
                   <a class="nav-link {{ str_contains(request()->url(), 'user/dashboard') == true ? 'active' : '' }} "
                       href="{{url('user/dashboard')}}">
                       <i class="nav-icon fas fa-tachometer-alt"></i>

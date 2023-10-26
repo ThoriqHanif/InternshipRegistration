@@ -35,7 +35,7 @@
                                       <img src="{{ asset('files/photo/' . auth()->user()->intern->first()->photo) }}" class="img-fluid elevation-1 mb-2 rounded" width="200px" height="200px" alt="User Image">
                                       @else
                                           <!-- Tampilkan foto default atau pesan jika tidak ada foto -->
-                                          <img src="{{ asset('img/default-photo.jpg') }}" class="img-circle elevation-2" alt="User Image">
+                                          <img src="{{ asset('img/profile1.jpg') }}" class="img-circle elevation-2" alt="User Image">
                                       @endif
                                   @endauth
                                     </div>

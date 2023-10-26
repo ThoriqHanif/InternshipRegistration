@@ -29,7 +29,7 @@
                         <div class="card card-primary card-outline">
                             <div class="card-body box-profile">
                                 <div class="text-center">
-                                    <img class="profile-user-img img-fluid img-circle" src="{{ asset ('img/profile1.jpg') }}"
+                                    <img class="profile-user-img img-fluid img-circle" src="{{ asset ('img/admin.jpg') }}"
                                         alt="User profile picture">
                                 </div>
 

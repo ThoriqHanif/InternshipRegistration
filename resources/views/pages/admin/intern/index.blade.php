@@ -25,9 +25,10 @@
                         <div class="card">
                             <div class="card-header">
                                 @if (auth()->check() && auth()->user()->role == 'admin')
-                                <a class="btn btn-md btn-success float-right" href="{{ route('intern.create') }}"> +
-                                    Pemagang</a>
-                                    <a class="btn btn-md btn-secondary float-left" onclick="showDeletedIntern()" id="showDeletedButtonIntern">Lihat Arsip</a>
+                                    <a class="btn btn-md btn-success float-right" href="{{ route('intern.create') }}"> +
+                                        Pemagang</a>
+                                    <a class="btn btn-md btn-secondary float-left" onclick="showDeletedIntern()"
+                                        id="showDeletedButtonIntern">Lihat Arsip</a>
                                 @endif
                             </div>
                             <!-- /.card-header -->
@@ -49,46 +50,47 @@
                                     </div>
                                     @endif
                                 </div> --}}
-                                <div class="d-flex justify-content-between mb-3">
-                                    {{-- @if (auth()->check() && auth()->user()->role == 'admin')
-                                    <div class="filter-section d-flex align-items-center justify-content-between">
-                                        <label for="status-filter" class="mr-2">Filter Status:</label>
+                                <div class="d-flex justify-content-between mb-4">
+                                    @if (auth()->check() && auth()->user()->role == 'admin')
+                                        <div class="filter-section d-flex align-items-center justify-content-between">
+                                            <label for="status-filter" class="mr-2">Cari Status:</label>
 
-                                        <div class="d-flex align-items-center">
-                                            <select id="status" name="status" class="form-control filter" style="width: 200px">
-                                                <option value="">All</option>
-                                                <option value="pending">Pending</option>
-                                                <option value="diterima">Diterima</option>
-                                                <option value="ditolak">Ditolak</option>
-                                            </select>
-                                        </div>
-                                        <div class="d-flex align-items-center">
+                                            <div class="d-flex align-items-center">
+                                                <select id="statusFilter" name="status" class="form-control"
+                                                    style="width: 200px">
+                                                    <option value="">All</option>
+                                                    <option value="pending">Pending</option>
+                                                    <option value="diterima">Diterima</option>
+                                                    <option value="ditolak">Ditolak</option>
+                                                </select>
+                                            </div>
+                                            {{-- <div class="d-flex align-items-center">
                                             <button id="filter-button" class="btn btn-sm btn-primary ml-2" style="width: 70px">Cari</button>
                                             <button id="reset-button" class="btn btn-sm btn-outline-secondary ml-2" style="width: 70px">Reset</button>
+                                        </div> --}}
                                         </div>
-                                    </div>
-                                    @endif --}}
+                                    @endif
                                 </div>
-                                
+
                                 @include('components.alert')
                                 <div class="table-responsive">
-                                <table class="table table-bordered table-hover" id="tableIntern">
-                                    <thead>
-                                        <tr>
-                                            <th style="width: 10px">No</th>
-                                            <th>Nama</th>
-                                            <th>Sekolah</th>
-                                            <th>Posisi</th>
-                                            <th>Tanggal Mulai</th>
-                                            <th>Tanggal Selesai</th>
-                                            <th>Status</th>
-                                            <th style="width: 120px">Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
+                                    <table class="table table-bordered table-hover" id="tableIntern">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 10px">No</th>
+                                                <th>Nama</th>
+                                                <th>Sekolah</th>
+                                                <th>Posisi</th>
+                                                <th>Tanggal Mulai</th>
+                                                <th>Tanggal Selesai</th>
+                                                <th>Status</th>
+                                                <th style="width: 120px">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
 
-                                    </tbody>
-                                    {{-- <tbody>
+                                        </tbody>
+                                        {{-- <tbody>
                                         @php
                                         $pageNumber = ($intern->currentPage() - 1) * $intern->perPage();
                                         @endphp
@@ -172,7 +174,7 @@
                                             </tr>
                                         @endforeach
                                     </tbody> --}}
-                                </table>
+                                    </table>
                                 </div>
                             </div>
 
@@ -182,21 +184,5 @@
                 </div>
         </section>
     </div>
+
 @endsection
-
-{{-- <script>
-    document.getElementById('filter-button').addEventListener('click', function() {
-        var selectedStatus = document.getElementById('status-filter').value;
-        // Redirect to the route with the selected filter status
-        window.location.href = '/intern?status=' + selectedStatus;
-    });
-
-    document.getElementById('reset-button').addEventListener('click', function() {
-        // Redirect to the route without any filter status
-        window.location.href = '/intern';
-    });
-</script> --}}
-
-
-
-

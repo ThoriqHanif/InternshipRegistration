@@ -115,6 +115,8 @@
         document.getElementById("showDeletedButton").setAttribute("onclick", "showDeleted()");
     }
 
+    
+
     let tablePosition = new DataTable('#tablePosition', {
         processing: true,
         serverSide: true,
@@ -150,8 +152,8 @@
 
 <script>
     function showDeletedIntern() {
-        // Mengubah URL Ajax yang digunakan untuk mengambil data intern
-        tableIntern.ajax.url("{{ route('intern.index') }}?showDeleted=1").load();
+        // Mengubah URL Ajax yang digunakan untuk mengambil data intern yang sudah dihapus
+        tableIntern.ajax.url("{{ route('intern.index') }}?showDeleted=1&status=" + $('#statusFilter').val()).load();
 
         // Mengganti teks tombol "Lihat Arsip" menjadi "Lihat Semua"
         document.getElementById("showDeletedButtonIntern").innerHTML = "Lihat Semua";
@@ -162,7 +164,7 @@
 
     function showAllIntern() {
         // Mengembalikan URL Ajax ke pengaturan semula (tanpa menampilkan data yang dihapus)
-        tableIntern.ajax.url("{{ route('intern.index') }}?showDeleted=0").load();
+        tableIntern.ajax.url("{{ route('intern.index') }}?showDeleted=0&status=" + $('#statusFilter').val()).load();
 
         // Mengganti teks tombol "Lihat Semua" kembali menjadi "Lihat Arsip"
         document.getElementById("showDeletedButtonIntern").innerHTML = "Lihat Arsip";
@@ -176,7 +178,11 @@
         serverSide: true,
         responsive: true,
         ajax: {
-            url: "{{ route('intern.index') }}"
+            url: "{{ route('intern.index') }}",
+            data: function(d) {
+                d.showDeleted = $('#showDeletedButtonIntern').data('show-deleted');
+                d.status = $('#statusFilter').val(); // Menambahkan filter status ke data yang dikirimkan
+            }
         },
         columns: [{
                 data: 'DT_RowIndex',
@@ -213,6 +219,11 @@
                 name: 'action'
             },
         ],
+    });
+
+    // Event handler untuk filter status
+    $('#statusFilter').change(function() {
+        tableIntern.ajax.reload(); // Memuat ulang data dengan filter status baru
     });
 </script>
 

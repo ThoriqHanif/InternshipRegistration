@@ -319,10 +319,10 @@
                                                                 @if ($coverLetterUrl)
                                                                     <a href="{{ $coverLetterUrl }}" target="_blank"
                                                                         class="text-sm text-primary btn mt-2"
-                                                                        style="background-color: #7066e0"
+                                                                        style="background-color: #7066e0" 
                                                                         data-toggle="tooltip" data-placement="top"
                                                                         title="Lihat Surat Pengantar">
-                                                                        <li class="fas fa-eye"></li>
+                                                                        <li class="fas fa-eye text-white"></li>
                                                                     </a>
                                                                     <a class="btn btn-info mt-2"
                                                                         href="{{ $coverLetterUrl }}" download

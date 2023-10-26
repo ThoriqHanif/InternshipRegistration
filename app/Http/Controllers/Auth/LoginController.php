@@ -37,7 +37,7 @@ class LoginController extends Controller
                 return redirect('/admin/dashboard');
             } elseif ($user->role === 'user') {
                 // Jika peran adalah 'user', redirect ke dashboard user
-                return redirect('/user/dashboard');
+                return redirect('/profile');
             }
         }
 
@@ -47,6 +47,7 @@ class LoginController extends Controller
 
     public function logout(Request $request)
     {
+        
 
         Auth::logout(); // Logout pengguna
         $request->session()->invalidate(); // Memadamkan sesi

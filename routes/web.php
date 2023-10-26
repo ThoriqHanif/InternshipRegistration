@@ -37,6 +37,9 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');;
 
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::resource('users', UserController::class);
+    Route::resource('intern', InternController::class);
+
+    Route::resource('position', PositionController::class);
     // Route::resource('timetable', TimeTableController::class);
     Route::get('/admin/profile', [ProfileController::class, 'admin'])->name('admin.profile');
     Route::get('/admin/dashboard', [DashboardController::class, 'admin']);
@@ -52,16 +55,14 @@ Route::middleware(['auth', 'admin'])->group(function () {
 });
 
 Route::middleware(['auth'])->group(function () {
-    Route::resource('intern', InternController::class);
-
-    Route::resource('position', PositionController::class);
+    
 });
 
 Route::middleware(['auth', 'user'])->group(function () {
-    Route::get('/user/dashboard', [DashboardController::class, 'user']);
+    // Route::get('/user/dashboard', [DashboardController::class, 'user']);
     Route::get('/profile', [ProfileController::class, 'user'])->name('profile');
     Route::put('/profile', [ProfileController::class, 'updateUser'])->name('profile.update');
-    Route::get('/user/report', function () {
-        return view('pages.user.report');
-    });
+    // Route::get('/user/report', function () {
+    //     return view('pages.user.report');
+    // });
 });
