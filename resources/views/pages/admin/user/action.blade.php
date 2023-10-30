@@ -60,7 +60,8 @@
                                     title: 'Berhasil!',
                                     text: 'Data pengguna berhasil dihapus.',
                                 }).then(function() {
-                                    window.location.href = '{{ route('users.index') }}';
+                                    tableUser.ajax.reload();
+                                    // window.location.href = '{{ route('users.index') }}';
 
                                 });
                                 // Tambahkan kode lain yang sesuai, seperti memperbarui tampilan tabel.

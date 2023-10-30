@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreInternRequest;
+use App\Mail\InternStatus;
 use App\Models\Intern;
 use App\Models\Position;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class RegistrationController extends Controller
 {
@@ -89,16 +91,52 @@ class RegistrationController extends Controller
         $interns->status = $request->input('status', 'pending');
 
         if ($interns->save()) {
+            if ($interns->status === 'pending') {
+                // Kirim email notifikasi ke pemagang dengan status 'pending'
+                Mail::to($interns->email)->send(new InternStatus($interns, 'pending'));
+            }
+
             return response()->json(['success' => true]);
         } else {
             return response()->json(['success' => false]);
         }
+        
 
+    }
 
-
-
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
+    {
         //
-        // $cvFileName = null;
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(string $id)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, string $id)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
+    {
+        //
+    }
+
+            // $cvFileName = null;
         // if ($request->hasFile('cv')) {
         //     $cvFile = $request->file('cv');
         //     $cvFileName = $cvFile->getClientOriginalName();
@@ -157,38 +195,4 @@ class RegistrationController extends Controller
 
 
         // return response()->json(['success' => true]);
-
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
 }

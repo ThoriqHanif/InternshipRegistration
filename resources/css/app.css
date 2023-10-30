@@ -1,2 +1,5 @@
 /* Import FancyBox CSS */
 @import "~@fancyapps/fancybox/dist/jquery.fancybox.min.css";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

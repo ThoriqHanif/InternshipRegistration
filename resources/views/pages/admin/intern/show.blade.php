@@ -244,27 +244,64 @@
 
                                                                 @if ($cvUrl)
                                                                 
-                                                                    <a class="btn mt-2" id="cv-link"
-                                                                        href="{{ $cvUrl }}"
-                                                                        data-caption="CV {{ $full_name }}"
-                                                                        class="text-sm text-primary"
-                                                                        style="background-color: #7066e0"
-                                                                        data-toggle="tooltip" data-placement="top"
-                                                                        title="Lihat CV">
-                                                                        <li class="fas fa-eye text-white"></li>
-                                                                    </a>
+                                                                    @if ($cvExtension == 'pdf' || $cvExtension == 'docx')
+                                                                        <a class="btn mt-2" id="cv-link" data-toggle="modal" data-target="#cvModal"
+                                                                            {{-- href="/public/files/cv/DUMMY DOCUMENT TEST.pdf" --}}
+                                                                            data-caption="CV {{ $full_name }}"
+                                                                            class="text-sm text-primary"
+                                                                            style="background-color: #7066e0"
+                                                                            data-toggle="tooltip" data-placement="top"
+                                                                            title="Lihat CV">
+                                                                            <li class="fas fa-eye text-white"></li>
+                                                                        </a>
+                                                                    @endif
                                                                     <a class="btn btn-info mt-2"
                                                                         href="{{ $cvUrl }}" download
                                                                         data-toggle="tooltip" data-placement="top"
                                                                         title="Unduh CV">
                                                                         <li class="fas fa-download"></li>
                                                                     </a>
+                                                                    @if ($cvExtension == 'png')
+                                                                    <div class="mt-3">
+                                                                        <a data-fancybox data-caption="CV {{$full_name}}"
+                                                                            href="{{ $cvUrl }}">
+                                                                            <img src="{{ $cvUrl }}" class="mt-3"
+                                                                                alt="CV" width="200">
+                                                                        </a>
+                                                                    </div>
+                                                                    @endif
                                                                 @else
                                                                     <p class="text-sm text-danger">Belum ada CV</p>
                                                                 @endif
                                                                 @error('cv')
                                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                                 @enderror
+                                                                <div class="modal fade" id="cvModal" tabindex="-1" role="dialog" aria-labelledby="cvModalLabel" aria-hidden="true">
+                                                                    <div class="modal-dialog modal-lg" role="document">
+                                                                        <div class="modal-content">
+                                                                            <div class="modal-header">
+                                                                                <h5 class="modal-title" id="cvModalLabel">CV {{ $full_name }}</h5>
+                                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                                    <span aria-hidden="true">&times;</span>
+                                                                                </button>
+                                                                            </div>
+                                                                            <div class="modal-body">
+                                                                                @if ($cvExtension == 'pdf')
+                                                                                    <object data="{{ $cvUrl }}" type="application/pdf" width="100%" height="600px">
+                                                                                        <p>Unable to display PDF file. <a href="{{ $cvUrl }}" target="_blank">Download</a> instead.</p>
+                                                                                    </object>
+                                                                               
+                                                                                @elseif ($cvExtension == 'docx')
+                                                                                    <!-- Tampilkan sesuai dengan format DOCX, misalnya dengan iframe -->
+                                                                                    <iframe src="{{ $cvUrl }}" width="100%" height="600px" frameborder="0"></iframe>
+                                                                                @else
+                                                                                    <p>File format not supported. <a href="{{ $cvUrl }}" target="_blank">Download</a> instead.</p>
+                                                                                @endif
+                                                                            </div>
+                                                                            
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                         <div class="col-md-6">
@@ -301,6 +338,10 @@
                                                                 @error('motivation_letter')
                                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                                 @enderror
+                                                                {{-- <iframe src="('https://view.officeapps.live.com/op/embed.aspx?src=/public/files/motivation_letter/Motivation Letter - Thoriq Muhammad Hanif Raihan.docx')" width="100%" height="565px" frameborder="0"></iframe> --}}
+                                                                {{-- <iframe src='https://view.officeapps.live.com/op/embed.aspx?src=http://www.learningaboutelectronics.com/Articles/NP-modernization-act-new-york-state.doc' width='80%' height='565px' frameborder='0'> </iframe>
+                                                                <iframe src='https://view.officeapps.live.com/op/embed.aspx?src={{ asset('public/files/motivation_letter/thrq.docx') }}' width='100%' height='565px' frameborder='0' class="mt-2"></iframe> --}}
+
                                                             </div>
                                                         </div>
                                                         <div class="col-md-6">

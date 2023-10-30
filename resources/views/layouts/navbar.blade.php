@@ -15,7 +15,7 @@
     </ul>
 
     <!-- Right navbar links -->
-    <ul class="navbar-nav ml-auto">
+    <ul class="navbar-nav ml-auto mb-3">
       <!-- Navbar Search -->
       <form id="logout-form" action="{{ url('logout') }}" method="POST" ">
         @csrf
@@ -23,7 +23,7 @@
         onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
             class="nav-link text-white font-weight-bold px-0">
             {{-- <i class="fa fa-user me-sm-1"></i> --}}
-            <button class="btn btn-md btn-danger d-sm-inline d-none" id="logout">Log out</button>
+            <button class="btn btn-md btn-danger d-sm-inline d-none" id="logout"><i class="fas fa-power-off mr-3"></i>Logout</button>
         </a>
     </form>
     </ul>

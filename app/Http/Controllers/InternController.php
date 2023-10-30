@@ -180,9 +180,19 @@ class InternController extends Controller
         $interns->cover_letter = $cover_letterFileName;
         $interns->portfolio = $portfolioFileName;
         $interns->photo = $photoFileName;
-        $interns->status = $request->input('status', 'pending');
+        // $interns->status = $request->input('status', 'pending');
 
+        // if ($interns->save()) {
+        //     return response()->json(['success' => true]);
+        // } else {
+        //     return response()->json(['success' => false]);
+        // }
         if ($interns->save()) {
+            if ($interns->status === 'pending') {
+                // Kirim email notifikasi ke pemagang dengan status 'pending'
+                Mail::to($interns->email)->send(new InternStatus($interns, 'pending'));
+            }
+
             return response()->json(['success' => true]);
         } else {
             return response()->json(['success' => false]);
@@ -201,13 +211,16 @@ class InternController extends Controller
         $positions = Position::all();
         $st = ['diterima' => 'Diterima', 'ditolak' => 'Ditolak', 'pending' => 'Pending'];
 
+        
         // Mengambil alamat URL untuk file CV dari penyimpanan "public"
         if ($intern->cv) {
             // Jika surat pengantar sudah diunggah, atur $coverLetterUrl
             $cvUrl = asset('files/cv/' . $intern->cv);
+            $cvExtension = pathinfo($intern->cv, PATHINFO_EXTENSION);
         } else {
             // Jika surat pengantar belum diunggah, atur $coverLetterUrl menjadi null
             $cvUrl = null;
+            $cvExtension = null;
         }
 
         // Mendefinisikan alamat URL untuk file motivation letter dari direktori 'public/uploads/motivation_letter'
@@ -261,6 +274,7 @@ class InternController extends Controller
             'genders' => $genders, // Kirim data jenis kelamin ke tampilan
             'positions' => $positions,
             'position_id' => $position_id,
+            'cvExtension' => $cvExtension,
             'cvUrl' => $cvUrl, // Menambahkan URL CV ke tampilan
             'motivationLetterUrl' => $motivationLetterUrl, // Menambahkan URL motivation letter ke tampilan
             'coverLetterUrl' => $coverLetterUrl, // Menambahkan URL cover letter ke tampilan
@@ -390,25 +404,29 @@ class InternController extends Controller
                     // Kirim email pemberitahuan
                     Mail::to($user->email)->send(new InternStatus($data, 'diterima', $password));
                 }
-            } elseif ($status === 'ditolak') {
-                // Jika status sebelumnya adalah 'diterima' dan status sekarang adalah 'ditolak',
-                // periksa apakah ada pemagang yang masih merujuk ke pengguna
-                if ($data->status === 'diterima' && $data->user) {
-                    // Sebelum menghapus pengguna, periksa pemang yang merujuk ke pengguna ini
+            } elseif ($status === 'ditolak' || $status === 'pending') {
+                if (($status === 'ditolak' || $status === 'pending') && $data->status === 'diterima' && $data->user) {
+                    if ($status === 'ditolak') {
+                        // Jika status sekarang adalah 'ditolak', kirim email notifikasi ditolak
+                        Mail::to($data->email)->send(new InternStatus($data, 'ditolak'));
+                    } elseif ($status === 'pending') {
+                        // Jika status sekarang adalah 'pending', kirim email notifikasi pending
+                        Mail::to($data->email)->send(new InternStatus($data, 'pending'));
+                    }
+    
+                    // Kemudian atur 'user_id' pada pemagang yang terkait menjadi null
                     $relatedInterns = Intern::where('user_id', $data->user_id)->get();
                     foreach ($relatedInterns as $relatedIntern) {
-                        // Set user_id menjadi null pada pemagang yang terkait
                         $relatedIntern->user_id = null;
                         $relatedIntern->save();
-
-                        Mail::to($data->email)->send(new InternStatus($data, 'ditolak'));
                     }
+    
+                    // Hapus pengguna
                     $data->user->delete();
                 }
             }
-
-
-            $data->status = $status; // Update status sesuai dengan status baru
+    
+            $data->status = $status;  // Update status sesuai dengan status baru
         }
 
         if ($data->position_id != $newPositionId) {

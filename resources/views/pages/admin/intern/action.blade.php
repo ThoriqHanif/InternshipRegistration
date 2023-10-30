@@ -23,7 +23,7 @@
 @if ($intern->trashed())
 <form style="display: inline" action="{{ route('intern.restore', $intern->id) }}" method="POST" id="restoreFormIntern">
     @csrf
-    <button type="submit" class="btn btn-sm btn-success restore-button-intern" data-toggle="tooltip" data-placement="top" title="Restore Pemagang">
+    <button type="submit" class="btn btn-sm btn-info restore-button-intern" data-toggle="tooltip" data-placement="top" title="Restore Pemagang">
         <i class="fas fa-undo"></i>
     </button>
 </form>

@@ -25,9 +25,9 @@
                         <div class="card">
                             <div class="card-header">
                                 @if (auth()->check() && auth()->user()->role == 'admin')
-                                    <a class="btn btn-md btn-success float-right" href="{{ route('intern.create') }}"> +
+                                    <a class="btn btn-sm btn-success float-right" href="{{ route('intern.create') }}"><i class="fas fa-plus mr-2 sm"></i>
                                         Pemagang</a>
-                                    <a class="btn btn-md btn-secondary float-left" onclick="showDeletedIntern()"
+                                    <a class="btn btn-sm btn-secondary float-left" onclick="showDeletedIntern()"
                                         id="showDeletedButtonIntern">Lihat Arsip</a>
                                 @endif
                             </div>
@@ -84,7 +84,7 @@
                                                 <th>Tanggal Mulai</th>
                                                 <th>Tanggal Selesai</th>
                                                 <th>Status</th>
-                                                <th style="width: 120px">Action</th>
+                                                <th style="width: 140px">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>

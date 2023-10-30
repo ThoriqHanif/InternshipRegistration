@@ -19,7 +19,7 @@
 @if ($positions->trashed())
 <form style="display: inline" action="{{ route('position.restore', $positions->id) }}" method="POST" id="restoreForm">
     @csrf
-    <button type="submit" class="btn btn-sm btn-success restore-button" data-toggle="tooltip" data-placement="top" title="Restore Posisi">
+    <button type="submit" class="btn btn-sm btn-info restore-button" data-toggle="tooltip" data-placement="top" title="Restore Posisi">
         <i class="fas fa-undo"></i>
     </button>
 </form>

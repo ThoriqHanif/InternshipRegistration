@@ -25,7 +25,7 @@
           <div class="card">
             <div class="card-header">
               {{-- <h3 class="card-title">User Managament</h3> --}}
-              <a class="btn btn-md btn-success float-right" href="{{ route('users.create') }}"> + User</a>
+              <a class="btn btn-sm btn-success float-right" href="{{ route('users.create') }}"><i class="fas fa-plus mr-2 sm"></i> User</a>
             </div>
             <!-- /.card-header -->
             <div class="card-body">

@@ -232,18 +232,6 @@
 
 
 
-
-{{-- <script>
-    $(document).ready(function() {
-        $("[data-fancybox]").fancybox({
-            type: 'iframe',
-            iframe: {
-                preload: false // Opsional, gunakan jika Anda ingin memuat iframe hanya ketika dibuka
-            }
-        });
-    });
-</script> --}}
-
 <!-- Include jQuery and Bootstrap Datepicker (Adjust the paths accordingly) -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap-datepicker@1.9.0/dist/js/bootstrap-datepicker.min.js"></script>
@@ -312,29 +300,36 @@
 <script src="{{ asset('js/jquery.fancybox.min.js') }}"></script>
 
 <script>
-$(document).ready(function() {
-    // Tambahkan event handler saat tautan "Lihat CV" diklik
-    $(".view-cv").on("click", function(e) {
-        e.preventDefault(); // Mencegah tautan mengarahkan ke URL aslinya
-        var cvUrl = $(this).attr("href"); // Dapatkan URL CV dari tautan
+    $(document).ready(function() {
+        // Tambahkan event handler saat tautan "Lihat CV" diklik
+        $(".view-cv").on("click", function(e) {
+            e.preventDefault(); // Mencegah tautan mengarahkan ke URL aslinya
+            var cvUrl = $(this).attr("href"); // Dapatkan URL CV dari tautan
 
-        // Buka CV dalam FancyBox
-        $.fancybox.open({
-            src: cvUrl,
-            type: "iframe", // Gunakan iframe untuk menampilkan PDF, DOCX, dan PNG
-            iframe: {
-                css: {
-                    width: "80%",
-                    height: "80%"
+            // Buka CV dalam FancyBox
+            $.fancybox.open({
+                src: cvUrl,
+                type: "iframe", // Gunakan iframe untuk menampilkan PDF, DOCX, dan PNG
+                iframe: {
+                    css: {
+                        width: "80%",
+                        height: "80%"
+                    }
                 }
+            });
+        });
+    });
+</script>
+
+
+
+{{-- <script>
+    $(document).ready(function() {
+        $("[data-fancybox]").fancybox({
+            type: 'iframe',
+            iframe: {
+                preload: false // Opsional, gunakan jika Anda ingin memuat iframe hanya ketika dibuka
             }
         });
     });
-});
-</script>
-
-<script>
-    {{-- $(document).ready(function() {
-        $('[data-fancybox="gallery"]').fancybox();
-    });
-</script>  --}}
+</script> --}}

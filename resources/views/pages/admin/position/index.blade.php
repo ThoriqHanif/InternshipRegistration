@@ -25,10 +25,10 @@
                         <div class="card">
                             <div class="card-header">
                                 @if (auth()->check() && auth()->user()->role == 'admin')
-                                <a class="btn btn-md btn-success float-right" href="{{ route('position.create') }}"> +
+                                <a class="btn btn-sm btn-success float-right" href="{{ route('position.create') }}"><i class="fas fa-plus mr-2 sm"></i>
                                     Posisi</a>
                                     @endif
-                                <a class="btn btn-md btn-secondary float-left" onclick="showDeleted()" id="showDeletedButton">Lihat Arsip</a>
+                                <a class="btn btn-sm btn-secondary float-left" onclick="showDeleted()" id="showDeletedButton">Lihat Arsip</a>
 
                             </div>
                             <!-- /.card-header -->
