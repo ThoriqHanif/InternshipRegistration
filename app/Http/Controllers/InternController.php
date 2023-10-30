@@ -227,36 +227,46 @@ class InternController extends Controller
         if ($intern->motivation_letter) {
             // Jika surat pengantar sudah diunggah, atur $coverLetterUrl
             $motivationLetterUrl = asset('files/motivation_letter/' . $intern->motivation_letter);
+            $motivation_letterExtension = pathinfo($intern->motivation_letter, PATHINFO_EXTENSION);
+
         } else {
             // Jika surat pengantar belum diunggah, atur $coverLetterUrl menjadi null
             $motivationLetterUrl = null;
+            $motivation_letterExtension = null;
         }
 
         // Mendefinisikan alamat URL untuk file cover letter dari direktori 'public/uploads/cover_letter'
         if ($intern->cover_letter) {
             // Jika surat pengantar sudah diunggah, atur $coverLetterUrl
             $coverLetterUrl = asset('files/cover_letter/' . $intern->cover_letter);
+            $cover_letterExtension = pathinfo($intern->cover_letter, PATHINFO_EXTENSION);
         } else {
             // Jika surat pengantar belum diunggah, atur $coverLetterUrl menjadi null
             $coverLetterUrl = null;
+            $cover_letterExtension = null;
         }
 
         // Mendefinisikan alamat URL untuk file portfolio dari direktori 'public/uploads/portfolio'
         if ($intern->portfolio) {
             // Jika surat pengantar sudah diunggah, atur $coverLetterUrl
             $portfolioUrl = asset('files/portfolio/' . $intern->portfolio);
+            $portfolioExtension = pathinfo($intern->portfolio, PATHINFO_EXTENSION);
+
         } else {
             // Jika surat pengantar belum diunggah, atur $coverLetterUrl menjadi null
             $portfoliorUrl = null;
+            $portfolioExtension = null;
         }
 
         // Mendefinisikan alamat URL untuk file photo dari direktori 'public/uploads/photo'
         if ($intern->photo) {
             // Jika surat pengantar sudah diunggah, atur $coverLetterUrl
             $photoUrl = asset('files/photo/' . $intern->photo);
+            $photoExtension = pathinfo($intern->photo, PATHINFO_EXTENSION);
         } else {
             // Jika surat pengantar belum diunggah, atur $coverLetterUrl menjadi null
             $photorUrl = null;
+            $photoExtension = null;
         }
         // Kembalikan view edit dengan data intern yang akan diedit
         return view('pages.admin.intern.show', [
@@ -275,7 +285,11 @@ class InternController extends Controller
             'positions' => $positions,
             'position_id' => $position_id,
             'cvExtension' => $cvExtension,
+            'motivation_letterExtension' => $motivation_letterExtension,
             'cvUrl' => $cvUrl, // Menambahkan URL CV ke tampilan
+            'cover_letterExtension' => $cover_letterExtension, // Menambahkan URL CV ke tampilan
+            'portfolioExtension' => $portfolioExtension, // Menambahkan URL CV ke tampilan
+            'photoExtension' => $photoExtension, // Menambahkan URL CV ke tampilan
             'motivationLetterUrl' => $motivationLetterUrl, // Menambahkan URL motivation letter ke tampilan
             'coverLetterUrl' => $coverLetterUrl, // Menambahkan URL cover letter ke tampilan
             'portfolioUrl' => $portfolioUrl, // Menambahkan URL portfolio ke tampilan
@@ -302,45 +316,55 @@ class InternController extends Controller
         if ($intern->cv) {
             // Jika surat pengantar sudah diunggah, atur $coverLetterUrl
             $cvUrl = asset('files/cv/' . $intern->cv);
+            $cvExtension = pathinfo($intern->cv, PATHINFO_EXTENSION);
         } else {
             // Jika surat pengantar belum diunggah, atur $coverLetterUrl menjadi null
             $cvUrl = null;
+            $cvExtension = null;
         }
 
         // Mendefinisikan alamat URL untuk file motivation letter dari direktori 'public/uploads/motivation_letter'
         if ($intern->motivation_letter) {
             // Jika surat pengantar sudah diunggah, atur $coverLetterUrl
             $motivationLetterUrl = asset('files/motivation_lettter/' . $intern->motivation_letter);
+            $motivation_letterExtension = pathinfo($intern->motivation_letter, PATHINFO_EXTENSION);
         } else {
             // Jika surat pengantar belum diunggah, atur $coverLetterUrl menjadi null
             $motivationLetterUrl = null;
+            $motivation_letterExtension = null;
         }
 
         // Mendefinisikan alamat URL untuk file cover letter dari direktori 'public/uploads/cover_letter'
         if ($intern->cover_letter) {
             // Jika surat pengantar sudah diunggah, atur $coverLetterUrl
             $coverLetterUrl = asset('files/cover_letter/' . $intern->cover_letter);
+            $cover_letterExtension = pathinfo($intern->cover_letter, PATHINFO_EXTENSION);
         } else {
             // Jika surat pengantar belum diunggah, atur $coverLetterUrl menjadi null
             $coverLetterUrl = null;
+            $cover_letterExtension = null;
         }
 
         // Mendefinisikan alamat URL untuk file portfolio dari direktori 'public/uploads/portfolio'
         if ($intern->portfolio) {
             // Jika surat pengantar sudah diunggah, atur $coverLetterUrl
             $portfolioUrl = asset('files/portfolio/' . $intern->portfolio);
+            $portfolioExtension = pathinfo($intern->portfolio, PATHINFO_EXTENSION);
         } else {
             // Jika surat pengantar belum diunggah, atur $coverLetterUrl menjadi null
             $portfoliorUrl = null;
+            $portfolioExtension = null;
         }
 
         // Mendefinisikan alamat URL untuk file photo dari direktori 'public/uploads/photo'
         if ($intern->photo) {
             // Jika surat pengantar sudah diunggah, atur $coverLetterUrl
             $photoUrl = asset('files/photo/' . $intern->photo);
+            $photoExtension = pathinfo($intern->photo, PATHINFO_EXTENSION);
         } else {
             // Jika surat pengantar belum diunggah, atur $coverLetterUrl menjadi null
             $photorUrl = null;
+            $photoExtension = null;
         }
         // Kembalikan view edit dengan data intern yang akan diedit
         return view('pages.admin.intern.edit', [
@@ -364,6 +388,11 @@ class InternController extends Controller
             'coverLetterUrl' => $coverLetterUrl, // Menambahkan URL cover letter ke tampilan
             'portfolioUrl' => $portfolioUrl, // Menambahkan URL portfolio ke tampilan
             'photoUrl' => $photoUrl,
+            'cvExtension' => $cvExtension,
+            'motivation_letterExtension' => $motivation_letterExtension,
+            'cover_letterExtension' => $cover_letterExtension,
+            'portfolioExtension' => $portfolioExtension,
+            'photoExtension' => $photoExtension,
             'status' => $intern->status,
             'st' => $st,
             'statusChanged' => $intern->status_changed,
@@ -488,7 +517,7 @@ class InternController extends Controller
         if ($request->hasFile('cover_letter')) {
 
             // Simpan file CV yang baru
-            $cover_letterFile = $request->file('cv');
+            $cover_letterFile = $request->file('cover_letter');
             $cover_letterFileName = $cover_letterFile->getClientOriginalName();
             $cover_letterFile->move(public_path('files/cover_letter'), $cover_letterFileName);
 

@@ -254,15 +254,81 @@
                                                                 </div>
 
                                                                 @if ($cvUrl)
-                                                                    <a href="{{ $cvUrl }}" target="_blank"
-                                                                        class="text-sm text-primary">Lihat CV</a>
-                                                                    {{-- <a class="text-sm text-primary view-cv" data-fancybox data-type="iframe" data-src="{{ $cvUrl }}" href="javascript:;">Lihat CV</a> --}}
+                                                                    @if ($cvExtension == 'pdf' || $cvExtension == 'docx')
+                                                                        <a class="btn mt-2" id="cv-link"
+                                                                            data-toggle="modal" data-target="#cvModal"
+                                                                            {{-- href="/public/files/cv/DUMMY DOCUMENT TEST.pdf" --}}
+                                                                            data-caption="CV {{ $full_name }}"
+                                                                            class="text-sm text-primary"
+                                                                            style="background-color: #7066e0"
+                                                                            data-toggle="tooltip" data-placement="top"
+                                                                            title="Lihat CV">
+                                                                            <li class="fas fa-eye text-white"></li>
+                                                                        </a>
+                                                                    @endif
+                                                                    <a class="btn btn-info mt-2"
+                                                                        href="{{ $cvUrl }}" download
+                                                                        data-toggle="tooltip" data-placement="top"
+                                                                        title="Unduh CV">
+                                                                        <li class="fas fa-download"></li>
+                                                                    </a>
+                                                                    @if ($cvExtension == 'png')
+                                                                        <div class="mt-3">
+                                                                            <a data-fancybox
+                                                                                data-caption="CV {{ $full_name }}"
+                                                                                href="{{ $cvUrl }}">
+                                                                                <img src="{{ $cvUrl }}"
+                                                                                    class="mt-3" alt="CV"
+                                                                                    width="200">
+                                                                            </a>
+                                                                        </div>
+                                                                    @endif
                                                                 @else
-                                                                    <p class="tetx-sm text-danger">Belum ada CV</p>
+                                                                    <p class="text-sm text-danger">Belum ada CV</p>
                                                                 @endif
                                                                 @error('cv')
                                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                                 @enderror
+                                                                <div class="modal fade" id="cvModal" tabindex="-1"
+                                                                    role="dialog" aria-labelledby="cvModalLabel"
+                                                                    aria-hidden="true">
+                                                                    <div class="modal-dialog modal-lg" role="document">
+                                                                        <div class="modal-content">
+                                                                            <div class="modal-header">
+                                                                                <h5 class="modal-title" id="cvModalLabel">
+                                                                                    CV {{ $full_name }}</h5>
+                                                                                <button type="button" class="close"
+                                                                                    data-dismiss="modal"
+                                                                                    aria-label="Close">
+                                                                                    <span aria-hidden="true">&times;</span>
+                                                                                </button>
+                                                                            </div>
+                                                                            <div class="modal-body">
+                                                                                @if ($cvExtension == 'pdf')
+                                                                                    <object data="{{ $cvUrl }}"
+                                                                                        type="application/pdf"
+                                                                                        width="100%" height="600px">
+                                                                                        <p>Unable to display PDF file. <a
+                                                                                                href="{{ $cvUrl }}"
+                                                                                                target="_blank">Download</a>
+                                                                                            instead.</p>
+                                                                                    </object>
+                                                                                @elseif ($cvExtension == 'docx')
+                                                                                    <!-- Tampilkan sesuai dengan format DOCX, misalnya dengan iframe -->
+                                                                                    <iframe src="{{ $cvUrl }}"
+                                                                                        width="100%" height="600px"
+                                                                                        frameborder="0"></iframe>
+                                                                                @else
+                                                                                    <p>File format not supported. <a
+                                                                                            href="{{ $cvUrl }}"
+                                                                                            target="_blank">Download</a>
+                                                                                        instead.</p>
+                                                                                @endif
+                                                                            </div>
+
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                         <div class="col-md-6">
@@ -280,16 +346,85 @@
                                                                         file</label>
                                                                 </div>
                                                                 @if ($motivationLetterUrl)
-                                                                    <a href="{{ $motivationLetterUrl }}" target="_blank"
-                                                                        class="text-sm text-primary">Lihat Motivation
-                                                                        Letter</a>
+                                                                    @if ($motivation_letterExtension == 'pdf' || $motivation_letterExtension == 'docx')
+                                                                        <a class="btn mt-2" id="ml-link"
+                                                                            data-toggle="modal" data-target="#mlModal"
+                                                                            {{-- href="/public/files/cv/DUMMY DOCUMENT TEST.pdf" --}}
+                                                                            data-caption="Motivation Letter {{ $full_name }}"
+                                                                            class="text-sm text-primary"
+                                                                            style="background-color: #7066e0"
+                                                                            data-toggle="tooltip" data-placement="top"
+                                                                            title="Lihat Motivation Letter">
+                                                                            <li class="fas fa-eye text-white"></li>
+                                                                        </a>
+                                                                    @endif
+                                                                    <a class="btn btn-info mt-2"
+                                                                        href="{{ $motivationLetterUrl }}" download
+                                                                        data-toggle="tooltip" data-placement="top"
+                                                                        title="Unduh Motivation Letter">
+                                                                        <li class="fas fa-download"></li>
+                                                                    </a>
+                                                                    @if ($motivation_letterExtension == 'png')
+                                                                        <div class="mt-3">
+                                                                            <a data-fancybox
+                                                                                data-caption="Motivation Letter {{ $full_name }}"
+                                                                                href="{{ $motivationLetterUrl }}">
+                                                                                <img src="{{ $motivationLetterUrl }}"
+                                                                                    class="mt-3" alt="Motivation Letter"
+                                                                                    width="200">
+                                                                            </a>
+                                                                        </div>
+                                                                    @endif
                                                                 @else
-                                                                    <p class="tetx-sm text-danger">Belum ada Motivation
+                                                                    <p class="text-sm text-danger">Belum ada Motivation
                                                                         Letter</p>
                                                                 @endif
                                                                 @error('motivation_letter')
                                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                                 @enderror
+                                                                <div class="modal fade" id="mlModal" tabindex="-1"
+                                                                    role="dialog" aria-labelledby="mlModalLabel"
+                                                                    aria-hidden="true">
+                                                                    <div class="modal-dialog modal-lg" role="document">
+                                                                        <div class="modal-content">
+                                                                            <div class="modal-header">
+                                                                                <h5 class="modal-title" id="mlModalLabel">
+                                                                                    Motivation Letter {{ $full_name }}
+                                                                                </h5>
+                                                                                <button type="button" class="close"
+                                                                                    data-dismiss="modal"
+                                                                                    aria-label="Close">
+                                                                                    <span aria-hidden="true">&times;</span>
+                                                                                </button>
+                                                                            </div>
+                                                                            <div class="modal-body">
+                                                                                @if ($motivation_letterExtension == 'pdf')
+                                                                                    <object
+                                                                                        data="{{ $motivationLetterUrl }}"
+                                                                                        type="application/pdf"
+                                                                                        width="100%" height="600px">
+                                                                                        <p>Unable to display PDF file. <a
+                                                                                                href="{{ $motivationLetterUrl }}"
+                                                                                                target="_blank">Download</a>
+                                                                                            instead.</p>
+                                                                                    </object>
+                                                                                @elseif ($motivation_letterExtension == 'docx')
+                                                                                    <!-- Tampilkan sesuai dengan format DOCX, misalnya dengan iframe -->
+                                                                                    <iframe
+                                                                                        src="{{ $motivationLetterUrl }}"
+                                                                                        width="100%" height="600px"
+                                                                                        frameborder="0"></iframe>
+                                                                                @else
+                                                                                    <p>File format not supported. <a
+                                                                                            href="{{ $motivationLetterUrl }}"
+                                                                                            target="_blank">Download</a>
+                                                                                        instead.</p>
+                                                                                @endif
+                                                                            </div>
+
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                         <div class="col-md-6">
@@ -306,16 +441,83 @@
                                                                 </div>
 
                                                                 @if ($coverLetterUrl)
-                                                                    <a href="{{ $coverLetterUrl }}" target="_blank"
-                                                                        class="text-sm text-primary">Lihat Surat
-                                                                        Pengantar</a>
+                                                                    @if ($cover_letterExtension == 'pdf' || $cover_letterExtension == 'docx')
+                                                                        <a class="btn mt-2" id="ml-link"
+                                                                            data-toggle="modal" data-target="#clModal"
+                                                                            {{-- href="/public/files/cv/DUMMY DOCUMENT TEST.pdf" --}}
+                                                                            data-caption="Surat Pengantar {{ $full_name }}"
+                                                                            class="text-sm text-primary"
+                                                                            style="background-color: #7066e0"
+                                                                            data-toggle="tooltip" data-placement="top"
+                                                                            title="Lihat Surat Pengantar">
+                                                                            <li class="fas fa-eye text-white"></li>
+                                                                        </a>
+                                                                    @endif
+                                                                    <a class="btn btn-info mt-2"
+                                                                        href="{{ $coverLetterUrl }}" download
+                                                                        data-toggle="tooltip" data-placement="top"
+                                                                        title="Unduh Surat Pengantar">
+                                                                        <li class="fas fa-download"></li>
+                                                                    </a>
+                                                                    @if ($cover_letterExtension == 'png')
+                                                                        <div class="mt-3">
+                                                                            <a data-fancybox
+                                                                                data-caption="Surat Pengantar {{ $full_name }}"
+                                                                                href="{{ $coverLetterUrl }}">
+                                                                                <img src="{{ $coverLetterUrl }}"
+                                                                                    class="mt-3" alt="Surat Pengantar"
+                                                                                    width="200">
+                                                                            </a>
+                                                                        </div>
+                                                                    @endif
                                                                 @else
                                                                     <p class="text-sm text-danger">Belum ada Surat
                                                                         Pengantar</p>
                                                                 @endif
-                                                                @error('cover_letter')
+                                                                @error('motivation_letter')
                                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                                 @enderror
+                                                                <div class="modal fade" id="clModal" tabindex="-1"
+                                                                    role="dialog" aria-labelledby="clModalLabel"
+                                                                    aria-hidden="true">
+                                                                    <div class="modal-dialog modal-lg" role="document">
+                                                                        <div class="modal-content">
+                                                                            <div class="modal-header">
+                                                                                <h5 class="modal-title" id="clModalLabel">
+                                                                                    Surat Pengantar {{ $full_name }}
+                                                                                </h5>
+                                                                                <button type="button" class="close"
+                                                                                    data-dismiss="modal"
+                                                                                    aria-label="Close">
+                                                                                    <span aria-hidden="true">&times;</span>
+                                                                                </button>
+                                                                            </div>
+                                                                            <div class="modal-body">
+                                                                                @if ($cover_letterExtension == 'pdf')
+                                                                                    <object data="{{ $coverLetterUrl }}"
+                                                                                        type="application/pdf"
+                                                                                        width="100%" height="600px">
+                                                                                        <p>Unable to display PDF file. <a
+                                                                                                href="{{ $coverLetterUrl }}"
+                                                                                                target="_blank">Download</a>
+                                                                                            instead.</p>
+                                                                                    </object>
+                                                                                @elseif ($cover_letterExtension == 'docx')
+                                                                                    <!-- Tampilkan sesuai dengan format DOCX, misalnya dengan iframe -->
+                                                                                    <iframe src="{{ $coverLetterUrl }}"
+                                                                                        width="100%" height="600px"
+                                                                                        frameborder="0"></iframe>
+                                                                                @else
+                                                                                    <p>File format not supported. <a
+                                                                                            href="{{ $coverLetterUrl }}"
+                                                                                            target="_blank">Download</a>
+                                                                                        instead.</p>
+                                                                                @endif
+                                                                            </div>
+
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                         <div class="col-md-6">
@@ -332,14 +534,76 @@
                                                                 </div>
 
                                                                 @if ($portfolioUrl)
-                                                                    <a href="{{ $portfolioUrl }}" target="_blank"
-                                                                        class="text-sm text-primary">Lihat Portfolio</a>
-                                                                @else
-                                                                    <p>Belum ada Motivation Letter</p>
+                                                                    @if ($portfolioExtension == 'pdf' || $portfolioExtension == 'docx')
+                                                                        <a class="btn mt-2" id="p-link"
+                                                                            data-toggle="modal" data-target="#pModal"
+                                                                            {{-- href="/public/files/cv/DUMMY DOCUMENT TEST.pdf" --}}
+                                                                            data-caption="Portfolio {{ $full_name }}"
+                                                                            class="text-sm text-primary"
+                                                                            style="background-color: #7066e0"
+                                                                            data-toggle="tooltip" data-placement="top"
+                                                                            title="Lihat Portfolio">
+                                                                            <li class="fas fa-eye text-white"></li>
+                                                                        </a>
+                                                                    @endif
+                                                                @endif
+                                                                <a class="btn btn-info mt-2" href="{{ $portfolioUrl }}"
+                                                                    download data-toggle="tooltip" data-placement="top"
+                                                                    title="Unduh Portfolio">
+                                                                    <li class="fas fa-download"></li>
+                                                                </a>
+                                                                @if ($portfolioExtension == 'png')
+                                                                    <div class="mt-3">
+                                                                        <a data-fancybox
+                                                                            data-caption="Portfolio{{ $full_name }}"
+                                                                            href="{{ $portfolioUrl }}">
+                                                                            <img src="{{ $portfolioUrl }}" class="mt-3"
+                                                                                alt="Portfolio" width="200">
+                                                                        </a>
+                                                                    </div>
                                                                 @endif
                                                                 @error('portfolio')
                                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                                 @enderror
+                                                                <div class="modal fade" id="pModal" tabindex="-1"
+                                                                    role="dialog" aria-labelledby="pModalLabel"
+                                                                    aria-hidden="true">
+                                                                    <div class="modal-dialog modal-lg" role="document">
+                                                                        <div class="modal-content">
+                                                                            <div class="modal-header">Portfolio
+                                                                                {{ $full_name }}</h5>
+                                                                                <button type="button" class="close"
+                                                                                    data-dismiss="modal"
+                                                                                    aria-label="Close">
+                                                                                    <span aria-hidden="true">&times;</span>
+                                                                                </button>
+                                                                            </div>
+                                                                            <div class="modal-body">
+                                                                                @if ($portfolioExtension == 'pdf')
+                                                                                    <object data="{{ $portfolioUrl }}"
+                                                                                        type="application/pdf"
+                                                                                        width="100%" height="600px">
+                                                                                        <p>Unable to display PDF file. <a
+                                                                                                href="{{ $portfolioUrl }}"
+                                                                                                target="_blank">Download</a>
+                                                                                            instead.</p>
+                                                                                    </object>
+                                                                                @elseif ($portfolioExtension == 'docx')
+                                                                                    <!-- Tampilkan sesuai dengan format DOCX, misalnya dengan iframe -->
+                                                                                    <iframe src="{{ $portfolioUrl }}"
+                                                                                        width="100%" height="600px"
+                                                                                        frameborder="0"></iframe>
+                                                                                @else
+                                                                                    <p>File format not supported. <a
+                                                                                            href="{{ $portfolioUrl }}"
+                                                                                            target="_blank">Download</a>
+                                                                                        instead.</p>
+                                                                                @endif
+                                                                            </div>
+
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                         <div class="col-md-6">
@@ -356,8 +620,7 @@
                                                                 </div>
 
                                                                 @if ($photoUrl)
-                                                                    <a data-fancybox
-                                                                        data-caption="Pas Foto {{ $username }}"
+                                                                    <a data-fancybox data-caption="Pas Foto"
                                                                         href="{{ $photoUrl }}">
                                                                         <img src="{{ $photoUrl }}" class="mt-3"
                                                                             alt="PAS Foto" width="200">
@@ -365,6 +628,7 @@
                                                                 @else
                                                                     <p class="text-sm text-danger">Belum ada Foto</p>
                                                                 @endif
+
                                                                 @error('photo')
                                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                                 @enderror
@@ -420,6 +684,13 @@
         <!-- /.content -->
     </div>
 
+    <script>
+        $(document).ready(function() {
+            $("[data-fancybox]").fancybox({
+                buttons: ["slideShow", "fullScreen", "thumbs", "close"],
+            });
+        });
+    </script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Dapatkan elemen input tanggal mulai dan tanggal selesai
