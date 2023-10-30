@@ -326,7 +326,7 @@ class InternController extends Controller
         // Mendefinisikan alamat URL untuk file motivation letter dari direktori 'public/uploads/motivation_letter'
         if ($intern->motivation_letter) {
             // Jika surat pengantar sudah diunggah, atur $coverLetterUrl
-            $motivationLetterUrl = asset('files/motivation_lettter/' . $intern->motivation_letter);
+            $motivationLetterUrl = asset('files/motivation_letter/' . $intern->motivation_letter);
             $motivation_letterExtension = pathinfo($intern->motivation_letter, PATHINFO_EXTENSION);
         } else {
             // Jika surat pengantar belum diunggah, atur $coverLetterUrl menjadi null
