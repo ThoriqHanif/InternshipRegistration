@@ -11,11 +11,14 @@ use App\Models\User;
 use Dotenv\Validator;
 use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator as FacadesValidator;
+use PhpOffice\PhpWord\IOFactory;
 use Yajra\DataTables\Facades\DataTables;
 use ZipArchive;
+use Vish4395\LaravelFileViewer\LaravelFileViewer;
 
 class InternController extends Controller
 {
@@ -28,19 +31,19 @@ class InternController extends Controller
         if ($request->ajax()) {
             $showDeleted = $request->input('showDeleted', 0);
             $statusFilter = $request->input('status');
-    
+
             $interns = Intern::with('position')->select('interns.*');
-    
+
             if ($showDeleted) {
                 // Jika showDeleted bernilai 1, hanya tampilkan data yang diarsipkan
                 $interns->onlyTrashed();
             }
-    
+
             if ($statusFilter) {
                 // Jika filter status dipilih, tambahkan filter sesuai dengan nilai status
                 $interns->where('status', $statusFilter);
             }
-    
+
             return DataTables::of($interns)
                 ->addColumn('action', function ($intern) {
                     return view('pages.admin.intern.action', compact('intern'));
@@ -49,7 +52,7 @@ class InternController extends Controller
                 ->rawColumns(['action'])
                 ->make(true);
         }
-    
+
         return view('pages.admin.intern.index');
 
 
@@ -199,9 +202,61 @@ class InternController extends Controller
         }
     }
 
+    // public function convertDocxToHtml($docxFilePath) {
+    //     $phpWord = IOFactory::load($docxFilePath);
+    //     $htmlWriter = IOFactory::createWriter($phpWord, 'HTML');
+    //     $htmlFilePath = storage_path('app/temp/docx.html');
+    //     $htmlWriter->save($htmlFilePath);
+    //     return file_get_contents($htmlFilePath);
+    // }
+
     /**
      * Display the specified resource.
      */
+
+    public function convertDocxToHtml($docxFilePath, $fileType)
+
+    {
+        $phpWord = IOFactory::load($docxFilePath);
+        $htmlWriter = new \PhpOffice\PhpWord\Writer\HTML($phpWord);
+
+        // Definisikan path di mana hasil HTML akan disimpan
+        $fileTypeFolder = '';
+        if ($fileType === 'motivation_letter') {
+            $fileTypeFolder = 'motivation_letter/';
+        } elseif ($fileType === 'cv') {
+            $fileTypeFolder = 'cv/';
+        } elseif ($fileType === 'cover_letter') {
+            $fileTypeFolder = 'cover_letter/';
+        } elseif ($fileType === 'portfolio') {
+            $fileTypeFolder = 'portfolio/';
+        }
+
+        $htmlFilePath = public_path('files/' . $fileTypeFolder . '/convert/' . pathinfo($docxFilePath, PATHINFO_FILENAME) . '.html');
+
+        $htmlWriter->save($htmlFilePath);
+
+        // Setel path file HTML yang dihasilkan
+        $htmlFilePath = asset('files/' . $fileTypeFolder . '/convert/' . pathinfo($docxFilePath, PATHINFO_FILENAME) . '.html');
+
+        // Kembalikan path file HTML
+        return $htmlFilePath;
+
+        // $phpWord = IOFactory::load($docxFilePath);
+        // $htmlWriter = new \PhpOffice\PhpWord\Writer\HTML($phpWord);
+
+        // // Definisikan path di mana hasil HTML akan disimpan
+        // $htmlFilePath = public_path('files/motivation_letter/' . pathinfo($docxFilePath, PATHINFO_FILENAME) . '.html');
+
+        // $htmlWriter->save($htmlFilePath);
+
+        // // Setel path file HTML yang dihasilkan
+        // $motivationLetterHtmlPath = asset('files/motivation_letter/' . pathinfo($docxFilePath, PATHINFO_FILENAME) . '.html');
+
+        // // Kembalikan path file HTML
+        // return $motivationLetterHtmlPath;
+    }
+
     public function show($id)
     {
         //
@@ -211,24 +266,33 @@ class InternController extends Controller
         $positions = Position::all();
         $st = ['diterima' => 'Diterima', 'ditolak' => 'Ditolak', 'pending' => 'Pending'];
 
-        
         // Mengambil alamat URL untuk file CV dari penyimpanan "public"
         if ($intern->cv) {
             // Jika surat pengantar sudah diunggah, atur $coverLetterUrl
             $cvUrl = asset('files/cv/' . $intern->cv);
             $cvExtension = pathinfo($intern->cv, PATHINFO_EXTENSION);
+            if ($cvExtension == 'docx') {
+                // Panggil metode untuk mengonversi DOCX ke HTML
+                $htmlPath = $this->convertDocxToHtml(public_path('files/cv/' . $intern->cv), 'cv');
+                $cvHtmlPath = $htmlPath;
+            }
         } else {
             // Jika surat pengantar belum diunggah, atur $coverLetterUrl menjadi null
             $cvUrl = null;
             $cvExtension = null;
         }
 
-        // Mendefinisikan alamat URL untuk file motivation letter dari direktori 'public/uploads/motivation_letter'
+        // Mendefinisikan alamat URL untuk file motivation letter dari direktori 'public/files/motivation_letter'
         if ($intern->motivation_letter) {
             // Jika surat pengantar sudah diunggah, atur $coverLetterUrl
             $motivationLetterUrl = asset('files/motivation_letter/' . $intern->motivation_letter);
             $motivation_letterExtension = pathinfo($intern->motivation_letter, PATHINFO_EXTENSION);
 
+            if ($motivation_letterExtension == 'docx') {
+                // Panggil metode untuk mengonversi DOCX ke HTML
+                $htmlPath = $this->convertDocxToHtml(public_path('files/motivation_letter/' . $intern->motivation_letter), 'motivation_letter');
+                $motivationLetterHtmlPath = $htmlPath;
+            }
         } else {
             // Jika surat pengantar belum diunggah, atur $coverLetterUrl menjadi null
             $motivationLetterUrl = null;
@@ -240,6 +304,11 @@ class InternController extends Controller
             // Jika surat pengantar sudah diunggah, atur $coverLetterUrl
             $coverLetterUrl = asset('files/cover_letter/' . $intern->cover_letter);
             $cover_letterExtension = pathinfo($intern->cover_letter, PATHINFO_EXTENSION);
+            if ($cover_letterExtension == 'docx') {
+                // Panggil metode untuk mengonversi DOCX ke HTML
+                $htmlPath = $this->convertDocxToHtml(public_path('files/cover_letter/' . $intern->cover_letter), 'cover_letter');
+                $coverLetterHtmlPath = $htmlPath;
+            }
         } else {
             // Jika surat pengantar belum diunggah, atur $coverLetterUrl menjadi null
             $coverLetterUrl = null;
@@ -251,7 +320,11 @@ class InternController extends Controller
             // Jika surat pengantar sudah diunggah, atur $coverLetterUrl
             $portfolioUrl = asset('files/portfolio/' . $intern->portfolio);
             $portfolioExtension = pathinfo($intern->portfolio, PATHINFO_EXTENSION);
-
+            if ($portfolioExtension == 'docx') {
+                // Panggil metode untuk mengonversi DOCX ke HTML
+                $htmlPath = $this->convertDocxToHtml(public_path('files/portfolio/' . $intern->portfolio), 'portfolio');
+                $portfolioHtmlPath = $htmlPath;
+            }
         } else {
             // Jika surat pengantar belum diunggah, atur $coverLetterUrl menjadi null
             $portfoliorUrl = null;
@@ -290,10 +363,16 @@ class InternController extends Controller
             'cover_letterExtension' => $cover_letterExtension, // Menambahkan URL CV ke tampilan
             'portfolioExtension' => $portfolioExtension, // Menambahkan URL CV ke tampilan
             'photoExtension' => $photoExtension, // Menambahkan URL CV ke tampilan
-            'motivationLetterUrl' => $motivationLetterUrl, // Menambahkan URL motivation letter ke tampilan
+            'motivationLetterUrl' => $motivationLetterUrl,
             'coverLetterUrl' => $coverLetterUrl, // Menambahkan URL cover letter ke tampilan
             'portfolioUrl' => $portfolioUrl, // Menambahkan URL portfolio ke tampilan
             'photoUrl' => $photoUrl,
+            'cvHtmlPath' => isset($cvHtmlPath) ? $cvHtmlPath : null,
+            'motivationLetterHtmlPath' => isset($motivationLetterHtmlPath) ? $motivationLetterHtmlPath : null,
+            'coverLetterHtmlPath' => isset($coverLetterHtmlPath) ? $coverLetterHtmlPath : null,
+            'portfolioHtmlPath' => isset($portfolioHtmlPath) ? $portfolioHtmlPath : null,
+
+            // 'motivationLetterHtmlPath' => $motivationLetterHtmlPath,
             'status' => $intern->status,
             'st' => $st
         ]);
@@ -317,6 +396,11 @@ class InternController extends Controller
             // Jika surat pengantar sudah diunggah, atur $coverLetterUrl
             $cvUrl = asset('files/cv/' . $intern->cv);
             $cvExtension = pathinfo($intern->cv, PATHINFO_EXTENSION);
+            if ($cvExtension == 'docx') {
+                // Panggil metode untuk mengonversi DOCX ke HTML
+                $htmlPath = $this->convertDocxToHtml(public_path('files/cv/' . $intern->cv), 'cv');
+                $cvHtmlPath = $htmlPath;
+            }
         } else {
             // Jika surat pengantar belum diunggah, atur $coverLetterUrl menjadi null
             $cvUrl = null;
@@ -328,6 +412,7 @@ class InternController extends Controller
             // Jika surat pengantar sudah diunggah, atur $coverLetterUrl
             $motivationLetterUrl = asset('files/motivation_letter/' . $intern->motivation_letter);
             $motivation_letterExtension = pathinfo($intern->motivation_letter, PATHINFO_EXTENSION);
+            
         } else {
             // Jika surat pengantar belum diunggah, atur $coverLetterUrl menjadi null
             $motivationLetterUrl = null;
@@ -339,6 +424,11 @@ class InternController extends Controller
             // Jika surat pengantar sudah diunggah, atur $coverLetterUrl
             $coverLetterUrl = asset('files/cover_letter/' . $intern->cover_letter);
             $cover_letterExtension = pathinfo($intern->cover_letter, PATHINFO_EXTENSION);
+            if ($cover_letterExtension == 'docx') {
+                // Panggil metode untuk mengonversi DOCX ke HTML
+                $htmlPath = $this->convertDocxToHtml(public_path('files/cover_letter/' . $intern->cover_letter), 'cover_letter');
+                $coverLetterHtmlPath = $htmlPath;
+            }
         } else {
             // Jika surat pengantar belum diunggah, atur $coverLetterUrl menjadi null
             $coverLetterUrl = null;
@@ -350,6 +440,11 @@ class InternController extends Controller
             // Jika surat pengantar sudah diunggah, atur $coverLetterUrl
             $portfolioUrl = asset('files/portfolio/' . $intern->portfolio);
             $portfolioExtension = pathinfo($intern->portfolio, PATHINFO_EXTENSION);
+            if ($portfolioExtension == 'docx') {
+                // Panggil metode untuk mengonversi DOCX ke HTML
+                $htmlPath = $this->convertDocxToHtml(public_path('files/portfolio/' . $intern->portfolio), 'portfolio');
+                $portfolioHtmlPath = $htmlPath;
+            }
         } else {
             // Jika surat pengantar belum diunggah, atur $coverLetterUrl menjadi null
             $portfoliorUrl = null;
@@ -393,6 +488,10 @@ class InternController extends Controller
             'cover_letterExtension' => $cover_letterExtension,
             'portfolioExtension' => $portfolioExtension,
             'photoExtension' => $photoExtension,
+            'cvHtmlPath' => isset($cvHtmlPath) ? $cvHtmlPath : null,
+            'motivationLetterHtmlPath' => isset($motivationLetterHtmlPath) ? $motivationLetterHtmlPath : null,
+            'coverLetterHtmlPath' => isset($coverLetterHtmlPath) ? $coverLetterHtmlPath : null,
+            'portfolioHtmlPath' => isset($portfolioHtmlPath) ? $portfolioHtmlPath : null,
             'status' => $intern->status,
             'st' => $st,
             'statusChanged' => $intern->status_changed,
@@ -442,19 +541,19 @@ class InternController extends Controller
                         // Jika status sekarang adalah 'pending', kirim email notifikasi pending
                         Mail::to($data->email)->send(new InternStatus($data, 'pending'));
                     }
-    
+
                     // Kemudian atur 'user_id' pada pemagang yang terkait menjadi null
                     $relatedInterns = Intern::where('user_id', $data->user_id)->get();
                     foreach ($relatedInterns as $relatedIntern) {
                         $relatedIntern->user_id = null;
                         $relatedIntern->save();
                     }
-    
+
                     // Hapus pengguna
                     $data->user->delete();
                 }
             }
-    
+
             $data->status = $status;  // Update status sesuai dengan status baru
         }
 

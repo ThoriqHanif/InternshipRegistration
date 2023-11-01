@@ -303,10 +303,8 @@
                                                                                             instead.</p>
                                                                                     </object>
                                                                                 @elseif ($cvExtension == 'docx')
-                                                                                    <!-- Tampilkan sesuai dengan format DOCX, misalnya dengan iframe -->
-                                                                                    <iframe src="{{ $cvUrl }}"
-                                                                                        width="100%" height="600px"
-                                                                                        frameborder="0"></iframe>
+                                                                                    {{-- DISINI UNTUK MELIHAT FILE DOCX --}}
+                                                                                    <iframe src="{{ $cvHtmlPath }}" style="width: 100%; height: 600px;"></iframe>
                                                                                 @else
                                                                                     <p>File format not supported. <a
                                                                                             href="{{ $cvUrl }}"
@@ -398,11 +396,10 @@
                                                                                             instead.</p>
                                                                                     </object>
                                                                                 @elseif ($motivation_letterExtension == 'docx')
-                                                                                    <!-- Tampilkan sesuai dengan format DOCX, misalnya dengan iframe -->
-                                                                                    <iframe
-                                                                                        src="{{ $motivationLetterUrl }}"
-                                                                                        width="100%" height="600px"
-                                                                                        frameborder="0"></iframe>
+                                                                                <iframe src="{{ $motivationLetterHtmlPath }}" style="width: 100%; height: 600px;"></iframe>
+
+
+                                                                                    
                                                                                 @else
                                                                                     <p>File format not supported. <a
                                                                                             href="{{ $motivationLetterUrl }}"
@@ -495,7 +492,7 @@
                                                                                     </object>
                                                                                 @elseif ($cover_letterExtension == 'docx')
                                                                                     <!-- Tampilkan sesuai dengan format DOCX, misalnya dengan iframe -->
-                                                                                    <iframe src="{{ $coverLetterUrl }}"
+                                                                                    <iframe src="{{ $coverLetterHtmlPath }}"
                                                                                         width="100%" height="600px"
                                                                                         frameborder="0"></iframe>
                                                                                 @else
@@ -582,7 +579,7 @@
                                                                                     </object>
                                                                                 @elseif ($portfolioExtension == 'docx')
                                                                                     <!-- Tampilkan sesuai dengan format DOCX, misalnya dengan iframe -->
-                                                                                    <iframe src="{{ $portfolioUrl }}"
+                                                                                    <iframe src="{{ $portfolioHtmlPath }}"
                                                                                         width="100%" height="600px"
                                                                                         frameborder="0"></iframe>
                                                                                 @else
