@@ -398,8 +398,6 @@
                                                                                 @elseif ($motivation_letterExtension == 'docx')
                                                                                 <iframe src="{{ $motivationLetterHtmlPath }}" style="width: 100%; height: 600px;"></iframe>
 
-
-                                                                                    
                                                                                 @else
                                                                                     <p>File format not supported. <a
                                                                                             href="{{ $motivationLetterUrl }}"
