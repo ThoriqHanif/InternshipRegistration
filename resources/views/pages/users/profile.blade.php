@@ -178,10 +178,10 @@
                                                             magang di Kadang Koding Indonesia. Status pendaftaran anda <a
                                                                 href="">{{ $intern->status }}</a>
                                                         </div>
-                                                        <div class="timeline-footer">
+                                                        {{-- <div class="timeline-footer">
                                                             <a href="#" class="btn btn-primary btn-sm">Lihat
                                                                 Laporan</a>
-                                                        </div>
+                                                        </div> --}}
                                                     </div>
                                                 </div>
                                             </div>

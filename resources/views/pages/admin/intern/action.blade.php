@@ -26,6 +26,14 @@
     <button type="submit" class="btn btn-sm btn-info restore-button-intern" data-toggle="tooltip" data-placement="top" title="Restore Pemagang">
         <i class="fas fa-undo"></i>
     </button>
+    
+</form>
+<form style="display: inline" action="{{ route('intern.forceDelete', $intern->id) }}" method="POST" id="forceDeleteFormIntern">
+    @csrf
+    @method('DELETE')
+    <button type="submit" class="btn btn-sm btn-danger delete-button-intern" data-toggle="tooltip" data-placement="top" title="Hapus Permanen Pemagang">
+        <i class="fas fa-trash"></i>
+    </button>
 </form>
 @endif
 
@@ -88,6 +96,65 @@
     });
 </script>
 
+<script>
+    $(document).ready(function() {
+    // Event handler untuk tombol "Force Delete"
+    $('.delete-button-intern').on('click', function(e) {
+        e.preventDefault();
+        var deleteButton = $(this);
+        var deleteForm = deleteButton.closest('#forceDeleteFormIntern');
+
+        Swal.fire({
+            title: 'Konfirmasi Hapus Permanen',
+            text: 'Anda yakin ingin menghapus pemagang ini secara permanen?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, Hapus Permanen',
+            cancelButtonText: 'Batal',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: 'Mohon Tunggu!',
+                    html: 'Sedang menghapus pemagang...',
+                    allowOutsideClick: false,
+                    showConfirmButton: false,
+                    willOpen: () => {
+                        Swal.showLoading();
+                    },
+                });
+
+                $.ajax({
+                    type: 'DELETE',
+                    url: deleteForm.attr('action'),
+                    data: deleteForm.serialize(),
+                    success: function(response) {
+                        Swal.close();
+
+                        if (response.success) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Berhasil!',
+                                text: 'Pemagang berhasil dihapus secara permanen.',
+                            }).then(function() {
+                                // Refresh DataTable or redirect to another page
+                                tableIntern.ajax.reload();
+                                window.location.href = '{{ route('intern.index') }}';
+                            });
+                        } else {
+                            Swal.fire('Gagal', 'Gagal menghapus pemagang secara permanen', 'error');
+                        }
+                    },
+                    error: function() {
+                        Swal.close();
+                        Swal.fire('Gagal', 'Terjadi kesalahan saat menghapus pemagang secara permanen', 'error');
+                    }
+                });
+            }
+        });
+    });
+});
+
+</script>
 
 <script>
     $(document).ready(function() {

@@ -23,6 +23,13 @@
         <i class="fas fa-undo"></i>
     </button>
 </form>
+<form style="display: inline" action="{{ route('position.forceDelete', $positions->id) }}" method="POST" id="forceDeleteFormPosition">
+    @csrf
+    @method('DELETE')
+    <button type="submit" class="btn btn-sm btn-danger delete-button-position" data-toggle="tooltip" data-placement="top" title="Hapus Permanen Posisi">
+        <i class="fas fa-trash"></i>
+    </button>
+</form>
 @endif
 
 <script>
@@ -82,6 +89,66 @@
             });
         });
     });
+</script>
+
+<script>
+    $(document).ready(function() {
+    // Event handler untuk tombol "Force Delete"
+    $('.delete-button-position').on('click', function(e) {
+        e.preventDefault();
+        var deleteButton = $(this);
+        var deleteForm = deleteButton.closest('#forceDeleteFormPosition');
+
+        Swal.fire({
+            title: 'Konfirmasi Hapus Permanen',
+            text: 'Anda yakin ingin menghapus Posisi ini secara permanen?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, Hapus Permanen',
+            cancelButtonText: 'Batal',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: 'Mohon Tunggu!',
+                    html: 'Sedang menghapus posisi...',
+                    allowOutsideClick: false,
+                    showConfirmButton: false,
+                    willOpen: () => {
+                        Swal.showLoading();
+                    },
+                });
+
+                $.ajax({
+                    type: 'DELETE',
+                    url: deleteForm.attr('action'),
+                    data: deleteForm.serialize(),
+                    success: function(response) {
+                        Swal.close();
+
+                        if (response.success) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Berhasil!',
+                                text: 'Posisi Magang berhasil dihapus secara permanen.',
+                            }).then(function() {
+                                // Refresh DataTable or redirect to another page
+                                tableIntern.ajax.reload();
+                                window.location.href = '{{ route('position.index') }}';
+                            });
+                        } else {
+                            Swal.fire('Gagal', 'Gagal menghapus posisi secara permanen', 'error');
+                        }
+                    },
+                    error: function() {
+                        Swal.close();
+                        Swal.fire('Gagal', 'Terjadi kesalahan saat menghapus pemagang secara permanen', 'error');
+                    }
+                });
+            }
+        });
+    });
+});
+
 </script>
 
 <script>

@@ -6,6 +6,7 @@ use App\Http\Controllers\PositionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\RegistrationController;
 use Illuminate\Support\Facades\Route;
 
@@ -20,7 +21,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::resource('/', RegistrationController::class);
+Route::resource('/', HomeController::class);
+Route::resource('/register', RegistrationController::class);
 
 
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
@@ -46,8 +48,12 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::put('/admin/profile', [ProfileController::class, 'updateAdmin'])->name('admin.profile.update');;
     Route::get('/intern/download/{id}', [InternController::class, 'download'])->name('intern.download');
     Route::post('/intern/restore/{id}', [InternController::class, 'restore'])->name('intern.restore');
+    Route::delete('/intern/force-delete/{id}', [InternController::class, 'forceDelete'])->name('intern.forceDelete');
+
 
     Route::post('/position/restore/{id}', [PositionController::class, 'restore'])->name('position.restore');
+    Route::delete('/position/force-delete/{id}', [PositionController::class, 'forceDelete'])->name('position.forceDelete');
+
 
     // Route::get('/report', function () {
     //     return view('pages.admin.report.index');

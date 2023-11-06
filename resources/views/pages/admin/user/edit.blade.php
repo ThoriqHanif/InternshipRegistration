@@ -104,9 +104,16 @@
                                                                 <label for="example-text-input"
                                                                     class="form-control-label">Password<span
                                                                         class="text-danger"> *</span></label>
+                                                                        <div class="input-group">
                                                                 <input
                                                                     class="form-control @error('password') is-invalid @enderror"
-                                                                    type="text" value="" name="password">
+                                                                    type="password" value="" name="password" id="password">
+                                                                    <div class="input-group-append" id="togglePassword" style="cursor: pointer">
+                                                                        <div class="input-group-text bg-white">
+                                                                            <i class="fas fa-eye" id="togglePasswordIcon"></i>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
                                                                 @error('password')
                                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                                 @enderror
@@ -136,6 +143,24 @@
         </section>
         <!-- /.content -->
     </div>
+
+    <script>
+        const passwordField = document.getElementById('password');
+        const togglePassword = document.getElementById('togglePassword');
+        const togglePasswordIcon = document.getElementById('togglePasswordIcon');
+
+        togglePassword.addEventListener('click', function() {
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                togglePasswordIcon.classList.remove('fa-eye');
+                togglePasswordIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordField.type = 'password';
+                togglePasswordIcon.classList.remove('fa-eye-slash');
+                togglePasswordIcon.classList.add('fa-eye');
+            }
+        });
+    </script>
 
 <script>
     $(document).ready(function() {

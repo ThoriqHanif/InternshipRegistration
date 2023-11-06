@@ -47,6 +47,22 @@ class PositionController extends Controller
         }
     }
 
+    public function forceDelete($id)
+    {
+        $positions = Position::onlyTrashed()->find($id);
+
+        if ($positions) {
+            try {
+                $positions->forceDelete();
+                return response()->json(['success' => true]);
+            } catch (\Exception $e) {
+                return response()->json(['success' => false, 'message' => 'Gagal menghapus Posisi secara permanen.']);
+            }
+        } else {
+            return response()->json(['success' => false, 'message' => 'Posisi tidak ditemukan atau tidak dalam status terhapus.']);
+        }
+    }
+
     /**
      * Show the form for creating a new resource.
      */

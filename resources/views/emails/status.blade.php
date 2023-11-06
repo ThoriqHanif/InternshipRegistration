@@ -357,10 +357,10 @@
                                                                     style="line-height:10px"><a
                                                                         href="https://kadangkoding.com"
                                                                         style="outline:none" tabindex="-1"
-                                                                        target="_blank"><img alt="Placeholder logo"
+                                                                        target="_blank"><img alt="Logo Kadang Koding"
                                                                             src="{{$message->embed(public_path().'/img/logo/logofull.png')}}"
                                                                             style="display: block; height: auto; border: 0; max-width: 140px; width: 100%;"
-                                                                            title="Placeholder logo"
+                                                                            title="Logo Kadang Koding"
                                                                             width="140" /></a></div>
                                                             </td>
                                                         </tr>
@@ -394,7 +394,7 @@
                                                                                         alt="Instagram" height="32"
                                                                                         src="{{$message->embed(public_path().'/img/sosmed/instagram2x.png')}}"
                                                                                         style="display: block; height: auto; border: 0;"
-                                                                                        title="instagram"
+                                                                                        title="Instagram"
                                                                                         width="32" /></a></td>
                                                                             <td style="padding:0 2px 0 2px;"><a
                                                                                     href="https://www.linkedin.com/company/kadang-koding-indonesia/about/"
@@ -402,7 +402,7 @@
                                                                                         alt="Linkedin" height="32"
                                                                                         src="{{$message->embed(public_path().'/img/sosmed/linkedin2x.png')}}"
                                                                                         style="display: block; height: auto; border: 0;"
-                                                                                        title="linkedin"
+                                                                                        title="Linkedin"
                                                                                         width="32" /></a></td>
                                                                             <td style="padding:0 2px 0 2px;"><a
                                                                                     href="https://www.facebook.com/kadangkodingindonesia/"
@@ -410,7 +410,7 @@
                                                                                         alt="Facebook" height="32"
                                                                                         src="{{$message->embed(public_path().'/img/sosmed/facebook2x.png')}}"
                                                                                         style="display: block; height: auto; border: 0;"
-                                                                                        title="facebook"
+                                                                                        title="Facebook"
                                                                                         width="32" /></a></td>
                                                                         </tr>
                                                                     </table>
@@ -560,10 +560,10 @@
                                                             <td class="pad">
                                                                 <div align="center" class="alignment"
                                                                     style="line-height:10px"><img
-                                                                        alt="Ilustration of resumes"
+                                                                        alt="Illustration Banner"
                                                                         src="{{$message->embed(public_path().'/img/sosmed/imgBanner.png')}}"
                                                                         style="display: block; height: auto; border: 0; max-width: 280px; width: 100%;"
-                                                                        title="Ilustration of resumes"
+                                                                        title="Illustration Banner"
                                                                         width="280" /></div>
                                                             </td>
                                                         </tr>
@@ -1322,10 +1322,10 @@
                                                                 <td class="pad">
                                                                     <div align="center" class="alignment"
                                                                         style="line-height:10px"><img
-                                                                            alt="Illustration of a person holding two resumes"
+                                                                            alt="Illustration Login"
                                                                             src="{{$message->embed(public_path().'/img/sosmed/imgLogin.png')}}"
                                                                             style="display: block; height: auto; border: 0; max-width: 280px; width: 100%;"
-                                                                            title="Illustration of a person holding two resumes"
+                                                                            title="Illustration Login"
                                                                             width="280" /></div>
                                                                 </td>
                                                             </tr>
@@ -1366,10 +1366,10 @@
                                                             <td class="pad"
                                                                 style="width:100%;padding-right:0px;padding-left:0px;">
                                                                 <div align="center" class="alignment"
-                                                                    style="line-height:10px"><img alt="I'm an image"
+                                                                    style="line-height:10px"><img alt="Illustration Thank You"
                                                                         src="{{$message->embed(public_path().'/img/sosmed/imgThx.png')}}"
                                                                         style="display: block; height: auto; border: 0; max-width: 210px; width: 100%;"
-                                                                        title="I'm an image" width="210" /></div>
+                                                                        title="Illustration Thank You" width="210" /></div>
                                                             </td>
                                                         </tr>
                                                     </table>
@@ -1486,10 +1486,10 @@
                                                                     style="line-height:10px"><a
                                                                         href="https://kadangkoding.com"
                                                                         style="outline:none" tabindex="-1"
-                                                                        target="_blank"><img alt="Placeholder Logo"
+                                                                        target="_blank"><img alt="Logo Kadang Koding"
                                                                             src="{{$message->embed(public_path().'/img/logo/logofull.png')}}"
                                                                             style="display: block; height: auto; border: 0; max-width: 150px; width: 100%;"
-                                                                            title="Placeholder Logo"
+                                                                            title="Logo Kadang Koding"
                                                                             width="150" /></a></div>
                                                             </td>
                                                         </tr>
@@ -1545,7 +1545,7 @@
                                                                                         height="32"
                                                                                         src="{{$message->embed(public_path().'/img/sosmed/instagram2x.png')}}"
                                                                                         style="display: block; height: auto; border: 0;"
-                                                                                        title="instagram"
+                                                                                        title="Instagram"
                                                                                         width="32" /></a></td>
                                                                             <td style="padding:0 2px 0 2px;"><a
                                                                                     href="https://www.linkedin.com/company/kadang-koding-indonesia/about/"
@@ -1554,7 +1554,7 @@
                                                                                         height="32"
                                                                                         src="{{$message->embed(public_path().'/img/sosmed/linkedin2x.png')}}"
                                                                                         style="display: block; height: auto; border: 0;"
-                                                                                        title="linkedin"
+                                                                                        title="Linkedin"
                                                                                         width="32" /></a></td>
                                                                             <td style="padding:0 2px 0 2px;"><a
                                                                                     href="https://www.facebook.com/kadangkodingindonesia/"

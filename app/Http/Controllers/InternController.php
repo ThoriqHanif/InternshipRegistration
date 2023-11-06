@@ -113,6 +113,23 @@ class InternController extends Controller
             return response()->json(['success' => false]);
         }
     }
+
+    public function forceDelete($id)
+    {
+        $intern = Intern::onlyTrashed()->find($id);
+
+        if ($intern) {
+            try {
+                $intern->forceDelete();
+                return response()->json(['success' => true]);
+            } catch (\Exception $e) {
+                return response()->json(['success' => false, 'message' => 'Gagal menghapus pemagang secara permanen.']);
+            }
+        } else {
+            return response()->json(['success' => false, 'message' => 'Pemagang tidak ditemukan atau tidak dalam status terhapus.']);
+        }
+    }
+
     /**
      * Show the form for creating a new resource.
      */
@@ -412,7 +429,6 @@ class InternController extends Controller
             // Jika surat pengantar sudah diunggah, atur $coverLetterUrl
             $motivationLetterUrl = asset('files/motivation_letter/' . $intern->motivation_letter);
             $motivation_letterExtension = pathinfo($intern->motivation_letter, PATHINFO_EXTENSION);
-            
         } else {
             // Jika surat pengantar belum diunggah, atur $coverLetterUrl menjadi null
             $motivationLetterUrl = null;
