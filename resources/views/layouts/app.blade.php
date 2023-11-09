@@ -93,6 +93,54 @@
 </script>
 
 <script>
+    let tablePeriode = new DataTable('#tablePeriode', {
+        processing: true,
+        serverSide: true,
+        responsive: true,
+        ajax: {
+            url: "{{ route('periode.index') }}"
+        },
+        columns: [{
+                data: 'DT_RowIndex',
+                name: 'DT_RowIndex',
+                orderable: false,
+                searchable: false
+            },
+            {
+                data: 'name',
+                name: 'name'
+            },
+            {
+                data: 'position.name',
+                name: 'position.name'
+            },
+            {
+                data: 'start_date',
+                name: 'start_date'
+            },
+            {
+                data: 'end_date',
+                name: 'end_date'
+            },
+            {
+                data: 'quota',
+                name: 'quota'
+            },
+            {
+                data: 'description',
+                name: 'description'
+            },
+            {
+                data: 'action',
+                name: 'action'
+            },
+
+
+        ]
+    });
+</script>
+
+<script>
     function showDeleted() {
         // Mengubah URL Ajax yang digunakan untuk mengambil data position
         tablePosition.ajax.url("{{ route('position.index') }}?showDeleted=1").load();
@@ -109,13 +157,14 @@
         tablePosition.ajax.url("{{ route('position.index') }}?showDeleted=0").load();
 
         // Mengganti teks tombol "Lihat Semua" kembali menjadi "Lihat Arsip"
-        document.getElementById("showDeletedButton").innerHTML = "Lihat Arsip";
+        document.getElementById("showDeletedButton").innerHTML =
+            '<i id="showDeletedIcon" class="fas fa-trash mr-2"></i> Lihat Data Terhapus';
 
         // Mengganti atribut onclick tombol "Lihat Semua" agar dapat memanggil kembali fungsi showDeleted()
         document.getElementById("showDeletedButton").setAttribute("onclick", "showDeleted()");
     }
 
-    
+
 
     let tablePosition = new DataTable('#tablePosition', {
         processing: true,
@@ -129,6 +178,18 @@
                 name: 'DT_RowIndex',
                 orderable: false,
                 searchable: false
+            },
+            {
+                data: 'image',
+                name: 'image',
+                render: function(data, type, full, meta) {
+                    if (type === 'display') {
+                        var imagePath = '{{ asset('files/image') }}/' + data;
+                        return '<img src="' + imagePath +
+                            '" alt="Gambar Posisi" width="40" height="40">';
+                    }
+                    return data;
+                }
             },
             {
                 data: 'name',
@@ -167,7 +228,8 @@
         tableIntern.ajax.url("{{ route('intern.index') }}?showDeleted=0&status=" + $('#statusFilter').val()).load();
 
         // Mengganti teks tombol "Lihat Semua" kembali menjadi "Lihat Arsip"
-        document.getElementById("showDeletedButtonIntern").innerHTML = "Lihat Arsip";
+        document.getElementById("showDeletedButtonIntern").innerHTML =
+            '<i id="showDeletedIcon" class="fas fa-trash mr-2"></i> Lihat Data Terhapus';
 
         // Mengganti atribut onclick tombol "Lihat Semua" agar dapat memanggil kembali fungsi showDeletedIntern()
         document.getElementById("showDeletedButtonIntern").setAttribute("onclick", "showDeletedIntern()");
@@ -254,7 +316,6 @@
                     icon: 'error',
                     title: 'Kesalahan',
                     text: 'Tanggal Selesai harus setelah Tanggal Mulai',
-                    confirmButtonColor: '#3085d6',
                     confirmButtonText: 'Ok'
                 });
 

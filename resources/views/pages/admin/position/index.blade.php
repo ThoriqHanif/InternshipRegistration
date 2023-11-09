@@ -28,7 +28,7 @@
                                 <a class="btn btn-sm btn-success float-right" href="{{ route('position.create') }}"><i class="fas fa-plus mr-2 sm"></i>
                                     Posisi</a>
                                     @endif
-                                <a class="btn btn-sm btn-secondary float-left" onclick="showDeleted()" id="showDeletedButton">Lihat Arsip</a>
+                                <a class="btn btn-sm btn-danger float-left" onclick="showDeleted()" id="showDeletedButton"><i id="showDeletedIcon" class="fas fa-trash mr-2"></i>Lihat Data Terhapus</a>
 
                             </div>
                             <!-- /.card-header -->
@@ -39,6 +39,7 @@
                                     <thead>
                                         <tr>
                                             <th style="width: 10px">No</th>
+                                            <th>Gambar</th>
                                             <th>Nama</th>
                                             <th>Deskripsi</th>
                                             <th>Syarat</th>

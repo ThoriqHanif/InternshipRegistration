@@ -58,6 +58,34 @@
                                                         </div>
                                                         <div class="col-md-6">
                                                             <div class="form-group">
+                                                                <label for="filefimage" class="form-control-label">Gambar
+                                                                    <span class="text-danger"> *</span></label>
+                                                                <div class="custom-file">
+                                                                    <input
+                                                                        class="custom-file-input @error('image') is-invalid @enderror"
+                                                                        type="file" id="fileimage" name="image"
+                                                                        accept=".jpg, .jpeg, .png, .webp">
+                                                                    <label class="custom-file-label"
+                                                                        for="fileSurat">Choose file</label>
+                                                                </div>
+
+                                                                @if ($imageUrl)
+                                                                    <a data-fancybox data-caption="Gambar Posisi "
+                                                                        href="{{ $imageUrl }}">
+                                                                        <img src="{{ $imageUrl }}" class="mt-3"
+                                                                            alt="Gambar Posisi" width="70">
+                                                                    </a>
+                                                                @else
+                                                                    <p class="text-sm text-danger">Belum ada Gambar</p>
+                                                                @endif
+
+                                                                @error('image')
+                                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                                @enderror
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
                                                                 <label for="example-text-input"
                                                                     class="form-control-label">Deskripsi</label>
                                                                 <textarea class="form-control  @error('description') is-invalid @enderror" type="text" value=""

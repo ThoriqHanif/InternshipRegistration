@@ -7,6 +7,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PeriodeController;
 use App\Http\Controllers\RegistrationController;
 use Illuminate\Support\Facades\Route;
 
@@ -23,6 +24,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::resource('/', HomeController::class);
 Route::resource('/register', RegistrationController::class);
+
+
+
 
 
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
@@ -42,6 +46,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::resource('intern', InternController::class);
 
     Route::resource('position', PositionController::class);
+    Route::resource('periode', PeriodeController::class);
     // Route::resource('timetable', TimeTableController::class);
     Route::get('/admin/profile', [ProfileController::class, 'admin'])->name('admin.profile');
     Route::get('/admin/dashboard', [DashboardController::class, 'admin']);

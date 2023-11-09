@@ -57,6 +57,18 @@
                                                         </div>
                                                         <div class="col-md-6">
                                                             <div class="form-group">
+                                                                <label for="filefoto" class="form-control-label">Gambar<span class="text-danger"> *</span></label>
+                                                                <div class="custom-file">
+                                                                    <input class="custom-file-input @error('image') is-invalid @enderror" type="file" id="filefoto" name="image" accept=".jpg, .jpeg, .png, .webp">
+                                                                    <label class="custom-file-label" for="fileSurat">Choose file</label>
+                                                                </div>
+                                                                @error('image')
+                                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                                @enderror
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
                                                                 <label for="example-text-input"
                                                                     class="form-control-label">Deskripsi</label>
                                                                 <textarea class="form-control  @error('description') is-invalid @enderror" type="text" value=""
@@ -66,6 +78,7 @@
                                                                 @enderror
                                                             </div>
                                                         </div>
+                                                        
                                                     </div>
                                                     <hr class="horizontal dark">
                                                     <div class="row">

@@ -27,8 +27,8 @@
                                 @if (auth()->check() && auth()->user()->role == 'admin')
                                     <a class="btn btn-sm btn-success float-right" href="{{ route('intern.create') }}"><i class="fas fa-plus mr-2 sm"></i>
                                         Pemagang</a>
-                                    <a class="btn btn-sm btn-secondary float-left" onclick="showDeletedIntern()"
-                                        id="showDeletedButtonIntern">Lihat Arsip</a>
+                                    <a class="btn btn-sm btn-danger float-left" onclick="showDeletedIntern()"
+                                        id="showDeletedButtonIntern"><i id="showDeletedIcon" class="fas fa-trash mr-2"></i> Lihat Data Terhapus</a>
                                 @endif
                             </div>
                             <!-- /.card-header -->

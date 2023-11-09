@@ -86,10 +86,19 @@ class PositionController extends Controller
             $requirementsString = null; // Atau, jika Anda ingin mengisi dengan null jika tidak ada yang dipilih
         }
 
+        
+        $imageFileName = null;
+        if ($request->hasFile('image')) {
+            $imageFile = $request->file('image');
+            $imageFileName = $imageFile->getClientOriginalName();
+            $imageFile->move(public_path('files/image'), $imageFileName);
+        }
+
         $positions = new Position();
         $positions->name = $request->input('name');
         $positions->description = $request->input('description');
         $positions->requirements = $requirementsString;
+        $positions->image = $imageFileName;
         // $positions->save();
 
         if ($positions->save()) {
@@ -105,11 +114,23 @@ class PositionController extends Controller
     public function show(Position $position)
     {
         //
+        if ($position->image) {
+            // Jika surat pengantar sudah diunggah, atur $coverLetterUrl
+            $imageUrl = asset('files/image/' . $position->image);
+            $imageExtension = pathinfo($position->image, PATHINFO_EXTENSION);
+        } else {
+            // Jika surat pengantar belum diunggah, atur $coverLetterUrl menjadi null
+            $imageUrl = null;
+            $imageExtension = null;
+        }
+
         return view('pages.admin.position.show')->with([
             'id' => 'id',
             'name' => $position->name,
             'description' => $position->description,
             'requirements' => $position->requirements,
+            'imageUrl' => $imageUrl,
+            'imageExtension' => $imageExtension,
         ]);
     }
 
@@ -118,13 +139,26 @@ class PositionController extends Controller
      */
     public function edit(Position $position)
     {
-        //
+     
+        $imageUrl = null;
+        if ($position->image) {
+            // Jika surat pengantar sudah diunggah, atur $coverLetterUrl
+            $imageUrl = asset('files/image/' . $position->image);
+            $imageExtension = pathinfo($position->image, PATHINFO_EXTENSION);
+        } else {
+            // Jika surat pengantar belum diunggah, atur $coverLetterUrl menjadi null
+            $imagerUrl = null;
+            $imageExtension = null;
+        }  
+
         return view('pages.admin.position.edit')->with([
             'position' => $position,
             'id' => $position->id,
             'name' => $position->name,
             'description' => $position->description,
             'requirements' => $position->requirements,
+            'imageUrl' => $imageUrl,
+            'imageExtension' => $imageExtension,
         ]);
         $requirements = explode(', ', $position->requirements);
 
@@ -137,7 +171,7 @@ class PositionController extends Controller
     public function update(UpdatePositionRequest $request, $id)
     {
         //
-
+        $data = $request->all();
         $data = Position::find($id);
 
         $data->name = $request->input('name');
@@ -148,6 +182,16 @@ class PositionController extends Controller
         $requirements = $request->input('requirements', []);
         $requirementsString = implode(', ', $requirements);
         $data->requirements = $requirementsString;
+
+        if ($request->hasFile('image')) {
+            // Simpan file gambar yang baru
+            $imageFile = $request->file('image');
+            $imageFileName = $imageFile->getClientOriginalName();
+            $imageFile->move(public_path('files/image'), $imageFileName);
+    
+            // Update kolom "image" dalam database
+            $data->update(['image' => $imageFileName]);
+        }
 
         // Simpan perubahan
         if ($data->save()) {

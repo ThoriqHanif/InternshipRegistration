@@ -81,6 +81,14 @@
                               </a>
                           </li>
                           <li class="nav-item">
+                            <a class="nav-link {{ request()->is('periode*') ? 'active' : '' }}" href="{{url('periode')}}">
+                                <i class="nav-icon fas fa-clock"></i>
+                                <p>
+                                    Periode Management
+                                </p>
+                            </a>
+                        </li>
+                          <li class="nav-item">
                               <a class="nav-link {{ request()->is('users*') ? 'active' : '' }}" href="{{url('users')}}">
                                   <i class="nav-icon fas fa-users"></i>
                                   <p>
@@ -88,6 +96,7 @@
                                   </p>
                               </a>
                           </li>
+                          
                           <li class="nav-item" hidden>
                             <a class="nav-link {{ request()->is('report*') ? 'active' : '' }}" href="{{url('reports')}}">
                                 <i class="nav-icon fas fa-clipboard"></i>

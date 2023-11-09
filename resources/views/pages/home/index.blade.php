@@ -58,12 +58,8 @@
                 <a href="#posisi" class="nav-item nav-link">Positions</a>
             </div>
             <div class="h-100 d-lg-inline-flex align-items-center d-none">
-                <a class="btn btn-square rounded-circle bg-light text-primary me-2" href=""><i
-                        class="fab fa-facebook-f"></i></a>
-                <a class="btn btn-square rounded-circle bg-light text-primary me-2" href=""><i
-                        class="fab fa-twitter"></i></a>
-                <a class="btn btn-square rounded-circle bg-light text-primary me-0" href=""><i
-                        class="fab fa-linkedin-in"></i></a>
+                <a class="btn bg-primary text-white me-2" href="{{ route('login') }}">Login</a>
+
             </div>
         </div>
     </nav>
@@ -75,7 +71,8 @@
         <div class="container py-5">
             <div class="row g-5 align-items-center">
                 <div class="col-lg-6">
-                    <h1 class="display-4 mb-3 animated slideInDown"><span class="text-primary">Kadang Koding</span> Indonesia Internship</h1>
+                    <h1 class="display-4 mb-3 animated slideInDown"><span class="text-primary">Kadang Koding</span>
+                        Indonesia Internship</h1>
                     <p class="animated slideInDown">Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit. Aliqu
                         diam amet diam et eos. Clita erat ipsum et lorem et sit, sed stet lorem sit clita duo justo
                         magna dolore erat amet</p>
@@ -164,10 +161,12 @@
             <div class="row g-5 mt-5">
                 <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                     <div class="text-center">
-                      <div class="rounded-circle d-inline-block bg-light" style="width: 80px; height: 80px; position: relative; text-align: center; overflow: hidden;">
-                        <img class="img-fluid" src="{{ asset('landingpage/img/daftar.png') }}" alt="" style="max-width: 100%; max-height: 100%; display: inline-block; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
-                    </div>
-                    
+                        <div class="rounded-circle d-inline-block bg-light"
+                            style="width: 80px; height: 80px; position: relative; text-align: center; overflow: hidden;">
+                            <img class="img-fluid" src="{{ asset('landingpage/img/daftar.png') }}" alt=""
+                                style="max-width: 100%; max-height: 100%; display: inline-block; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+                        </div>
+
                         <h5 class="mb-3 mt-3">Daftar</h5>
                         <p>Aliqu diam amet diam et eos. Clita erat ipsum et lorem et sit, sed stet lorem sit clita duo
                             justo</p>
@@ -176,10 +175,12 @@
 
                 <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                     <div class="text-center">
-                      <div class="rounded-circle d-inline-block bg-light" style="width: 80px; height: 80px; position: relative; text-align: center; overflow: hidden;">
-                        <img class="img-fluid" src="{{ asset('landingpage/img/interview.png') }}" alt="" style="max-width: 100%; max-height: 100%; display: inline-block; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
-                    </div>
-                    
+                        <div class="rounded-circle d-inline-block bg-light"
+                            style="width: 80px; height: 80px; position: relative; text-align: center; overflow: hidden;">
+                            <img class="img-fluid" src="{{ asset('landingpage/img/interview.png') }}" alt=""
+                                style="max-width: 100%; max-height: 100%; display: inline-block; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+                        </div>
+
                         <h5 class="mb-3 mt-3">Interview</h5>
                         <p>Aliqu diam amet diam et eos. Clita erat ipsum et lorem et sit, sed stet lorem sit clita duo
                             justo</p>
@@ -187,10 +188,12 @@
                 </div>
                 <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                     <div class="text-center">
-                      <div class="rounded-circle d-inline-block bg-light" style="width: 80px; height: 80px; position: relative; text-align: center; overflow: hidden;">
-                        <img class="img-fluid" src="{{ asset('landingpage/img/lolos.png') }}" alt="" style="max-width: 100%; max-height: 100%; display: inline-block; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
-                    </div>
-                    
+                        <div class="rounded-circle d-inline-block bg-light"
+                            style="width: 80px; height: 80px; position: relative; text-align: center; overflow: hidden;">
+                            <img class="img-fluid" src="{{ asset('landingpage/img/lolos.png') }}" alt=""
+                                style="max-width: 100%; max-height: 100%; display: inline-block; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+                        </div>
+
                         <h5 class="mb-3 mt-3">Diterima</h5>
                         <p>Aliqu diam amet diam et eos. Clita erat ipsum et lorem et sit, sed stet lorem sit clita duo
                             justo</p>
@@ -205,13 +208,26 @@
     <!-- Service Start -->
     <div class="container-xxl bg-light py-5 my-5" id="posisi">
         <div class="container py-5">
-            <div class="text-center mx-auto wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;">
-              
+            <div class="text-center mx-auto wow fadeInUp" data-wow-delay="0.1s" style="max-width: 800px;">
+
                 <h1 class="display-6">Posisi Internship</h1>
-                <p class="text-primary fs-5 mb-5">Buy, Sell And Exchange Cryptocurrency</p>
+                <p class=" mb-5">Lorem ipsum dolor sit amet consectetur adipisicing elit. Distinctio excepturi repellendus non! Id assumenda excepturi quam pariatur reprehenderit nihil quaerat tempora hic placeat dolorem eligendi sunt, dolor corporis quos commodi!</p>
             </div>
             <div class="row g-4">
-                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                @foreach ($activePositions as $position)
+                    <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                        <div class="service-item bg-white p-5">
+                            <img class="img-fluid mb-4" src="{{ asset('landingpage/img/' . $position->image) }}"
+                                alt="{{ $position->name }}">
+                            <h5 class="mb-3">{{ $position->name }}</h5>
+                            <p>{{ $position->description }}</p>
+                            <a href="{{ route('register.index', ['position_id' => $position->id]) }}">Daftar posisi ini <i class="fa fa-arrow-right ms-2"></i></a>
+
+
+                        </div>
+                    </div>
+                @endforeach
+                {{-- <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                     <div class="service-item bg-white p-5">
                         <img class="img-fluid mb-4" src="{{asset('landingpage/img/front.png')}}" alt="">
                         <h5 class="mb-3">Frontend Developer</h5>
@@ -268,7 +284,7 @@
                             justo</p>
                         <a href="">Daftar posisi ini <i class="fa fa-arrow-right ms-2"></i></a>
                     </div>
-                </div>
+                </div> --}}
             </div>
         </div>
     </div>
@@ -457,8 +473,9 @@
         <div class="container py-5">
             <div class="row g-5">
                 <div class="col-md-6">
-                    <h1 class="text-primary mb-4"><img class="img-fluid me-2" src="{{asset('img/logo/logo2.png')}}" alt=""
-                            style="width: 45px;">Kadang Koding</h1>
+                    <h1 class="text-primary mb-4"><img class="img-fluid me-2"
+                            src="{{ asset('img/logo/logo2.png') }}" alt="" style="width: 45px;">Kadang
+                        Koding</h1>
                     <span>Diam dolor diam ipsum sit. Aliqu diam amet diam et eos. Clita erat ipsum et lorem et sit, sed
                         stet lorem sit clita. Diam dolor diam ipsum sit. Aliqu diam amet diam et eos. Clita erat ipsum
                         et lorem et sit.</span>
@@ -568,36 +585,36 @@
       window.addEventListener("scroll", setActiveNavLink);
   </script> --}}
 
-  <script>
-    // Fungsi untuk menentukan link navbar yang aktif
-    function setActiveNavLink() {
-        const links = document.querySelectorAll(".navbar-nav .nav-link");
+    <script>
+        // Fungsi untuk menentukan link navbar yang aktif
+        function setActiveNavLink() {
+            const links = document.querySelectorAll(".navbar-nav .nav-link");
 
-        links.forEach(link => {
-            const targetId = link.getAttribute("href").substring(1); // Menghapus tanda '#' dari href
-            const targetElement = document.getElementById(targetId);
+            links.forEach(link => {
+                const targetId = link.getAttribute("href").substring(1); // Menghapus tanda '#' dari href
+                const targetElement = document.getElementById(targetId);
 
-            if (targetElement) {
-                const rect = targetElement.getBoundingClientRect();
-                if (
-                    (targetId === "home" && window.scrollY < 50) || // Atur jarak sesuai kebutuhan
-                    (rect.top <= 50 && rect.bottom >= 50)
-                ) {
-                    link.classList.add("active");
-                } else {
-                    link.classList.remove("active");
+                if (targetElement) {
+                    const rect = targetElement.getBoundingClientRect();
+                    if (
+                        (targetId === "home" && window.scrollY < 50) || // Atur jarak sesuai kebutuhan
+                        (rect.top <= 50 && rect.bottom >= 50)
+                    ) {
+                        link.classList.add("active");
+                    } else {
+                        link.classList.remove("active");
+                    }
                 }
-            }
-        });
-    }
+            });
+        }
 
-    // Panggil fungsi saat halaman dimuat dan ketika terjadi peristiwa scroll
-    window.addEventListener("DOMContentLoaded", setActiveNavLink);
-    window.addEventListener("scroll", setActiveNavLink);
-</script>
+        // Panggil fungsi saat halaman dimuat dan ketika terjadi peristiwa scroll
+        window.addEventListener("DOMContentLoaded", setActiveNavLink);
+        window.addEventListener("scroll", setActiveNavLink);
+    </script>
 
-  
-  
+
+
 </body>
 
 </html>
