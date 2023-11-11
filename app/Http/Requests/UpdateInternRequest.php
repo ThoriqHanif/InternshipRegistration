@@ -45,6 +45,7 @@ class UpdateInternRequest extends FormRequest
             'cover_letter' => 'nullable|file|mimes:pdf,docx',
             'portfolio' => 'nullable|file|mimes:pdf,docx,png',
             'photo' => 'nullable|file|mimes:png,jpg,jpeg,webp',
+            'messages' => 'required'
         ];
     }
 
@@ -74,6 +75,7 @@ class UpdateInternRequest extends FormRequest
             'portfolio.mimes' => 'Format Portfolio harus PDF, docx, atau PNG',
             'photo.file' => 'File PAS Foto harus berupa file',
             'photo.mimes' => 'Format PAS Foto harus PNG, jpg, jpeg, atau webp',
+            'messages.required' =>'Pesan harus diisi'
         ];
     }
     

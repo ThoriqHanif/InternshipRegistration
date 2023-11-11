@@ -127,8 +127,8 @@
                       </p>
                   </a>
                   </li>
-                  {{-- <li class="nav-header">Master Data</li>
-                          <li class="nav-item">
+                  <li class="nav-header">Report</li>
+                          {{-- <li class="nav-item">
                               <a class="nav-link {{ request()->is('intern*') ? 'active' : '' }}" href="{{url('intern')}}">
                                   <i class="nav-icon fas fa-list-ul"></i>
                                   <p>
@@ -143,15 +143,15 @@
                                       Position Management
                                   </p>
                               </a>
-                          </li>
+                          </li> --}}
                           <li class="nav-item">
                             <a class="nav-link {{ request()->is('report*') ? 'active' : '' }}" href="{{url('reports')}}">
-                                <i class="nav-icon fas fa-clipboard"></i>
+                                <i class="nav-icon fas fa-folder"></i>
                                 <p>
-                                    Report Management
+                                    Daily Report
                                 </p>
                             </a>
-                        </li> --}}
+                        </li>
                   
                   <li class="nav-header">Account Pages</li>
                 <li class="nav-item">

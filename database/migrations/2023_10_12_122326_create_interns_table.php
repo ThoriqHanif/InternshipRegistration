@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('interns', function (Blueprint $table) {
             $table->id();
             $table->string('reg_number')->unique();
-            // $table->unsignedBigInteger('user_id')->nullable();
             $table->string('full_name');
             $table->string('username');
             $table->string('email')->unique();
@@ -33,6 +32,8 @@ return new class extends Migration
             $table->string('photo');
             $table->string('status');
             $table->unsignedBigInteger('user_id')->nullable();
+            $table->text('messages')->nullable();
+
             $table->timestamps();
             $table->softDeletes();
 

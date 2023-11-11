@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.app-edit')
 
 @section('content')
     <div class="content-wrapper">
@@ -625,20 +625,13 @@
                                                                 @enderror
                                                             </div>
                                                         </div>
-                                                        <p class="text-uppercase text-sm">Status Information</p>
                                                         <div class="col-md-6">
                                                             <div class="form-group">
-                                                                <label for="example-text-input"
-                                                                    class="form-control-label">Status<span
-                                                                        class="text-danger"> *</span></label>
-                                                                <select
-                                                                    class="form-select form-control @error('status') is-invalid @enderror"
-                                                                    name="status">
-                                                                    <option value="" selected disabled>Pilih Status
-                                                                    </option>
+                                                                <label for="example-text-input" class="form-control-label">Status<span class="text-danger"> *</span></label>
+                                                                <select class="form-select form-control @error('status') is-invalid @enderror" id="statusSelect" name="status">
+                                                                    <option value="" selected disabled>Pilih Status</option>
                                                                     @foreach ($st as $key => $value)
-                                                                        <option value="{{ $key }}"
-                                                                            {{ $intern->status == $key ? 'selected' : '' }}>
+                                                                        <option value="{{ $key }}" {{ $intern->status == $key ? 'selected' : '' }}>
                                                                             {{ $value }}
                                                                         </option>
                                                                     @endforeach
@@ -648,9 +641,40 @@
                                                                 @enderror
                                                             </div>
                                                         </div>
-
-
                                                     </div>
+                                                        <hr class="horizontal dark">
+                                                        <p class="text-uppercase text-sm">Pesan Email</p>
+                                                        
+                                                        <div class="col-md-14">
+                                                            <div class="card card-primary card-outline">
+                                                              <div class="card-header">
+                                                                <h3 class="card-title">Kirim Pesan untuk Pemagang</h3>
+                                                              </div>
+                                                              <!-- /.card-header -->
+                                                              <div class="card-body">
+                                                                
+                                                                <div class="form-group">
+                                                                    <textarea id="messages" class="form-control" name="messages" style="height: 300px" data-previous-value="{{$messages}}">
+                                                                    
+                                                                    {{$messages}}
+                                                                    </textarea>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                  <div class="btn btn-default btn-file">
+                                                                    <i class="fas fa-paperclip"></i> Attachment
+                                                                    <input type="file" name="attachment">
+                                                                  </div>
+                                                                  <p class="help-block">Max. 32MB</p>
+                                                                </div>
+                                                              </div>
+                                                              <!-- /.card-body -->
+                                                              
+                                                              <!-- /.card-footer -->
+                                                            </div>
+                                                            <!-- /.card -->
+                                                        </div>
+                                                    
+                                                          
                                                     <div class="inline-block mt-3">
                                                         <button type=""
                                                             class="btn btn-md btn-success">Update</button>
@@ -674,7 +698,42 @@
         </section>
         <!-- /.content -->
     </div>
+    
+    
+    {{-- <textarea id="messages" class="form-control" name="messages" style="height: 300px">
+        {{$messages}}
+    </textarea>
+    
+    <script>
+        var messagesTextarea = document.getElementById('messages');
+        var initialMessages = '{{$messages}}';
+    
+        document.getElementById('statusSelect').addEventListener('change', function() {
+            var selectedValue = this.value;
+            
+            // Mengosongkan pesan jika status berubah
+            if (selectedValue === 'diterima' || selectedValue === 'pending' || selectedValue === 'interview' || selectedValue === 'ditolak') {
+                messagesTextarea.value = initialMessages;
+            } else {
+                messagesTextarea.value = '';
+            }
+        });
+    </script> --}}
+    
 
+    <script>
+        $('#messages').summernote({
+          placeholder: 'Masukkan Pesan',
+          tabsize: 2,
+          height: 400
+        });
+      </script>
+    <script>
+        $(function () {
+          //Add text editor
+          $('#summernote').summernote()
+        })
+      </script>
     <script>
         $(document).ready(function() {
             $("[data-fancybox]").fancybox({

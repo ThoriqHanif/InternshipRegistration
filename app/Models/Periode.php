@@ -21,4 +21,9 @@ class Periode extends Model
     {
         return $this->belongsTo(Position::class);
     }
+
+    public function interns()
+    {
+        return $this->hasMany(Intern::class);
+    }
 }

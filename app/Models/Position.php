@@ -5,13 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Spatie\Sluggable\HasSlug;
-use Spatie\Sluggable\SlugOptions;
+use Cviebrock\EloquentSluggable\Sluggable;
 
 
 class Position extends Model
 {
-    use HasFactory, SoftDeletes, HasSlug;
+    use HasFactory, SoftDeletes, Sluggable;
 
     protected $dates = ['deleted_at'];
 
@@ -37,11 +36,12 @@ class Position extends Model
         return $this->hasMany(Periode::class);
     }
 
-    public function getSlugOptions(): SlugOptions
+    public function sluggable(): array
     {
-        return SlugOptions::create()
-            ->generateSlugsFrom('name') // Kolom yang akan digunakan untuk menghasilkan slug
-            ->saveSlugsTo('slug'); // Kolom database yang akan menyimpan slug
-            // ->allowDuplicateSlugs();
+        return [
+            'slug' => [
+                'source' => 'name'
+            ]
+        ];
     }
 }

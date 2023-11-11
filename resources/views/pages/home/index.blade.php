@@ -211,19 +211,29 @@
             <div class="text-center mx-auto wow fadeInUp" data-wow-delay="0.1s" style="max-width: 800px;">
 
                 <h1 class="display-6">Posisi Internship</h1>
-                <p class=" mb-5">Lorem ipsum dolor sit amet consectetur adipisicing elit. Distinctio excepturi repellendus non! Id assumenda excepturi quam pariatur reprehenderit nihil quaerat tempora hic placeat dolorem eligendi sunt, dolor corporis quos commodi!</p>
+                <p class=" mb-5">Lorem ipsum dolor sit amet consectetur adipisicing elit. Distinctio excepturi
+                    repellendus non! Id assumenda excepturi quam pariatur reprehenderit nihil quaerat tempora hic
+                    placeat dolorem eligendi sunt, dolor corporis quos commodi!</p>
             </div>
             <div class="row g-4">
                 @foreach ($activePositions as $position)
+                    @php
+                        $periode = $position->periode->first(); // Ambil periode pertama terkait
+                        $kuotaPenuh = $periode && $periode->quota <= 0;
+                    @endphp
                     <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                         <div class="service-item bg-white p-5">
                             <img class="img-fluid mb-4" src="{{ asset('landingpage/img/' . $position->image) }}"
                                 alt="{{ $position->name }}">
                             <h5 class="mb-3">{{ $position->name }}</h5>
                             <p>{{ $position->description }}</p>
-                            <a href="{{ route('register.index', ['position_id' => $position->id]) }}">Daftar posisi ini <i class="fa fa-arrow-right ms-2"></i></a>
-
-
+                            @if ($kuotaPenuh)
+                            <a class="btn btn-light text-primary" disabled>Kuota Full <i
+                                class="fa fa-xmark ms-2"></i></a>      
+                            @else
+                                <a class="btn btn-outline-primary" href="{{ route('register.showBySlug', $position->slug) }}">Daftar posisi ini <i
+                                     class="fa fa-arrow-right ms-2"></i></a>
+                            @endif
                         </div>
                     </div>
                 @endforeach

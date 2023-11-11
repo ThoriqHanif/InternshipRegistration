@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreInternRequest;
 use App\Mail\InternStatus;
 use App\Models\Intern;
+use App\Models\Periode;
 use App\Models\Position;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -35,7 +36,36 @@ class RegistrationController extends Controller
     return view('form', compact('selectedPosition', 'activePositions'));
 }
 
-    
+public function showBySlug(Request $request, $slug)
+{
+    $position = Position::where('slug', $slug)->first();
+
+    if (!$position) {
+        abort(404);
+    }
+
+    $selectedPosition = $position;
+
+    $today = now()->format('Y-m-d');
+    $activePositions = Position::whereHas('periode', function ($query) use ($today) {
+        $query->where('start_date', '<=', $today)
+            ->where('end_date', '>=', $today);
+    })->get();
+
+    $periode = Periode::where('position_id', $selectedPosition->id)
+    ->where('start_date', '<=', $today)
+    ->where('end_date', '>=', $today)
+    ->first();
+
+if (!$periode || $periode->quota <= 0) {
+    // Periode tidak ditemukan atau kuotanya habis, atur respon sesuai kebutuhan Anda
+    return view('components.error');
+}
+
+    return view('form', compact('selectedPosition', 'activePositions'));
+}
+
+
 
 
     /**

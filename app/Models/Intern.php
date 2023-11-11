@@ -32,6 +32,7 @@ class Intern extends Model
         'photo',
         'status',
         'user_id',
+        'messages'
     ];
 
     // public function position()
@@ -85,5 +86,10 @@ class Intern extends Model
     public function getDeletedUserIdAttribute()
     {
         return $this->attributes['user_id'];
+    }
+
+    public function reports()
+    {
+        return $this->hasMany(Report::class);
     }
 }

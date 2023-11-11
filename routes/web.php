@@ -9,6 +9,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PeriodeController;
 use App\Http\Controllers\RegistrationController;
+use App\Http\Controllers\ReportController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -24,6 +25,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::resource('/', HomeController::class);
 Route::resource('/register', RegistrationController::class);
+
+Route::get('apply/{slug}', [RegistrationController::class, 'showBySlug'])->name('register.showBySlug');
 
 
 
@@ -71,6 +74,7 @@ Route::middleware(['auth'])->group(function () {
 
 Route::middleware(['auth', 'user'])->group(function () {
     // Route::get('/user/dashboard', [DashboardController::class, 'user']);
+    Route::resource('/reports', ReportController::class);
     Route::get('/profile', [ProfileController::class, 'user'])->name('profile');
     Route::put('/profile', [ProfileController::class, 'updateUser'])->name('profile.update');
     // Route::get('/user/report', function () {
