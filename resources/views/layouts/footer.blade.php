@@ -54,6 +54,7 @@
 
 <script src="https://cdn.datatables.net/v/bs5/dt-1.13.6/b-2.4.2/b-colvis-2.4.2/r-2.5.0/datatables.min.js"></script>
 
+
 <!-- AdminLTE for demo purposes -->
 {{-- <script src="{{asset  ('adminlte/dist/js/demo.js')}}"></script> --}}
 <!-- Page specific script -->

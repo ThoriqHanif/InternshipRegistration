@@ -74,7 +74,7 @@
 
                                 @include('components.alert')
                                 <div class="table-responsive">
-                                    <table class="table table-bordered table-hover" id="tableIntern">
+                                    <table class="table table-bordered table-hover" id="tableIntern" >
                                         <thead>
                                             <tr>
                                                 <th style="width: 10px">No</th>

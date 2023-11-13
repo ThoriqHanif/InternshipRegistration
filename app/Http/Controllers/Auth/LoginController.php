@@ -37,7 +37,7 @@ class LoginController extends Controller
                 return redirect('/admin/dashboard');
             } elseif ($user->role === 'user') {
                 // Jika peran adalah 'user', redirect ke dashboard user
-                return redirect('/profile');
+                return redirect('/reports');
             }
         }
 

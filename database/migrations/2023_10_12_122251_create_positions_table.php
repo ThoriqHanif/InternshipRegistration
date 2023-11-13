@@ -18,6 +18,7 @@ return new class extends Migration
             $table->text('requirements')->nullable();
             $table->string('image');
             $table->string('slug')->unique();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

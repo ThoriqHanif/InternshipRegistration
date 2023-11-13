@@ -16,11 +16,11 @@ return new class extends Migration
             $table->unsignedBigInteger('intern_id');
             $table->foreign('intern_id')->references('id')->on('interns')->onDelete('cascade');
             $table->date('date');
-            $table->boolean('presence')->default(false);
+            $table->boolean('presence')->nullable();
             $table->time('attendance_hours')->nullable();
-            $table->string('agency');
-            $table->string('project_name');
-            $table->string('job');
+            $table->string('agency')->nullable();
+            $table->string('project_name')->nullable();
+            $table->string('job')->nullable();
             $table->text('description')->nullable();
             $table->timestamps();
         });

@@ -93,6 +93,61 @@
 </script>
 
 <script>
+    let tableReport = new DataTable('#tableReport', {
+        dom: 'Bfrtip',
+        buttons: ['copy', 'csv', 'excel', 'pdf', 'print'],
+        
+        processing: true,
+        serverSide: true,
+        responsive: true,
+
+        ajax: {
+            url: "{{ route('reports.index') }}",
+        },
+
+        columns: [{
+                data: 'DT_RowIndex',
+                name: 'DT_RowIndex',
+                orderable: false,
+                searchable: false
+            },
+            {
+                data: 'date',
+                name: 'date'
+            },
+            {
+                data: 'presence',
+                name: 'presence'
+            },
+            {
+                data: 'attendance_hours',
+                name: 'attendance_hours'
+            },
+            {
+                data: 'agency',
+                name: 'agency'
+            },
+            {
+                data: 'project_name',
+                name: 'project_name'
+            },
+            {
+                data: 'job',
+                name: 'job'
+            },
+            {
+                data: 'description',
+                name: 'description'
+            },
+            {
+                data: 'action',
+                name: 'action'
+            },
+        ]
+    });
+</script>
+
+<script>
     let tablePeriode = new DataTable('#tablePeriode', {
         processing: true,
         serverSide: true,
@@ -173,6 +228,7 @@
         ajax: {
             url: "{{ route('position.index') }}"
         },
+
         columns: [{
                 data: 'DT_RowIndex',
                 name: 'DT_RowIndex',
@@ -243,7 +299,8 @@
             url: "{{ route('intern.index') }}",
             data: function(d) {
                 d.showDeleted = $('#showDeletedButtonIntern').data('show-deleted');
-                d.status = $('#statusFilter').val(); // Menambahkan filter status ke data yang dikirimkan
+                d.status = $('#statusFilter').val();
+
             }
         },
         columns: [{

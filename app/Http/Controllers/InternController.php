@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateInternRequest;
 use App\Mail\InternStatus;
 use App\Models\Periode;
 use App\Models\Position;
+use App\Models\Report;
 use App\Models\User;
 use Dotenv\Validator;
 use Illuminate\Http\Request as HttpRequest;
@@ -561,8 +562,6 @@ class InternController extends Controller
                     // Relasikan pemagang dengan user
                     $data->user_id = $user->id;
 
-                    
-
                     $position = Position::find($data->position_id);
                     $periode = Periode::where('position_id', $data->position_id)
                         ->where('start_date', '<=', $data->created_at)
@@ -575,6 +574,26 @@ class InternController extends Controller
         
                         // Simpan perubahan
                         $periode->save();
+                    }
+
+                    $startDate = $data->start_date;
+                    $endDate = $data->end_date;
+                    $internId = $data->id;
+
+                    $currentDate = $startDate;
+                    while ($currentDate <= $endDate) {
+                        Report::create([
+                            'intern_id' => $internId,
+                            'date' => $currentDate,
+                            'presence' => null,
+                            'attendance_hours' => null,
+                            'agency' => null,
+                            'project_name' => null,
+                            'job' => null,
+                            'description' => null,
+                        ]);
+            
+                        $currentDate = date('Y-m-d', strtotime($currentDate . ' +1 day'));
                     }
 
                     Mail::to($data->email)->send(new InternStatus($data, 'diterima', $password));
