@@ -48,23 +48,6 @@
               </table>
               </div>
             </div>
-            <!-- /.card-body -->
-           {{-- <div class="card-footer clearfix">
-                                <ul class="pagination pagination-sm m-0 float-right">
-                                    <li class="page-item {{ $user->onFirstPage() ? 'disabled' : '' }}">
-                                        <a class="page-link" href="{{ $user->previousPageUrl() }}">&laquo;</a>
-                                    </li>
-                                    @for ($i = 1; $i <= $user->lastPage(); $i++)
-                                        <li class="page-item {{ $i == $user->currentPage() ? 'active' : '' }}">
-                                            <a class="page-link" href="{{ $user->url($i) }}">{{ $i }}</a>
-                                        </li>
-                                    @endfor
-                                    <li
-                                        class="page-item {{ $user->currentPage() == $user->lastPage() ? 'disabled' : '' }}">
-                                        <a class="page-link" href="{{ $user->nextPageUrl() }}">&raquo;</a>
-                                    </li>
-                                </ul>
-                            </div> --}}
           </div>
         </div>
         
@@ -72,188 +55,43 @@
   </section>
 </div>
 
-{{-- <script>
-  $(document).ready(function() {
-      // Memberikan event handler untuk tombol hapus
-      $('.delete-button').on('click', function(e) {
-          e.preventDefault();
-          var deleteButton = $(this);
+@push('table-user')
+<script>
+    let tableUser = new DataTable('#tableUser', {
+        processing: true,
+        serverSide: true,
+        responsive: true,
+        ajax: {
+            url: "{{ route('users.index') }}"
+        },
+        columns: [{
+                data: 'DT_RowIndex',
+                name: 'DT_RowIndex',
+                orderable: false,
+                searchable: false
+            },
+            {
+                data: 'name',
+                name: 'name'
+            },
+            {
+                data: 'email',
+                name: 'email'
+            },
+            {
+                data: 'role',
+                name: 'role'
+            },
+            {
+                data: 'action',
+                name: 'action'
+            },
 
-          Swal.fire({
-              title: 'Konfirmasi Hapus',
-              text: 'Anda yakin ingin menghapus pengguna ini?',
-              icon: 'error',
-              showCancelButton: true,
-              confirmButtonText: 'Ya, Hapus',
-              cancelButtonText: 'Batal',
-          }).then((result) => {
-              if (result.isConfirmed) {
-                  Swal.fire({
-                      title: 'Mohon Tunggu!',
-                      html: 'Sedang menghapus pengguna...',
-                      allowOutsideClick: false,
-                      showConfirmButton: false,
-                      willOpen: () => {
-                          Swal.showLoading();
-                      },
-                  });
 
-                  // Jika pengguna mengkonfirmasi penghapusan, kirimkan permintaan penghapusan
-                  $.ajax({
-                      type: 'POST',
-                      url: deleteButton.closest('form').attr('action'),
-                      data: deleteButton.closest('form').serialize(),
-                      success: function(response) {
-                          // Tutup pesan "loading"
-                          Swal.close();
-
-                          // Handle pesan hasil penghapusan
-                          if (response.success) {
-                              Swal.fire({
-                                  icon: 'success',
-                                  title: 'Berhasil!',
-                                  text: 'Data pengguna berhasil dihapus.',
-                              }).then(function() {
-                                  $('#tableUser').DataTable().ajax.reload();
-
-                              });
-                              // Tambahkan kode lain yang sesuai, seperti memperbarui tampilan tabel.
-                          } else {
-                              Swal.fire('Gagal', 'Gagal menghapus pengguna',
-                                  'error');
-                          }
-                      },
-                      error: function() {
-                          // Tutup pesan "loading"
-                          Swal.close();
-
-                          Swal.fire('Gagal',
-                              'Terjadi kesalahan saat menghapus pengguna',
-                              'error');
-                      }
-                  });
-              }
-          });
-      });
-  });
-</script> --}}
-
-{{-- <script>
-  $(document).ready(function() {
-      // Memberikan event handler untuk tombol hapus
-      $('.delete-button').on('click', function(e) {
-          e.preventDefault();
-          var deleteButton = $(this);
-  
-          Swal.fire({
-              title: 'Konfirmasi Hapus',
-              text: 'Anda yakin ingin menghapus pengguna ini?',
-              icon: 'error',
-              showCancelButton: true,
-              confirmButtonText: 'Ya, Hapus',
-              cancelButtonText: 'Batal',
-          }).then((result) => {
-              if (result.isConfirmed) {
-                  Swal.fire({
-                      title: 'Mohon Tunggu!',
-                      html: 'Sedang menghapus pengguna...',
-                      allowOutsideClick: false,
-                      showConfirmButton: false,
-                      willOpen: () => {
-                          Swal.showLoading();
-                      },
-                  });
-  
-                  // Jika pengguna mengkonfirmasi penghapusan, kirimkan permintaan penghapusan
-                  $.ajax({
-                      type: 'POST',
-                      url: deleteButton.closest('form').attr('action'),
-                      data: deleteButton.closest('form').serialize(),
-                      success: function(response) {
-                          // Tutup pesan "loading"
-                          Swal.close();
-  
-                          // Handle pesan hasil penghapusan
-                          if (response.success) {
-                              Swal.fire('Berhasil', 'Pengguna berhasil dihapus', 'success');
-                              $('#tableUser').DataTable().ajax.reload();
-                              // Tambahkan kode lain yang sesuai, seperti memperbarui tampilan tabel.
-                          } else {
-                              Swal.fire('Gagal', 'Gagal menghapus pengguna', 'error');
-                          }
-                      },
-                      error: function() {
-                          // Tutup pesan "loading"
-                          Swal.close();
-  
-                          Swal.fire('Gagal', 'Terjadi kesalahan saat menghapus pengguna', 'error');
-                      }
-                  });
-              }
-          });
-      });
-  });
-</script> --}}
-
-{{-- <script>
-  $(document).ready(function() {
-      var dataTable = $('#data-table').DataTable({
-          processing: true,
-          serverSide: true,
-          ajax: '{{ route('users.index') }}',
-          columns: [
-              { data: 'name', name: 'name' },
-              { data: 'email', name: 'email' },
-              { data: 'action', name: 'action', orderable: false, searchable: false },
-          ]
-      });
-  
-      $('#data-table').on('click', '.delete-button', function(e) {
-          e.preventDefault();
-          var deleteButton = $(this);
-          var url = deleteButton.attr('data-url');
-  
-          Swal.fire({
-              title: 'Konfirmasi Hapus',
-              text: 'Anda yakin ingin menghapus pengguna ini?',
-              icon: 'warning',
-              showCancelButton: true,
-              confirmButtonText: 'Ya, Hapus',
-              cancelButtonText: 'Batal',
-          }).then((result) => {
-              if (result.isConfirmed) {
-                  Swal.fire({
-                      title: 'Mohon Tunggu!',
-                      html: 'Sedang menghapus pengguna...',
-                      allowOutsideClick: false,
-                      showConfirmButton: false,
-                      willOpen: () => {
-                          Swal.showLoading();
-                      },
-                  });
-  
-                  $.ajax({
-                      type: 'DELETE',
-                      url: url,
-                      success: function(response) {
-                          Swal.close();
-                          if (response.success) {
-                              Swal.fire('Berhasil', 'Pengguna berhasil dihapus', 'success');
-                              dataTable.ajax.reload();
-                          } else {
-                              Swal.fire('Gagal', 'Gagal menghapus pengguna', 'error');
-                          }
-                      },
-                      error: function() {
-                          Swal.close();
-                          Swal.fire('Gagal', 'Terjadi kesalahan saat menghapus pengguna', 'error');
-                      }
-                  });
-              }
-          });
-      });
-  });
-  </script> --}}
+        ]
+    });
+</script>
+@endpush
 @endsection
 
 

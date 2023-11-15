@@ -18,15 +18,13 @@ class ReportController extends Controller
     public function index(Request $request)
     {
         $userId = Auth::id();
-
         $intern = Intern::where('user_id', $userId)->first();
-        $reports = Report::all();
-        
+
         if ($intern) {
-            $internId = $intern->id; // Mengasumsikan 'id' pada tabel Intern adalah 'intern_id'
+            $internId = $intern->id;
 
             if ($request->ajax()) {
-                $reports = Report::where('intern_id', $internId)->select('*');
+                $reports = Report::where('intern_id', $internId)->select('*')->get();
                 return DataTables::of($reports)
                     ->addColumn('action', function ($report) use ($internId) {
                         return view('pages.users.report.action', compact('report', 'internId'));
@@ -36,15 +34,13 @@ class ReportController extends Controller
                     ->make(true);
             }
 
-            $reports = Report::all();
-
             $reports = Report::where('intern_id', $internId)->get();
-
-            return view('pages.users.report.index', compact('internId'));
-        } 
-    
-    
+            return view('pages.users.report.index', compact('internId', 'reports')); // Kirimkan data ke view
+        }
     }
+
+
+
 
     /**
      * Show the form for creating a new resource.
@@ -75,23 +71,27 @@ class ReportController extends Controller
      */
     public function edit($id)
     {
-        //
-        $report = Report::find($id);
-       
-        return view('pages.users.report.edit', [
-            'report' => $report,
-            'id' => $report->id,
-            'date' => $report->date,
-            'presence' => $report->presence,
-            'attendance_hours' => $report->attendance_hours,
-            'agency' => $report->agency,
-            'project_name' => $report->project_name,
-            'job' => $report->job,
-            'description' => $report->description,
-           
+        
+        $data = Report::find($id);
+        $presences = ['masuk' => 'Masuk', 'remote' => 'Remote', 'libur' => 'Libur', 'izin' => 'Izin'];
 
-        ]);
-        return view('pages.users.report.edit', compact('report'));
+        // return view('pages.users.report.edit', [
+        //     'report' => $data,
+        //     'id' => $data->id,
+        //     'date' => $data->date,
+        //     'presence' => $data->presence,
+        //     'presences' => $presences,
+        //     'attendance_hours' => $data->attendance_hours,
+        //     'agency' => $data->agency,
+        //     'project_name' => $data->project_name,
+        //     'job' => $data->job,
+        //     'description' => $data->description,
+
+
+        // ]);
+        // return view('pages.users.report.edit', compact('report'));
+        // $data = Report::where('id', $id)->first();
+        return response()->json(['result' => $data]);
     }
 
     /**
@@ -100,18 +100,19 @@ class ReportController extends Controller
     public function update(UpdateReportRequest $request, $id)
     {
         //
+        // dd($id);
         $report = Report::find($id);
 
-        $report->update([
-            'presence'=>$request->input('presence'),
-            'attendance_hours'=>$request->input('attendance_hours'),
-            'agency'=>$request->input('agency'),
-            'project_name'=>$request->input('project_name'),
-            'job'=>$request->input('job'),
-            'description'=>$request->input('description'),
+        $report->update([   
+            'presence' => $request->input('presence'),
+            'attendance_hours' => $request->input('attendance_hours'),
+            'agency' => $request->input('agency'),
+            'project_name' => $request->input('project_name'),
+            'job' => $request->input('job'),
+            'description' => $request->input('description'),
         ]);
 
-         // Simpan perubahan
+        // Simpan perubahan 
         if ($report->save()) {
             return response()->json(['success' => true]);
         } else {

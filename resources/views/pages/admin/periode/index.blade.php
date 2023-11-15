@@ -63,5 +63,53 @@
                 </div>
         </section>
     </div>
+@push('table-periode')
+<script>
+    let tablePeriode = new DataTable('#tablePeriode', {
+        processing: true,
+        serverSide: true,
+        responsive: true,
+        ajax: {
+            url: "{{ route('periode.index') }}"
+        },
+        columns: [{
+                data: 'DT_RowIndex',
+                name: 'DT_RowIndex',
+                orderable: false,
+                searchable: false
+            },
+            {
+                data: 'name',
+                name: 'name'
+            },
+            {
+                data: 'position.name',
+                name: 'position.name'
+            },
+            {
+                data: 'start_date',
+                name: 'start_date'
+            },
+            {
+                data: 'end_date',
+                name: 'end_date'
+            },
+            {
+                data: 'quota',
+                name: 'quota'
+            },
+            {
+                data: 'description',
+                name: 'description'
+            },
+            {
+                data: 'action',
+                name: 'action'
+            },
 
+
+        ]
+    });
+</script>
+@endpush
 @endsection

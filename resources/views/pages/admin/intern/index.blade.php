@@ -185,4 +185,109 @@
         </section>
     </div>
 
+    @push('table-intern')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var urlParams = new URLSearchParams(window.location.search);
+            var selectedStatus = urlParams.get('status');
+            var statusFilter = document.getElementById('status-filter');
+            if (selectedStatus) {
+                statusFilter.value = selectedStatus;
+            }
+    
+            // Handle filter when "Cari" button is clicked
+            document.getElementById('filter-button').addEventListener('click', function() {
+                var selectedStatus = statusFilter.value;
+                // Redirect to the route with the selected filter status
+                window.location.href = '/intern?status=' + selectedStatus;
+            });
+    
+            // Handle reset when "Reset" button is clicked
+            document.getElementById('reset-button').addEventListener('click', function() {
+                // Redirect to the route without any filter status
+                window.location.href = '/intern';
+            });
+        });
+    </script>
+    <script>
+        function showDeletedIntern() {
+            // Mengubah URL Ajax yang digunakan untuk mengambil data intern yang sudah dihapus
+            tableIntern.ajax.url("{{ route('intern.index') }}?showDeleted=1&status=" + $('#statusFilter').val()).load();
+    
+            // Mengganti teks tombol "Lihat Arsip" menjadi "Lihat Semua"
+            document.getElementById("showDeletedButtonIntern").innerHTML = "Lihat Semua";
+    
+            // Mengganti atribut onclick tombol "Lihat Arsip" agar dapat membatalkan tampilan data yang dihapus
+            document.getElementById("showDeletedButtonIntern").setAttribute("onclick", "showAllIntern()");
+        }
+    
+        function showAllIntern() {
+            // Mengembalikan URL Ajax ke pengaturan semula (tanpa menampilkan data yang dihapus)
+            tableIntern.ajax.url("{{ route('intern.index') }}?showDeleted=0&status=" + $('#statusFilter').val()).load();
+    
+            // Mengganti teks tombol "Lihat Semua" kembali menjadi "Lihat Arsip"
+            document.getElementById("showDeletedButtonIntern").innerHTML =
+                '<i id="showDeletedIcon" class="fas fa-trash mr-2"></i> Lihat Data Terhapus';
+    
+            // Mengganti atribut onclick tombol "Lihat Semua" agar dapat memanggil kembali fungsi showDeletedIntern()
+            document.getElementById("showDeletedButtonIntern").setAttribute("onclick", "showDeletedIntern()");
+        }
+    
+        let tableIntern = new DataTable('#tableIntern', {
+            
+            processing: true,
+            serverSide: true,
+            responsive: true,
+            ajax: {
+                url: "{{ route('intern.index') }}",
+                data: function(d) {
+                    d.showDeleted = $('#showDeletedButtonIntern').data('show-deleted');
+                    d.status = $('#statusFilter').val();
+    
+                }
+            },
+            columns: [{
+                    data: 'DT_RowIndex',
+                    name: 'DT_RowIndex',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'full_name',
+                    name: 'full_name'
+                },
+                {
+                    data: 'school',
+                    name: 'school'
+                },
+                {
+                    data: 'position.name',
+                    name: 'position.name'
+                },
+                {
+                    data: 'start_date',
+                    name: 'start_date'
+                },
+                {
+                    data: 'end_date',
+                    name: 'end_date'
+                },
+                {
+                    data: 'status',
+                    name: 'status'
+                },
+                {
+                    data: 'action',
+                    name: 'action'
+                },
+            ],
+        });
+    
+        // Event handler untuk filter status
+        $('#statusFilter').change(function() {
+            tableIntern.ajax.reload(); // Memuat ulang data dengan filter status baru
+        });
+    </script>
+    @endpush
+
 @endsection

@@ -11,7 +11,7 @@ class UpdateReportRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,6 +23,23 @@ class UpdateReportRequest extends FormRequest
     {
         return [
             //
+            'presence' => 'required',
+            'attendance_hours' => 'required',
+            'agency' => 'required',
+            'project_name' => 'required',
+            'job' => 'required',
+
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'presence.required' => "Harus memilih Presensi",
+            'attendance_hours.required' => "Jam kehadiran tidak boleh kosong",
+            'agency.required' => "Instansi tidak boleh kosong",
+            'project_name.required' => "Nama Project tidak boleh kosong",
+            'job.required' => "Pekerjaan tidak boleh kosong",
         ];
     }
 }
