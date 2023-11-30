@@ -20,6 +20,7 @@ class ProfileController extends Controller
         return view('pages.admin.profile', [
             'admin' => $admin,
             'id' => $admin->id,
+            
             'email' => $admin->email,
             'name' => $admin->name,
             'role' => $admin->role,
@@ -99,10 +100,10 @@ class ProfileController extends Controller
                 $data->email = $newEmail;
             }
 
-            if ($newPassword) {
-                // Update password jika berubah
-                $data->password = Hash::make($newPassword);
-            }
+                if ($newPassword) {
+                    // Update password jika berubah
+                    $data->password = Hash::make($newPassword);
+                }
 
             $data->save();
             Session::flash('profile-updated', 'Data profile anda telah berubah.');

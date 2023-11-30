@@ -132,7 +132,7 @@
                                 text: 'Posisi Magang berhasil dihapus secara permanen.',
                             }).then(function() {
                                 // Refresh DataTable or redirect to another page
-                                tableIntern.ajax.reload();
+                                tablePosition.ajax.reload();
                                 window.location.href = '{{ route('position.index') }}';
                             });
                         } else {

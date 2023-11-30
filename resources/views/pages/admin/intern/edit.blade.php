@@ -1,4 +1,4 @@
-@extends('layouts.app-edit')
+@extends('layouts.app')
 
 @section('content')
     <div class="content-wrapper">
@@ -48,8 +48,7 @@
                                                             <input type="hidden" name="id"
                                                                 value="{{ $id }}">
                                                             <div class="form-group">
-                                                                <label for="example-text-input"
-                                                                    class="form-control-label">Email address<span
+                                                                <label class="form-control-label">Email address<span
                                                                         class="text-danger"> *</span></label>
                                                                 <input
                                                                     class="form-control @error('email') is-invalid @enderror"
@@ -62,8 +61,7 @@
                                                         </div>
                                                         <div class="col-md-6">
                                                             <div class="form-group">
-                                                                <label for="example-text-input"
-                                                                    class="form-control-label">Nama Lengkap<span
+                                                                <label class="form-control-label">Nama Lengkap<span
                                                                         class="text-danger"> *</span></label>
                                                                 <input
                                                                     class="form-control  @error('full_name') is-invalid @enderror"
@@ -76,8 +74,7 @@
                                                         </div>
                                                         <div class="col-md-6">
                                                             <div class="form-group">
-                                                                <label for="example-text-input"
-                                                                    class="form-control-label">Nama Panggilan<span
+                                                                <label class="form-control-label">Nama Panggilan<span
                                                                         class="text-danger"> *</span></label>
                                                                 <input
                                                                     class="form-control  @error('username') is-invalid @enderror"
@@ -90,8 +87,7 @@
                                                         </div>
                                                         <div class="col-md-6">
                                                             <div class="form-group">
-                                                                <label for="example-text-input"
-                                                                    class="form-control-label">No Telephone<span
+                                                                <label class="form-control-label">No Telephone<span
                                                                         class="text-danger"> *</span></label>
                                                                 <input
                                                                     class="form-control @error('phone_number') is-invalid @enderror"
@@ -104,8 +100,7 @@
                                                         </div>
                                                         <div class="col-md-6">
                                                             <div class="form-group">
-                                                                <label for="example-text-input"
-                                                                    class="form-control-label">Jenis Kelamin<span
+                                                                <label class="form-control-label">Jenis Kelamin<span
                                                                         class="text-danger"> *</span></label>
 
                                                                 <select
@@ -132,8 +127,7 @@
                                                     <div class="row">
                                                         <div class="col-md-6">
                                                             <div class="form-group">
-                                                                <label for="example-text-input"
-                                                                    class="form-control-label">Asal Sekolah<span
+                                                                <label class="form-control-label">Asal Sekolah<span
                                                                         class="text-danger"> *</span></label>
                                                                 <input
                                                                     class="form-control @error('school') is-invalid @enderror"
@@ -146,8 +140,7 @@
                                                         </div>
                                                         <div class="col-md-6">
                                                             <div class="form-group">
-                                                                <label for="example-text-input"
-                                                                    class="form-control-label">Jurusan / Prodi<span
+                                                                <label class="form-control-label">Jurusan / Prodi<span
                                                                         class="text-danger"> *</span></label>
                                                                 <input
                                                                     class="form-control @error('major') is-invalid @enderror"
@@ -165,8 +158,7 @@
                                                         <div class="col-md-12">
 
                                                             <div class="form-group">
-                                                                <label for="example-text-input"
-                                                                    class="form-control-label">Alamat<span
+                                                                <label class="form-control-label">Alamat<span
                                                                         class="text-danger"> *</span></label>
                                                                 <textarea class="form-control @error('address') is-invalid @enderror" type="text" value="" name="address"
                                                                     placeholder="Masukkan Alamat">{{ $address }}</textarea>
@@ -182,8 +174,7 @@
                                                     <div class="row">
                                                         <div class="col-md-6">
                                                             <div class="form-group">
-                                                                <label for="example-text-input"
-                                                                    class="form-control-label">Posisi<span
+                                                                <label class="form-control-label">Posisi<span
                                                                         class="text-danger"> *</span></label>
                                                                 <select
                                                                     class="form-select form-control @error('position_id') is-invalid @enderror"
@@ -204,8 +195,7 @@
                                                         </div>
                                                         <div class="col-md-6">
                                                             <div class="form-group">
-                                                                <label for="example-text-input"
-                                                                    class="form-control-label">Tanggal Mulai<span
+                                                                <label class="form-control-label">Tanggal Mulai<span
                                                                         class="text-danger"> *</span></label>
                                                                 <div class="input-group date" id="datepicker">
                                                                     <input type="date" id="start_date"
@@ -221,8 +211,7 @@
                                                         </div>
                                                         <div class="col-md-6">
                                                             <div class="form-group">
-                                                                <label for="example-text-input"
-                                                                    class="form-control-label">Tanggal Selesai<span
+                                                                <label class="form-control-label">Tanggal Selesai<span
                                                                         class="text-danger"> *</span></label>
                                                                 <div class="input-group date">
                                                                     <input type="date" id="end_date"
@@ -315,7 +304,8 @@
                                                                                     </object>
                                                                                 @elseif ($cvExtension == 'docx')
                                                                                     <!-- Tampilkan sesuai dengan format DOCX, misalnya dengan iframe -->
-                                                                                    <iframe src="{{ $cvHtmlPath }}" style="width: 100%; height: 600px;"></iframe>
+                                                                                    <iframe src="{{ $cvHtmlPath }}"
+                                                                                        style="width: 100%; height: 600px;"></iframe>
                                                                                 @else
                                                                                     <p>File format not supported. <a
                                                                                             href="{{ $cvUrl }}"
@@ -408,7 +398,9 @@
                                                                                     </object>
                                                                                 @elseif ($motivation_letterExtension == 'docx')
                                                                                     <!-- Tampilkan sesuai dengan format DOCX, misalnya dengan iframe -->
-                                                                                    <iframe src="{{ $motivationLetterHtmlPath }}" style="width: 100%; height: 600px;"></iframe>
+                                                                                    <iframe
+                                                                                        src="{{ $motivationLetterHtmlPath }}"
+                                                                                        style="width: 100%; height: 600px;"></iframe>
                                                                                 @else
                                                                                     <p>File format not supported. <a
                                                                                             href="{{ $motivationLetterUrl }}"
@@ -499,7 +491,9 @@
                                                                                     </object>
                                                                                 @elseif ($cover_letterExtension == 'docx')
                                                                                     <!-- Tampilkan sesuai dengan format DOCX, misalnya dengan iframe -->
-                                                                                    <iframe src="{{ $coverLetterHtmlPath }}" style="width: 100%; height: 700px;"></iframe>
+                                                                                    <iframe
+                                                                                        src="{{ $coverLetterHtmlPath }}"
+                                                                                        style="width: 100%; height: 700px;"></iframe>
                                                                                 @else
                                                                                     <p>File format not supported. <a
                                                                                             href="{{ $coverLetterUrl }}"
@@ -583,7 +577,8 @@
                                                                                     </object>
                                                                                 @elseif ($portfolioExtension == 'docx')
                                                                                     <!-- Tampilkan sesuai dengan format DOCX, misalnya dengan iframe -->
-                                                                                    <iframe src="{{ $portfolioHtmlPath }}" style="width: 100%; height: 600px;"></iframe>
+                                                                                    <iframe src="{{ $portfolioHtmlPath }}"
+                                                                                        style="width: 100%; height: 600px;"></iframe>
                                                                                 @else
                                                                                     <p>File format not supported. <a
                                                                                             href="{{ $portfolioUrl }}"
@@ -627,11 +622,16 @@
                                                         </div>
                                                         <div class="col-md-6">
                                                             <div class="form-group">
-                                                                <label for="example-text-input" class="form-control-label">Status<span class="text-danger"> *</span></label>
-                                                                <select class="form-select form-control @error('status') is-invalid @enderror" id="statusSelect" name="status">
-                                                                    <option value="" selected disabled>Pilih Status</option>
+                                                                <label class="form-control-label">Status<span
+                                                                        class="text-danger"> *</span></label>
+                                                                <select
+                                                                    class="form-select form-control @error('status') is-invalid @enderror"
+                                                                    id="status" name="status">
+                                                                    <option value="" selected disabled>Pilih Status
+                                                                    </option>
                                                                     @foreach ($st as $key => $value)
-                                                                        <option value="{{ $key }}" {{ $intern->status == $key ? 'selected' : '' }}>
+                                                                        <option value="{{ $key }}"
+                                                                            {{ $intern->status == $key ? 'selected' : '' }}>
                                                                             {{ $value }}
                                                                         </option>
                                                                     @endforeach
@@ -642,45 +642,45 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                        <hr class="horizontal dark">
-                                                        <p class="text-uppercase text-sm">Pesan Email</p>
-                                                        
-                                                        <div class="col-md-14">
-                                                            <div class="card card-primary card-outline">
-                                                              <div class="card-header">
+                                                    <hr class="horizontal dark">
+                                                    <p class="text-uppercase text-sm">Pesan Email</p>
+
+                                                    <div class="col-md-14">
+                                                        <div class="card card-primary card-outline">
+                                                            <div class="card-header">
                                                                 <h3 class="card-title">Kirim Pesan untuk Pemagang</h3>
-                                                              </div>
-                                                              <!-- /.card-header -->
-                                                              <div class="card-body">
-                                                                
+                                                            </div>
+                                                            <!-- /.card-header -->
+                                                            <div class="card-body">
+
                                                                 <div class="form-group">
-                                                                    <textarea id="messages" class="form-control" name="messages" style="height: 300px" data-previous-value="{{$messages}}">
+                                                                    <textarea id="messages" class="form-control" name="messages" style="height: 300px"
+                                                                        data-previous-value="{{ $messages }}">
                                                                     
-                                                                    {{$messages}}
+                                                                    {{ $intern->messages }}
                                                                     </textarea>
                                                                 </div>
                                                                 <div class="form-group">
-                                                                  <div class="btn btn-default btn-file">
-                                                                    <i class="fas fa-paperclip"></i> Attachment
-                                                                    <input type="file" name="attachment">
-                                                                  </div>
-                                                                  <p class="help-block">Max. 32MB</p>
+                                                                    <div class="btn btn-default btn-file">
+                                                                        <i class="fas fa-paperclip"></i> Attachment
+                                                                        <input type="file" name="attachment">
+                                                                    </div>
+                                                                    <p class="help-block">Max. 32MB</p>
                                                                 </div>
-                                                              </div>
-                                                              <!-- /.card-body -->
-                                                              
-                                                              <!-- /.card-footer -->
                                                             </div>
-                                                            <!-- /.card -->
+                                                            <!-- /.card-body -->
+
+                                                            <!-- /.card-footer -->
                                                         </div>
-                                                    
-                                                          
+                                                        <!-- /.card -->
+                                                    </div>
+
+
                                                     <div class="inline-block mt-3">
-                                                        <button type=""
-                                                            class="btn btn-md btn-success">Update</button>
                                                         <button type="button" class="btn btn-md btn-secondary"
                                                             onclick="window.history.back();">Cancel</button>
-
+                                                        <button type=""
+                                                            class="btn btn-md btn-success">Update</button>
                                                     </div>
 
                                                 </div>
@@ -698,49 +698,38 @@
         </section>
         <!-- /.content -->
     </div>
-    
-    
-    {{-- <textarea id="messages" class="form-control" name="messages" style="height: 300px">
-        {{$messages}}
-    </textarea>
-    
-    <script>
-        var messagesTextarea = document.getElementById('messages');
-        var initialMessages = '{{$messages}}';
-    
-        document.getElementById('statusSelect').addEventListener('change', function() {
-            var selectedValue = this.value;
-            
-            // Mengosongkan pesan jika status berubah
-            if (selectedValue === 'diterima' || selectedValue === 'pending' || selectedValue === 'interview' || selectedValue === 'ditolak') {
-                messagesTextarea.value = initialMessages;
-            } else {
-                messagesTextarea.value = '';
-            }
-        });
-    </script> --}}
-    
+
 
     <script>
-        $('#messages').summernote({
-          placeholder: 'Masukkan Pesan',
-          tabsize: 2,
-          height: 400
-        });
-      </script>
-    <script>
-        $(function () {
-          //Add text editor
-          $('#summernote').summernote()
-        })
-      </script>
-    <script>
         $(document).ready(function() {
-            $("[data-fancybox]").fancybox({
-                buttons: ["slideShow", "fullScreen", "thumbs", "close"],
+            // Simpan status awal dan pesan awal
+            var initialStatus = '{{ $intern->status }}';
+            var initialMessages = '{{ $intern->messages }}';
+
+            // Inisialisasi Summernote pada saat dokumen siap
+            $('#messages').summernote({
+                placeholder: 'Masukkan Pesan',
+                tabsize: 2,
+                height: 400
+            });
+
+            // Tangani perubahan status
+            $('#status').on('change', function() {
+                var selectedStatus = $(this).val();
+                var messagesTextarea = $('#messages');
+
+                // Jika status yang dipilih tidak sama dengan status awal
+                if (selectedStatus !== initialStatus) {
+                    // Hapus konten Summernote
+                    messagesTextarea.summernote('code', '');
+                } else {
+                    // Jika status sama dengan status awal, isi dengan pesan awal
+                    messagesTextarea.summernote('code', initialMessages);
+                }
             });
         });
     </script>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Dapatkan elemen input tanggal mulai dan tanggal selesai
@@ -868,11 +857,17 @@
                             }
                             Swal.fire('Gagal', errorMessages, 'error');
                         } else {
-                            Swal.fire('Gagal', 'Terjadi kesalahan saat update data.', 'error');
+                            // Menampilkan pesan kesalahan dari respons JSON
+                            var errorMessage = xhr.responseJSON
+                                .message; // Mendapatkan pesan kesalahan dari controller
+                            Swal.fire('Gagal', errorMessage,
+                                'error'); // Menampilkan pesan kesalahan di SweetAlert
                         }
                     },
+
                 });
             });
         });
     </script>
+
 @endsection

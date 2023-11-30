@@ -63,18 +63,13 @@
     });
 </script>
 
-<script>
-    // Inisialisasi Fancybox
-    $(document).ready(function() {
-        $("[data-fancybox]").fancybox();
-    });
-</script>
-
-<script>
-    $(function() {
-        $('[data-toggle="tooltip"]').tooltip()
-    })
-</script>
+@stack('table-intern')
+@stack('table-position')
+@stack('table-periode')
+@stack('table-user')
+@stack('show-modal-report')
+@stack('script-report')
+@stack('script-edit-intern')
 
 {{-- <script>
     let tableReport = new DataTable('#tableReport', {
@@ -131,21 +126,18 @@
     });
 </script> --}}
 
+{{-- <script>
+    // Inisialisasi Fancybox
+    $(document).ready(function() {
+        $("[data-fancybox]").fancybox();
+    });
+</script> --}}
 
-@stack('table-intern')
-@stack('table-position')
-@stack('table-periode')
-@stack('table-user')
-@stack('show-modal-report')
-@stack('script-report')
-
-
-<!-- Include jQuery and Bootstrap Datepicker (Adjust the paths accordingly) -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap-datepicker@1.9.0/dist/js/bootstrap-datepicker.min.js"></script>
-
-
-
+{{-- <script>
+    $(function() {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+</script> --}}
 
 
 

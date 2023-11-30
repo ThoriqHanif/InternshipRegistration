@@ -209,11 +209,16 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label for="inputPassword"
-                                                        class="col-sm-2 col-form-label">Password</label>
+                                                    <label for="inputExperience" class="col-sm-2 col-form-label">Password</label>
                                                     <div class="col-sm-10">
-                                                        <input type="text" class="form-control" id="inputPassword"
-                                                            name="password" placeholder="Password" value="">
+                                                        <div class="input-group">
+                                                            <input type="password" class="form-control" id="inputPassword" name="password" value="" aria-describedby="passwordToggle">
+                                                            <div class="input-group-append" id="togglePassword">
+                                                                <div class="input-group-text bg-white" style="cursor: pointer">
+                                                                    <i class="fas fa-eye" id="togglePasswordIcon"></i>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
 
@@ -250,6 +255,24 @@
         <!-- /.content -->
     </div>
     <!-- /.content-wrapper -->
+
+    <script>
+        const passwordField = document.getElementById('inputPassword');
+        const togglePassword = document.getElementById('togglePassword');
+        const togglePasswordIcon = document.getElementById('togglePasswordIcon');
+
+        togglePassword.addEventListener('click', function() {
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                togglePasswordIcon.classList.remove('fa-eye');
+                togglePasswordIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordField.type = 'password';
+                togglePasswordIcon.classList.remove('fa-eye-slash');
+                togglePasswordIcon.classList.add('fa-eye');
+            }
+        });
+    </script>
 
 <script>
     $(document).ready(function() {

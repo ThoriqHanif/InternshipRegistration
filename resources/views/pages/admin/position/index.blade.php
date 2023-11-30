@@ -28,7 +28,7 @@
                                 <a class="btn btn-sm btn-success float-right" href="{{ route('position.create') }}"><i class="fas fa-plus mr-2 sm"></i>
                                     Posisi</a>
                                     @endif
-                                <a class="btn btn-sm btn-danger float-left" onclick="showDeleted()" id="showDeletedButton"><i id="showDeletedIcon" class="fas fa-trash mr-2"></i>Lihat Data Terhapus</a>
+                                <a class="btn btn-sm btn-danger float-left text-white" onclick="showDeleted()" id="showDeletedButton"><i id="showDeletedIcon" class="fas fa-trash mr-2 color-white"></i>Lihat Data Terhapus</a>
 
                             </div>
                             <!-- /.card-header -->

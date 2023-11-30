@@ -27,8 +27,8 @@
                                 @if (auth()->check() && auth()->user()->role == 'admin')
                                     <a class="btn btn-sm btn-success float-right" href="{{ route('intern.create') }}"><i class="fas fa-plus mr-2 sm"></i>
                                         Pemagang</a>
-                                    <a class="btn btn-sm btn-danger float-left" onclick="showDeletedIntern()"
-                                        id="showDeletedButtonIntern"><i id="showDeletedIcon" class="fas fa-trash mr-2"></i> Lihat Data Terhapus</a>
+                                    <a class="btn btn-sm btn-danger float-left text-white" onclick="showDeletedIntern()"
+                                        id="showDeletedButtonIntern"><i id="showDeletedIcon" class="fas fa-trash mr-2 color-white"></i> Lihat Data Terhapus</a>
                                 @endif
                             </div>
                             <!-- /.card-header -->
@@ -60,6 +60,7 @@
                                                     style="width: 200px">
                                                     <option value="">All</option>
                                                     <option value="pending">Pending</option>
+                                                    <option value="interview">Interview</option>
                                                     <option value="diterima">Diterima</option>
                                                     <option value="ditolak">Ditolak</option>
                                                 </select>
@@ -215,7 +216,7 @@
             tableIntern.ajax.url("{{ route('intern.index') }}?showDeleted=1&status=" + $('#statusFilter').val()).load();
     
             // Mengganti teks tombol "Lihat Arsip" menjadi "Lihat Semua"
-            document.getElementById("showDeletedButtonIntern").innerHTML = "Lihat Semua";
+            document.getElementById("showDeletedButtonIntern").innerHTML = "<span style='color: white'>Lihat Semua</span>";
     
             // Mengganti atribut onclick tombol "Lihat Arsip" agar dapat membatalkan tampilan data yang dihapus
             document.getElementById("showDeletedButtonIntern").setAttribute("onclick", "showAllIntern()");
@@ -226,14 +227,30 @@
             tableIntern.ajax.url("{{ route('intern.index') }}?showDeleted=0&status=" + $('#statusFilter').val()).load();
     
             // Mengganti teks tombol "Lihat Semua" kembali menjadi "Lihat Arsip"
-            document.getElementById("showDeletedButtonIntern").innerHTML =
-                '<i id="showDeletedIcon" class="fas fa-trash mr-2"></i> Lihat Data Terhapus';
+            document.getElementById("showDeletedButtonIntern").innerHTML = '<i id="showDeletedIcon" class="fas fa-trash mr-2 color-white"></i><span style="color: white"> Lihat Data Terhapus</span>';
+
     
             // Mengganti atribut onclick tombol "Lihat Semua" agar dapat memanggil kembali fungsi showDeletedIntern()
             document.getElementById("showDeletedButtonIntern").setAttribute("onclick", "showDeletedIntern()");
         }
     
         let tableIntern = new DataTable('#tableIntern', {
+         "createdRow": function(row, data, dataIndex) {
+            let badgeClass = '';
+            let textColor = 'text-white';
+
+            if (data['status'] === 'interview') {
+                badgeClass = 'bg-purple';
+            } else if (data['status'] === 'pending') {
+                badgeClass = 'bg-yellow';
+            } else if (data['status'] === 'Ditolak') {
+                badgeClass = 'bg-red';
+            } else if (data['status'] === 'diterima') {
+                badgeClass = 'bg-green';
+            }
+
+            $(row).find('td:eq(6)').html('<span class="badge text-capitalize text-white px-2 ' + badgeClass + ' ' + textColor + '">' + data['status'] + '</span>');
+        },  
             
             processing: true,
             serverSide: true,

@@ -728,8 +728,7 @@
                             </tr>
                         </tbody>
                     </table> --}}
-                    <div class="spacer_block block-1"
-                                                        style="height:20px;line-height:20px;font-size:1px;"> </div>
+                    <div class="spacer_block block-1" style="height:20px;line-height:20px;font-size:1px;"> </div>
                     @if ($newStatus === 'diterima' || $newStatus === 'ditolak' || $newStatus === 'interview' || $newStatus === 'pending')
                         
                     <table align="center" border="0" cellpadding="0" cellspacing="0" class="row row-11"
@@ -851,7 +850,7 @@
                                                                     <div align="center" class="alignment"
                                                                         style="line-height:10px"><img
                                                                             alt="Illustration Login"
-                                                                            src="{{ $message->embed(public_path() . '/img/pending.png') }}"
+                                                                            src="{{ $message->embed(public_path() . '/img/pending2.png') }}"
                                                                             style="display: block; height: auto; border: 0; max-width: 280px; width: 100%;"
                                                                             title="Illustration Login"
                                                                             width="280" /></div>

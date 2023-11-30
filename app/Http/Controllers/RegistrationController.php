@@ -16,54 +16,54 @@ class RegistrationController extends Controller
      * Display a listing of the resource.
      */
     public function index(Request $request)
-{
-    $positionId = $request->input('position_id');
-    $selectedPosition = null;
-    $activePositions = null; // Inisialisasi $activePositions agar tidak menghasilkan "Undefined variable" jika tidak ada parameter 'position_id'.
+    {
+        $positionId = $request->input('position_id');
+        $selectedPosition = null;
+        $activePositions = null; // Inisialisasi $activePositions agar tidak menghasilkan "Undefined variable" jika tidak ada parameter 'position_id'.
 
-    if ($positionId) {
-        // Jika parameter position_id ada, pengguna membuka formulir dari tautan di halaman landing.
-        $selectedPosition = Position::find($positionId);
-    } else {
-        // Jika tidak ada parameter position_id, tampilkan daftar posisi yang aktif.
+        if ($positionId) {
+            // Jika parameter position_id ada, pengguna membuka formulir dari tautan di halaman landing.
+            $selectedPosition = Position::find($positionId);
+        } else {
+            // Jika tidak ada parameter position_id, tampilkan daftar posisi yang aktif.
+            $today = now()->format('Y-m-d');
+            $activePositions = Position::whereHas('periode', function ($query) use ($today) {
+                $query->where('start_date', '<=', $today)
+                    ->where('end_date', '>=', $today);
+            })->get();
+        }
+
+        return view('form', compact('selectedPosition', 'activePositions'));
+    }
+
+    public function showBySlug(Request $request, $slug)
+    {
+        $position = Position::where('slug', $slug)->first();
+
+        if (!$position) {
+            abort(404);
+        }
+
+        $selectedPosition = $position;
+
         $today = now()->format('Y-m-d');
         $activePositions = Position::whereHas('periode', function ($query) use ($today) {
             $query->where('start_date', '<=', $today)
                 ->where('end_date', '>=', $today);
         })->get();
+
+        $periode = Periode::where('position_id', $selectedPosition->id)
+            ->where('start_date', '<=', $today)
+            ->where('end_date', '>=', $today)
+            ->first();
+
+        if (!$periode || $periode->quota <= 0) {
+            // Periode tidak ditemukan atau kuotanya habis, atur respon sesuai kebutuhan Anda
+            return view('components.error');
+        }
+
+        return view('form', compact('selectedPosition', 'activePositions'));
     }
-
-    return view('form', compact('selectedPosition', 'activePositions'));
-}
-
-public function showBySlug(Request $request, $slug)
-{
-    $position = Position::where('slug', $slug)->first();
-
-    if (!$position) {
-        abort(404);
-    }
-
-    $selectedPosition = $position;
-
-    $today = now()->format('Y-m-d');
-    $activePositions = Position::whereHas('periode', function ($query) use ($today) {
-        $query->where('start_date', '<=', $today)
-            ->where('end_date', '>=', $today);
-    })->get();
-
-    $periode = Periode::where('position_id', $selectedPosition->id)
-    ->where('start_date', '<=', $today)
-    ->where('end_date', '>=', $today)
-    ->first();
-
-if (!$periode || $periode->quota <= 0) {
-    // Periode tidak ditemukan atau kuotanya habis, atur respon sesuai kebutuhan Anda
-    return view('components.error');
-}
-
-    return view('form', compact('selectedPosition', 'activePositions'));
-}
 
 
 
@@ -136,6 +136,7 @@ if (!$periode || $periode->quota <= 0) {
         $interns->portfolio = $portfolioFileName;
         $interns->photo = $photoFileName;
         $interns->status = $request->input('status', 'pending');
+        $interns->messages = $request->messages;
 
         if ($interns->save()) {
             if ($interns->status === 'pending') {

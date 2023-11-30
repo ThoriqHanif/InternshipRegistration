@@ -69,9 +69,26 @@ class PeriodeController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Periode $periode)
+    public function show($id)
     {
         //
+        $periode = Periode::find($id);
+        $position_id = $periode->position_id;
+        $positions = Position::all();
+
+        return view('pages.admin.periode.show', [
+            'periode' => $periode,
+            'id' => $periode->id,
+            'name' => $periode->name,
+            'position_id' => $position_id,
+            'positions' => $positions,
+            'start_date' => $periode->start_date,
+            'end_date' => $periode->end_date,
+            'quota'=> $periode->quota,
+            'description'=> $periode->description
+
+        ]);
+        return view('pages.admin.periode.show', compact('periode', 'position'));
     }
 
     /**

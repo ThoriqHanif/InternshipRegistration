@@ -46,7 +46,7 @@
                                                                 <input
                                                                     class="form-control @error('email') is-invalid @enderror"
                                                                     type="email" value="{{ old('email') }}"
-                                                                    name="email" placeholder="Masukkan Email">
+                                                                    name="email" placeholder="example@gmail.com">
                                                                 @error('email')
                                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                                 @enderror
@@ -88,7 +88,7 @@
                                                                 <input
                                                                     class="form-control @error('phone_number') is-invalid @enderror"
                                                                     type="number" value="{{ old('phone_number') }}"
-                                                                    name="phone_number" placeholder="Masukkan Telp">
+                                                                    name="phone_number" placeholder="08xxxxx">
                                                                 @error('phone_number')
                                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                                 @enderror
@@ -323,6 +323,18 @@
                                                                         for="fileSurat">Choose file</label>
                                                                 </div>
                                                                 @error('photo')
+                                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                                @enderror
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-12" hidden>
+                                                            <div class="form-group">
+                                                                <label for="example-text-input"
+                                                                    class="form-control-label">messages<span
+                                                                        class="text-danger"> *</span></label>
+                                                                <textarea class="form-control @error('messages') is-invalid @enderror" type="text" value="" name="messages"
+                                                                    placeholder="Masukkan Alamat">Terimakasih telah mendaftarkan diri magang di Kadang Koding Indonesia. Data anda sedang kami proses.</textarea>
+                                                                @error('messages')
                                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                                 @enderror
                                                             </div>

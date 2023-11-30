@@ -243,6 +243,18 @@
                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                 @enderror
                                             </div>
+                                            <div class="col-md-12" hidden>
+                                                <div class="form-group">
+                                                    <label for="example-text-input"
+                                                        class="form-control-label">messages<span
+                                                            class="text-danger"> *</span></label>
+                                                    <textarea class="form-control @error('messages') is-invalid @enderror" type="text" value="" name="messages"
+                                                        placeholder="Masukkan Alamat">Terimakasih telah mendaftarkan diri magang di Kadang Koding Indonesia. Data anda sedang kami proses.</textarea>
+                                                    @error('messages')
+                                                        <div class="invalid-feedback">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                            </div>
                                         </div>
                                             <div class="form-group">
                                                 <input class="form-control invisible" value="pending" id="status" name="status">

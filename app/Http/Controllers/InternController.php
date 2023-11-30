@@ -10,17 +10,12 @@ use App\Models\Periode;
 use App\Models\Position;
 use App\Models\Report;
 use App\Models\User;
-use Dotenv\Validator;
-use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Validator as FacadesValidator;
 use PhpOffice\PhpWord\IOFactory;
 use Yajra\DataTables\Facades\DataTables;
 use ZipArchive;
-use Vish4395\LaravelFileViewer\LaravelFileViewer;
 
 class InternController extends Controller
 {
@@ -56,52 +51,6 @@ class InternController extends Controller
         }
 
         return view('pages.admin.intern.index');
-
-
-
-        // if ($request->ajax()) {
-        //     $interns = Intern::with('position')->select('interns.*');
-
-        //     return DataTables::of($interns)
-        //         ->addColumn('action', function ($intern) {
-        //             return view('pages.admin.intern.action', compact('intern'));
-        //         })
-        //         ->addIndexColumn()
-        //         ->rawColumns(['action'])
-        //         ->make(true);
-        // }
-
-        // return view('pages.admin.intern.index');
-
-        // Cek apakah pengguna adalah admin
-        // if (auth()->check() && auth()->user()->role == 'admin') {
-        //     $statusFilter = $request->query('status');
-
-        //     // Query data berdasarkan filter status jika ada
-        //     if ($statusFilter) {
-        //         $intern = Intern::where('status', $statusFilter)->paginate(10);
-        //     } else {
-        //         // Jika tidak ada filter, tampilkan semua data dengan paginasi
-        //         $intern = Intern::paginate(1);
-        //     }
-        // } elseif (auth()->check() && auth()->user()->role == 'user') {
-        //     // Jika pengguna adalah 'user', tampilkan hanya data dengan status 'diterima'
-        //     $intern = Intern::where('status', 'diterima')->paginate(1);
-        // } else {
-        //     // Jika pengguna belum masuk, mungkin Anda ingin menangani ini secara berbeda, misalnya, arahkan mereka ke halaman login.
-        //     return redirect('/login');
-        // }
-
-        // Filter status jika ada
-        // if ($request->input('status') === 'diterima') {
-        //     $interns->where('status', 'diterima');
-        // } elseif ($request->input('status') === 'ditolak') {
-        //     $interns->where('status', 'ditolak');
-        // } elseif ($request->input('status') === 'pending') {
-        //     $interns->where('status', 'pending');
-        // }
-
-        // return view('pages.admin.intern.index', compact('intern'));
     }
 
     public function restore($id)
@@ -125,10 +74,10 @@ class InternController extends Controller
                 $intern->forceDelete();
                 return response()->json(['success' => true]);
             } catch (\Exception $e) {
-                return response()->json(['success' => false, 'message' => 'Gagal menghapus pemagang secara permanen.']);
+                return response()->json(['message' => 'Gagal menghapus pemagang secara permanen.'], 400);
             }
         } else {
-            return response()->json(['success' => false, 'message' => 'Pemagang tidak ditemukan atau tidak dalam status terhapus.']);
+            return response()->json(['message' => 'Pemagang tidak ditemukan atau tidak dalam status terhapus.']);
         }
     }
 
@@ -202,16 +151,12 @@ class InternController extends Controller
         $interns->cover_letter = $cover_letterFileName;
         $interns->portfolio = $portfolioFileName;
         $interns->photo = $photoFileName;
-        // $interns->status = $request->input('status', 'pending');
+        $interns->status = $request->input('status', 'pending');
+        $interns->messages = $request->messages;
 
-        // if ($interns->save()) {
-        //     return response()->json(['success' => true]);
-        // } else {
-        //     return response()->json(['success' => false]);
-        // }
         if ($interns->save()) {
             if ($interns->status === 'pending') {
-                // Kirim email notifikasi ke pemagang dengan status 'pending'
+                // Kirim email status e 'pending'
                 Mail::to($interns->email)->send(new InternStatus($interns, 'pending'));
             }
 
@@ -220,15 +165,6 @@ class InternController extends Controller
             return response()->json(['success' => false]);
         }
     }
-
-    // public function convertDocxToHtml($docxFilePath) {
-    //     $phpWord = IOFactory::load($docxFilePath);
-    //     $htmlWriter = IOFactory::createWriter($phpWord, 'HTML');
-    //     $htmlFilePath = storage_path('app/temp/docx.html');
-    //     $htmlWriter->save($htmlFilePath);
-    //     return file_get_contents($htmlFilePath);
-    // }
-
     /**
      * Display the specified resource.
      */
@@ -239,7 +175,6 @@ class InternController extends Controller
         $phpWord = IOFactory::load($docxFilePath);
         $htmlWriter = new \PhpOffice\PhpWord\Writer\HTML($phpWord);
 
-        // Definisikan path di mana hasil HTML akan disimpan
         $fileTypeFolder = '';
         if ($fileType === 'motivation_letter') {
             $fileTypeFolder = 'motivation_letter/';
@@ -401,14 +336,14 @@ class InternController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-        public function edit($id)
-        {
-            //
-            $intern = Intern::find($id);
-            $genders = ['L' => 'Laki - Laki', 'P' => 'Perempuan'];
-            $position_id = $intern->position_id;
-            $positions = Position::all();
-            $st = ['diterima' => 'Diterima', 'interview' => 'Interview' , 'ditolak' => 'Ditolak', 'pending' => 'Pending'];
+    public function edit($id)
+    {
+        //
+        $intern = Intern::find($id);
+        $genders = ['L' => 'Laki - Laki', 'P' => 'Perempuan'];
+        $position_id = $intern->position_id;
+        $positions = Position::all();
+        $st = ['diterima' => 'Diterima', 'interview' => 'Interview', 'ditolak' => 'Ditolak', 'pending' => 'Pending'];
 
         // Mengambil alamat URL untuk file CV dari penyimpanan "public"
         if ($intern->cv) {
@@ -431,6 +366,12 @@ class InternController extends Controller
             // Jika surat pengantar sudah diunggah, atur $coverLetterUrl
             $motivationLetterUrl = asset('files/motivation_letter/' . $intern->motivation_letter);
             $motivation_letterExtension = pathinfo($intern->motivation_letter, PATHINFO_EXTENSION);
+
+            if ($motivation_letterExtension == 'docx') {
+                // Panggil metode untuk mengonversi DOCX ke HTML
+                $htmlPath = $this->convertDocxToHtml(public_path('files/motivation_letter/' . $intern->motivation_letter), 'motivation_letter');
+                $motivationLetterHtmlPath = $htmlPath;
+            }
         } else {
             // Jika surat pengantar belum diunggah, atur $coverLetterUrl menjadi null
             $motivationLetterUrl = null;
@@ -470,15 +411,15 @@ class InternController extends Controller
         }
 
         // Mendefinisikan alamat URL untuk file photo dari direktori 'public/uploads/photo'
-        if ($intern->photo) {
-            // Jika surat pengantar sudah diunggah, atur $coverLetterUrl
-            $photoUrl = asset('files/photo/' . $intern->photo);
-            $photoExtension = pathinfo($intern->photo, PATHINFO_EXTENSION);
-        } else {
-            // Jika surat pengantar belum diunggah, atur $coverLetterUrl menjadi null
-            $photorUrl = null;
-            $photoExtension = null;
-        }
+            if ($intern->photo) {
+                // Jika surat pengantar sudah diunggah, atur $coverLetterUrl
+                $photoUrl = asset('files/photo/' . $intern->photo);
+                $photoExtension = pathinfo($intern->photo, PATHINFO_EXTENSION);
+            } else {
+                // Jika surat pengantar belum diunggah, atur $coverLetterUrl menjadi null
+                $photorUrl = null;
+                $photoExtension = null;
+            }
         // Kembalikan view edit dengan data intern yang akan diedit
         return view('pages.admin.intern.edit', [
             'intern' => $intern,
@@ -522,196 +463,246 @@ class InternController extends Controller
     /**
      * Update the specified resource in storage.
      */
-        public function update(UpdateInternRequest $request, $id)
-        {
-            $data = Intern::find($id);
-            $status = $request->input('status');
-            $newPositionId = $request->input('position_id');
+    public function update(UpdateInternRequest $request, $id)
+    {
+        $data = Intern::find($id);
+        $status = $request->input('status');
+        $newPositionId = $request->input('position_id');
+        $previousStatus = $data->status;
 
-            // Validasi status yang diizinkan (misalnya: "diterima" atau "ditolak")
+        // Validasi status yang diizinkan (misalnya: "diterima" atau "ditolak")
 
-            if ($request->status === 'diterima' || $request->status === 'pending' || $request->status === 'interview' || $request->status === 'ditolak') {
-                $data->messages = $request->messages; // Ambil pesan dari request
-                $data->save();
-            }
+        if ($request->status === 'diterima' || $request->status === 'pending' || $request->status === 'interview' || $request->status === 'ditolak') {
+            $data->messages = $request->messages; // Ambil pesan dari request
+            $data->save();
+        }
 
-            if ($data->status !== $status) {
-                // Pindahkan logika pengiriman email ke luar dari kondisi 'diterima'
-                if ($status === 'ditolak') {
-                    // Jika status sekarang adalah 'ditolak', kirim email notifikasi ditolak
-                    Mail::to($data->email)->send(new InternStatus($data, 'ditolak'));
-                } elseif ($status === 'pending') {
-                    // Jika status sekarang adalah 'pending', kirim email notifikasi pending
-                    Mail::to($data->email)->send(new InternStatus($data, 'pending'));
-                } elseif ($status === 'interview') {
-                    // Jika status sekarang adalah 'interview', kirim email notifikasi interview
-                    Mail::to($data->email)->send(new InternStatus($data, 'interview'));
-                } elseif ($status === 'diterima') {
-                    // Jika status sekarang adalah 'diterima', buat pengguna baru
-                    $username = $data->username;
-                    $password = 'intern' . $username;
-                    
-        
-                    $user = User::create([
-                        'name' => $data->username,
-                        'email' => $data->email,
-                        'role' => 'user',
-                        'password' => $password,
-                    ]);
-        
-                    // Relasikan pemagang dengan user
-                    $data->user_id = $user->id;
+        if ($data->status !== $status) {
+            // Pindahkan logika pengiriman email ke luar dari kondisi 'diterima'
+            if ($status === 'ditolak') {
+                if ($previousStatus === 'diterima') {
+                    $positionId = $data->position_id;
+                    $currentDate = $data->created_at;
 
-                    $position = Position::find($data->position_id);
-                    $periode = Periode::where('position_id', $data->position_id)
-                        ->where('start_date', '<=', $data->created_at)
-                        ->where('end_date', '>=', $data->created_at)
+                    $periode = Periode::where('position_id', $positionId)
+                        ->where('start_date', '<=', $currentDate)
+                        ->where('end_date', '>=', $currentDate)
                         ->first();
-        
-                    if ($position && $periode) {
-                        // Perbarui kuota pada periode yang sesuai
-                        $periode->quota--;
-        
-                        // Simpan perubahan
+
+                    if ($periode) {
+                        $periode->quota++;
                         $periode->save();
                     }
+                }
+                // Jika status sekarang adalah 'ditolak', kirim email notifikasi ditolak
+                Mail::to($data->email)->send(new InternStatus($data, 'ditolak', $data->messages));
+            } elseif ($status === 'pending') {
+                if ($previousStatus === 'diterima') {
+                    $positionId = $data->position_id;
+                    $currentDate = $data->created_at;
 
-                    $startDate = $data->start_date;
-                    $endDate = $data->end_date;
-                    $internId = $data->id;
+                    $periode = Periode::where('position_id', $positionId)
+                        ->where('start_date', '<=', $currentDate)
+                        ->where('end_date', '>=', $currentDate)
+                        ->first();
 
-                    $currentDate = $startDate;
-                    while ($currentDate <= $endDate) {
-                        Report::create([
-                            'intern_id' => $internId,
-                            'date' => $currentDate,
-                            'presence' => null,
-                            'attendance_hours' => null,
-                            'agency' => null,
-                            'project_name' => null,
-                            'job' => null,
-                            'description' => null,
-                        ]);
-            
-                        $currentDate = date('Y-m-d', strtotime($currentDate . ' +1 day'));
+                    if ($periode) {
+                        $periode->quota++;
+                        $periode->save();
                     }
+                }
+                // Jika status sekarang adalah 'pending', kirim email notifikasi pending
+                Mail::to($data->email)->send(new InternStatus($data, 'pending', $data->messages));
+            } elseif ($status === 'interview') {
+                if ($previousStatus === 'diterima') {
+                    $positionId = $data->position_id;
+                    $currentDate = $data->created_at;
 
-                    Mail::to($data->email)->send(new InternStatus($data, 'diterima', $password));
+                    $periode = Periode::where('position_id', $positionId)
+                        ->where('start_date', '<=', $currentDate)
+                        ->where('end_date', '>=', $currentDate)
+                        ->first();
+
+                    if ($periode) {
+                        $periode->quota++;
+                        $periode->save();
+                    }
                 }
-        
-                // Kemudian atur 'user_id' pada pemagang yang terkait menjadi null
-                $relatedInterns = Intern::where('user_id', $data->user_id)->get();
-                foreach ($relatedInterns as $relatedIntern) {
-                    $relatedIntern->user_id = null;
-                    $relatedIntern->save();
+                // Jika status sekarang adalah 'interview', kirim email notifikasi interview
+                Mail::to($data->email)->send(new InternStatus($data, 'interview', $data->messages));
+            } elseif ($status === 'diterima') {
+
+                $position = Position::find($data->position_id);
+                $periode = Periode::where('position_id', $data->position_id)
+                    ->where('start_date', '<=', $data->created_at)
+                    ->where('end_date', '>=', $data->created_at)
+                    ->where('quota', '>', 0)
+                    ->first();
+
+                if (!$periode) {
+                    // Jika kuota sudah penuh, keluarkan alert atau pesan kesalahan
+                    return response()->json(['message' => 'Maaf, kuota untuk posisi ini sudah penuh.'],400);
                 }
-        
-                // Hapus pengguna jika status sebelumnya adalah 'diterima'
-                if ($data->status === 'diterima' && $data->user) {
-                    $data->user->delete();
+                
+                if ($position && $periode) {
+                    // Perbarui kuota pada periode yang sesuai
+                    $periode->quota--;
+
+                    // Simpan perubahan
+                    $periode->save();
                 }
-        
-                // Update status sesuai dengan status baru
-                $data->status = $status;
+                // Jika status sekarang adalah 'diterima', buat pengguna baru
+                $username = $data->username;
+                $password = 'intern' . $username;
+
+
+                $user = User::create([
+                    'name' => $data->username,
+                    'email' => $data->email,
+                    'role' => 'user',
+                    'password' => $password,
+                ]);
+
+                // Relasikan pemagang dengan user
+                $data->user_id = $user->id;
+
+                $startDate = $data->start_date;
+                $endDate = $data->end_date;
+                $internId = $data->id;
+
+                $currentDate = $startDate;
+                while ($currentDate <= $endDate) {
+                    Report::create([
+                        'intern_id' => $internId,
+                        'date' => $currentDate,
+                        'presence' => null,
+                        'attendance_hours' => null,
+                        'agency' => null,
+                        'project_name' => null,
+                        'job' => null,  
+                        'description' => null,
+                    ]);
+
+                    $currentDate = date('Y-m-d', strtotime($currentDate . ' +1 day'));
+                }
+
+                Mail::to($data->email)->send(new InternStatus($data, 'diterima', $password, $data->messages));
             }
-        
-            if ($data->position_id != $newPositionId) {
-                // Periksa apakah posisi yang baru ada
-                $newPosition = Position::find($newPositionId);
-        
-                if ($newPosition) {
-                    // Hapus relasi dengan posisi lama
-                    $oldPosition = Position::find($data->position_id);
-                    if ($oldPosition) {
-                        $data->position()->dissociate();
-                        $data->save();
-                    }
-        
-                    // Atur relasi dengan posisi baru
-                    $data->position_id = $newPositionId;
+
+            // Kemudian atur 'user_id' pada pemagang yang terkait menjadi null
+            $relatedInterns = Intern::where('user_id', $data->user_id)->get();
+            foreach ($relatedInterns as $relatedIntern) {
+                $relatedIntern->user_id = null;
+                $relatedIntern->save();
+            }
+
+            // Hapus pengguna jika status sebelumnya adalah 'diterima'
+            if ($data->status === 'diterima' && $data->user) {
+                $data->user->delete();
+            }
+
+            // Update status sesuai dengan status baru
+            $data->status = $status;
+            
+        }
+
+        if ($data->position_id != $newPositionId) {
+            // Periksa apakah posisi yang baru ada
+            $newPosition = Position::find($newPositionId);
+
+            if ($newPosition) {
+                // Hapus relasi dengan posisi lama
+                $oldPosition = Position::find($data->position_id);
+                if ($oldPosition) {
+                    $data->position()->dissociate();
                     $data->save();
                 }
-            }
 
-            // Status tidak berubah, Anda dapat memperbarui data lainnya seperti nama, alamat, dll
-            $data->update([
-                'full_name' => $request->input('full_name'),
-                'username' => $request->input('username'),
-                'email' => $request->input('email'),
-                'phone_number' => $request->input('phone_number'),
-                'address' => $request->input('address'),
-                'gender' => $request->input('gender'),
-                'school' => $request->input('school'),
-                'major' => $request->input('major'),
-                'start_date' => $request->input('start_date'),
-                'end_date' => $request->input('end_date'),
-                'position_id' => $request->input('position_id'),
-                'messages' => $request->input('messages')
-            ]);
-
-            if ($request->hasFile('cv')) {
-
-                // Simpan file CV yang baru
-                $cvFile = $request->file('cv');
-                $cvFileName = $cvFile->getClientOriginalName();
-                $cvFile->move(public_path('files/cv'), $cvFileName);
-
-                // Update kolom "cv" dalam database
-                $data->update(['cv' => $cvFileName]);
-            }
-
-            if ($request->hasFile('motivation_letter')) {
-
-
-                // Simpan file CV yang baru
-                $motivation_letterFile = $request->file('motivation_letter');
-                $motivation_letterFileName = $motivation_letterFile->getClientOriginalName();
-                $motivation_letterFile->move(public_path('files/motivation_letter'), $motivation_letterFileName);
-
-                // Update kolom "cv" dalam database
-                $data->update(['motivation_letter' => $motivation_letterFileName]);
-            }
-
-            if ($request->hasFile('cover_letter')) {
-
-                // Simpan file CV yang baru
-                $cover_letterFile = $request->file('cover_letter');
-                $cover_letterFileName = $cover_letterFile->getClientOriginalName();
-                $cover_letterFile->move(public_path('files/cover_letter'), $cover_letterFileName);
-
-                // Update kolom "cv" dalam database
-                $data->update(['cover_letter' => $cover_letterFileName]);
-            }
-
-            if ($request->hasFile('portfolio')) {
-
-                // Simpan file CV yang baru
-                $portfolioFile = $request->file('portfolio');
-                $portfolioFileName = $portfolioFile->getClientOriginalName();
-                $portfolioFile->move(public_path('files/portfolio'), $portfolioFileName);
-
-                // Update kolom "cv" dalam database
-                $data->update(['portfolio' => $portfolioFileName]);
-            }
-
-            if ($request->hasFile('photo')) {
-
-                // Simpan file CV yang baru
-                $photoFile = $request->file('photo');
-                $photoFileName = $photoFile->getClientOriginalName();
-                $photoFile->move(public_path('files/photo'), $photoFileName);
-
-                // Update kolom "cv" dalam database
-                $data->update(['photo' => $photoFileName]);
-            }
-
-            // Simpan perubahan
-            if ($data->save()) {
-                return response()->json(['success' => true]);
-            } else {
-                return response()->json(['success' => false]);
+                // Atur relasi dengan posisi baru
+                $data->position_id = $newPositionId;
+                $data->save();
             }
         }
+
+        // Status tidak berubah, Anda dapat memperbarui data lainnya seperti nama, alamat, dll
+        $data->update([
+            'full_name' => $request->input('full_name'),
+            'username' => $request->input('username'),
+            'email' => $request->input('email'),
+            'phone_number' => $request->input('phone_number'),
+            'address' => $request->input('address'),
+            'gender' => $request->input('gender'),
+            'school' => $request->input('school'),
+            'major' => $request->input('major'),
+            'start_date' => $request->input('start_date'),
+            'end_date' => $request->input('end_date'),
+            'position_id' => $request->input('position_id'),
+            'messages' => $request->input('messages')
+        ]);
+
+        if ($request->hasFile('cv')) {
+
+            // Simpan file CV yang baru
+            $cvFile = $request->file('cv');
+            $cvFileName = $cvFile->getClientOriginalName();
+            $cvFile->move(public_path('files/cv'), $cvFileName);
+
+            // Update kolom "cv" dalam database
+            $data->update(['cv' => $cvFileName]);
+        }
+
+        if ($request->hasFile('motivation_letter')) {
+
+
+            // Simpan file CV yang baru
+            $motivation_letterFile = $request->file('motivation_letter');
+            $motivation_letterFileName = $motivation_letterFile->getClientOriginalName();
+            $motivation_letterFile->move(public_path('files/motivation_letter'), $motivation_letterFileName);
+
+            // Update kolom "cv" dalam database
+            $data->update(['motivation_letter' => $motivation_letterFileName]);
+        }
+
+        if ($request->hasFile('cover_letter')) {
+
+            // Simpan file CV yang baru
+            $cover_letterFile = $request->file('cover_letter');
+            $cover_letterFileName = $cover_letterFile->getClientOriginalName();
+            $cover_letterFile->move(public_path('files/cover_letter'), $cover_letterFileName);
+
+            // Update kolom "cv" dalam database
+            $data->update(['cover_letter' => $cover_letterFileName]);
+        }
+
+        if ($request->hasFile('portfolio')) {
+
+            // Simpan file CV yang baru
+            $portfolioFile = $request->file('portfolio');
+            $portfolioFileName = $portfolioFile->getClientOriginalName();
+            $portfolioFile->move(public_path('files/portfolio'), $portfolioFileName);
+
+            // Update kolom "cv" dalam database
+            $data->update(['portfolio' => $portfolioFileName]);
+        }
+
+        if ($request->hasFile('photo')) {
+
+            // Simpan file CV yang baru
+            $photoFile = $request->file('photo');
+            $photoFileName = $photoFile->getClientOriginalName();
+            $photoFile->move(public_path('files/photo'), $photoFileName);
+
+            // Update kolom "cv" dalam database
+            $data->update(['photo' => $photoFileName]);
+        }
+
+        // Simpan perubahan
+        if ($data->save()) {
+            return response()->json(['success' => true]);
+        } else {
+            return response()->json(['success' => false]);
+        }
+    }
 
 
 
@@ -741,11 +732,11 @@ class InternController extends Controller
         }
 
         // Hapus data Interns dari database
-        if ($intern->delete()) {
-            return response()->json(['success' => true, 'message' => 'Posisi berhasil dihapus.']);
-        } else {
-            return response()->json(['success' => false, 'message' => 'Posisi menghapus User.']);
-        }
+            if ($intern->delete()) {
+                return response()->json(['success' => true, 'message' => 'Posisi berhasil dihapus.']);
+            } else {
+                return response()->json(['success' => false, 'message' => 'Posisi menghapus User.']);
+            }
     }
 
     public function download($id)
