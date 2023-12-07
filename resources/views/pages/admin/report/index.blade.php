@@ -412,9 +412,9 @@
                                                     '<a class="btn btn-sm btn-success btn-verified"><i class="nav-icon fas fa-check-circle mr-1"></i> Terverifikasi</a>';
                                             } else {
                                                 buttonHtml =
-                                                    '<a class="btn btn-sm btn-primary btn-view-report" data-intern-id="' +
+                                                    '<a class="btn btn-sm btn-primary btn-vermin" data-report-id="' +
                                                     row.id +
-                                                    '"><i class="nav-icon fas fa-clipboard mr-1"></i> Daily Report</a>';
+                                                    '"><i class="nav-icon fas fa-check mr-1"></i> Vermin</a>';
                                             }
 
                                             return buttonHtml;
