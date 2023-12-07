@@ -62,7 +62,9 @@ class RegistrationController extends Controller
             return view('components.error');
         }
 
-        return view('form', compact('selectedPosition', 'activePositions'));
+        return view('form', compact('selectedPosition', 'activePositions', 'periode'));
+
+
     }
 
 
@@ -130,6 +132,7 @@ class RegistrationController extends Controller
         $interns->start_date = $request->start_date;
         $interns->end_date = $request->end_date;
         $interns->position_id = $request->position_id;
+        $interns->periode_id = $request->periode_id; 
         $interns->cv = $cvFileName;
         $interns->motivation_letter = $motivation_letterFileName;
         $interns->cover_letter = $cover_letterFileName;

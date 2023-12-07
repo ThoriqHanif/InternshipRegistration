@@ -22,8 +22,14 @@ class Periode extends Model
         return $this->belongsTo(Position::class);
     }
 
+    public function isActive() {
+        return $this->start_date <= now() && $this->end_date >= now();
+    }
+
     public function interns()
     {
         return $this->hasMany(Intern::class);
     }
+
+    
 }

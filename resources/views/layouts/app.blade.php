@@ -70,6 +70,7 @@
 @stack('show-modal-report')
 @stack('script-report')
 @stack('script-edit-intern')
+@stack('table-report-intern')
 
 {{-- <script>
     let tableReport = new DataTable('#tableReport', {

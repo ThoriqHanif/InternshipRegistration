@@ -9,6 +9,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PeriodeController;
 use App\Http\Controllers\RegistrationController;
+use App\Http\Controllers\ReportAdminController;
 use App\Http\Controllers\ReportController;
 use Illuminate\Support\Facades\Route;
 
@@ -36,12 +37,7 @@ Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 
 // Rute untuk menangani proses login
 Route::post('/login', [LoginController::class, 'login']);
-Route::post('/logout', [LoginController::class, 'logout'])->name('logout');;
-
-// Route::resource('intern', InternController::class);
-// Route::resource('position', PositionController::class);
-// Route::resource('user', UserController::class);
-
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 
 Route::middleware(['auth', 'admin'])->group(function () {
@@ -50,22 +46,25 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
     Route::resource('position', PositionController::class);
     Route::resource('periode', PeriodeController::class);
-    // Route::resource('timetable', TimeTableController::class);
     Route::get('/admin/profile', [ProfileController::class, 'admin'])->name('admin.profile');
     Route::get('/admin/dashboard', [DashboardController::class, 'admin']);
     Route::put('/admin/profile', [ProfileController::class, 'updateAdmin'])->name('admin.profile.update');;
     Route::get('/intern/download/{id}', [InternController::class, 'download'])->name('intern.download');
     Route::post('/intern/restore/{id}', [InternController::class, 'restore'])->name('intern.restore');
     Route::delete('/intern/force-delete/{id}', [InternController::class, 'forceDelete'])->name('intern.forceDelete');
-
-
     Route::post('/position/restore/{id}', [PositionController::class, 'restore'])->name('position.restore');
     Route::delete('/position/force-delete/{id}', [PositionController::class, 'forceDelete'])->name('position.forceDelete');
 
+    // Route::get('report/admin', [ReportAdminController::class, 'index'])->name('report.admin.index');
+    Route::get('/getPeriodeId/{positionId}', [InternController::class, 'getPeriodeId']);
 
-    // Route::get('/report', function () {
-    //     return view('pages.admin.report.index');
-    // });
+    Route::get('/admin/report', [ReportAdminController::class, 'index'])->name('admin.report.index');
+    Route::get('/admin/intern/{id}', [ReportAdminController::class, 'getInternsByPeriode'])->name('admin.intern.periode');
+    Route::get('/admin/daily/{id}', [ReportAdminController::class, 'getReportByIntern'])->name('admin.report.intern');
+    Route::post('/admin/report/verify/{id}', [ReportAdminController::class, 'verifyReport'])->name('admin.report.verify');
+    Route::get('/admin/report/status',  [ReportAdminController::class, 'getStatus'])->name('admin.report.status');
+
+    
 });
 
 Route::middleware(['auth'])->group(function () {

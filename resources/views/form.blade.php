@@ -173,14 +173,7 @@
                                                     <div class="row">
                                                         <div class="col-md-6">
                                                             <div class="form-group">
-                                                                <label for="position_id">Pilih Posisi Magang</label>
-                                                                {{-- <select name="position_id" class="form-control" {{ $selectedPosition ? 'disabled' : '' }}>
-                                                                    @if ($selectedPosition)
-                                                                        <option value="{{ $selectedPosition->id }}" selected>{{ $selectedPosition->name }}</option>
-                                                                    @else
-                                                                        <option value="" selected disabled>Pilih Posisi Magang</option>
-                                                                    @endif
-                                                                </select> --}}
+                                                                <label for="position_id">Posisi Magang</label>
                                                                 <select name="position_id" class="form-control" {{ $selectedPosition ? 'readonly' : '' }} required>
                                                                     @if ($selectedPosition)
                                                                     <option value="{{ $selectedPosition->id }}" {{ $selectedPosition ? 'selected' : '' }}>{{ $selectedPosition->name }}</option>
@@ -339,6 +332,8 @@
                                                                 @enderror
                                                             </div>
                                                         </div>
+                                                        <input type="hidden" name="periode_id" value="{{ $periode->id }}">
+
                                                         <div class="form-group">
                                                             <input class="form-control invisible" value="pending"
                                                                 id="status" name="status">

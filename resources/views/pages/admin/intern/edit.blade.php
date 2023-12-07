@@ -181,10 +181,11 @@
                                                                     name="position_id">
                                                                     <option value="" selected>Pilih Posisi Magang
                                                                     </option>
-                                                                    @foreach ($positions as $position)
+                                                                    @foreach ($activePositions as $position)
                                                                         <option value="{{ $position->id }}"
                                                                             {{ $position_id == $position->id ? 'selected' : '' }}>
                                                                             {{ $position->name }}
+                                                                            <!-- Ubah sesuai field nama posisi pada model -->
                                                                         </option>
                                                                     @endforeach
                                                                 </select>
@@ -193,6 +194,7 @@
                                                                 @enderror
                                                             </div>
                                                         </div>
+                                                        
                                                         <div class="col-md-6">
                                                             <div class="form-group">
                                                                 <label class="form-control-label">Tanggal Mulai<span
@@ -660,13 +662,7 @@
                                                                     {{ $intern->messages }}
                                                                     </textarea>
                                                                 </div>
-                                                                <div class="form-group">
-                                                                    <div class="btn btn-default btn-file">
-                                                                        <i class="fas fa-paperclip"></i> Attachment
-                                                                        <input type="file" name="attachment">
-                                                                    </div>
-                                                                    <p class="help-block">Max. 32MB</p>
-                                                                </div>
+                                                                
                                                             </div>
                                                             <!-- /.card-body -->
 

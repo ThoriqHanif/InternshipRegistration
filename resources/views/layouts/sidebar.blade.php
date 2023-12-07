@@ -96,9 +96,9 @@
                                   </p>
                               </a>
                           </li>
-                          
-                          <li class="nav-item" hidden>
-                            <a class="nav-link {{ request()->is('report*') ? 'active' : '' }}" href="{{url('reports')}}">
+                          <li class="nav-header">Report</li>
+                          <li class="nav-item">
+                            <a class="nav-link {{ request()->is('admin/report*') ? 'active' : '' }}" href="{{route('admin.report.index')}}">
                                 <i class="nav-icon fas fa-clipboard"></i>
                                 <p>
                                     Report Management

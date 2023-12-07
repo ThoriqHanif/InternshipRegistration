@@ -28,6 +28,8 @@ class Intern extends Model
         'cv',
         'motivation_letter',
         'cover_letter',
+        'position_id',
+        'periode_id',
         'portfolio',
         'photo',
         'status',
@@ -42,7 +44,7 @@ class Intern extends Model
 
     public function position()
     {
-        return $this->belongsTo(Position::class);
+        return $this->belongsTo(Position::class, 'position_id');
     }
 
     
@@ -91,5 +93,10 @@ class Intern extends Model
     public function reports()
     {
         return $this->hasMany(Report::class);
+    }
+
+    public function periode()
+    {
+        return $this->belongsTo(Periode::class, 'periode_id');
     }
 }

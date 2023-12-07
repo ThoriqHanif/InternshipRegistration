@@ -30,13 +30,11 @@ class LoginController extends Controller
         $credentials = $request->only('email', 'password');
     
         if (Auth::attempt($credentials)) {
-            // Login berhasil, cek peran (role) pengguna
+        //    Cek Role
             $user = Auth::user();
             if ($user->role === 'admin') {
-                // Jika peran adalah 'admin', redirect ke dashboard admin
                 return redirect('/admin/dashboard');
             } elseif ($user->role === 'user') {
-                // Jika peran adalah 'user', redirect ke dashboard user
                 return redirect('/reports');
             }
         }
@@ -49,9 +47,9 @@ class LoginController extends Controller
     {
         
 
-        Auth::logout(); // Logout pengguna
-        $request->session()->invalidate(); // Memadamkan sesi
-        $request->session()->regenerateToken(); // Menghasilkan token sesi yang baru
+        Auth::logout(); // Logout user
+        $request->session()->invalidate(); // sesi done
+        $request->session()->regenerateToken(); // token baru
 
         return redirect('/login'); // Redirect ke halaman login setelah logout
     }

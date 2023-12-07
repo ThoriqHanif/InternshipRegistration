@@ -25,14 +25,15 @@
                         <div class="card">
                             <div class="card-header">
                                 @if (auth()->check() && auth()->user()->role == 'admin')
-                                    <a class="btn btn-sm btn-success float-right" href="{{ route('periode.create') }}"><i class="fas fa-plus mr-2 sm"></i>
+                                    <a class="btn btn-sm btn-success float-right" href="{{ route('periode.create') }}"><i
+                                            class="fas fa-plus mr-2 sm"></i>
                                         Periode</a>
                                 @endif
                             </div>
                             <!-- /.card-header -->
                             <div class="card-body">
-                                
-                                
+
+
 
                                 @include('components.alert')
                                 <div class="table-responsive">
@@ -45,14 +46,13 @@
                                                 <th>Tanggal Mulai</th>
                                                 <th>Tanggal Selesai</th>
                                                 <th>Kuota</th>
-                                                <th>Deskripsi</th>
                                                 <th style="width: 140px">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
 
                                         </tbody>
-                                       
+
                                     </table>
                                 </div>
                             </div>
@@ -63,53 +63,49 @@
                 </div>
         </section>
     </div>
-@push('table-periode')
-<script>
-    let tablePeriode = new DataTable('#tablePeriode', {
-        processing: true,
-        serverSide: true,
-        responsive: true,
-        ajax: {
-            url: "{{ route('periode.index') }}"
-        },
-        columns: [{
-                data: 'DT_RowIndex',
-                name: 'DT_RowIndex',
-                orderable: false,
-                searchable: false
-            },
-            {
-                data: 'name',
-                name: 'name'
-            },
-            {
-                data: 'position.name',
-                name: 'position.name'
-            },
-            {
-                data: 'start_date',
-                name: 'start_date'
-            },
-            {
-                data: 'end_date',
-                name: 'end_date'
-            },
-            {
-                data: 'quota',
-                name: 'quota'
-            },
-            {
-                data: 'description',
-                name: 'description'
-            },
-            {
-                data: 'action',
-                name: 'action'
-            },
+    @push('table-periode')
+        <script>
+            let tablePeriode = new DataTable('#tablePeriode', {
+                processing: true,
+                serverSide: true,
+                responsive: true,
+                ajax: {
+                    url: "{{ route('periode.index') }}"
+                },
+                columns: [{
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'name',
+                        name: 'name'
+                    },
+                    {
+                        data: 'position.name',
+                        name: 'position.name'
+                    },
+                    {
+                        data: 'start_date',
+                        name: 'start_date'
+                    },
+                    {
+                        data: 'end_date',
+                        name: 'end_date'
+                    },
+                    {
+                        data: 'quota',
+                        name: 'quota'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action'
+                    },
 
 
-        ]
-    });
-</script>
-@endpush
+                ]
+            });
+        </script>
+    @endpush
 @endsection

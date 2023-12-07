@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('project_name')->nullable();
             $table->string('job')->nullable();
             $table->text('description')->nullable();
+            $table->string('status')->nullable();
             $table->timestamps();
         });
     }

@@ -25,6 +25,7 @@ return new class extends Migration
             $table->date('start_date');
             $table->date('end_date');
             $table->unsignedBigInteger('position_id');
+            $table->unsignedBigInteger('periode_id');
             $table->text('cv');
             $table->text('motivation_letter');
             $table->text('cover_letter')->nullable();
@@ -39,6 +40,7 @@ return new class extends Migration
 
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('position_id')->references('id')->on('positions');
+            $table->foreign('periode_id')->references('id')->on('periodes');
         });
     }
 

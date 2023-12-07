@@ -33,23 +33,6 @@
                             </div>
                             <!-- /.card-header -->
                             <div class="card-body">
-                                {{-- <div class="d-flex justify-content-between mb-2">
-                                    @if (auth()->check() && auth()->user()->role == 'admin')
-                                    <div class="filter-section">
-                                        <label for="status-filter">Filter Status:</label>
-                                        <select id="status-filter" name="status" class="form-control ">
-                                            <option value="">All</option>
-                                            <option value="pending">Pending</option>
-                                            <option value="diterima">Diterima</option>
-                                            <option value="ditolak">Ditolak</option>
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <button id="filter-button" class="btn btn-sm btn-primary">Cari</button>
-                                        <button id="reset-button" class="btn btn-sm btn-danger">Reset</button>
-                                    </div>
-                                    @endif
-                                </div> --}}
                                 <div class="d-flex justify-content-between mb-4">
                                     @if (auth()->check() && auth()->user()->role == 'admin')
                                         <div class="filter-section d-flex align-items-center justify-content-between">
@@ -243,7 +226,7 @@
                 badgeClass = 'bg-purple';
             } else if (data['status'] === 'pending') {
                 badgeClass = 'bg-yellow';
-            } else if (data['status'] === 'Ditolak') {
+            } else if (data['status'] === 'ditolak') {
                 badgeClass = 'bg-red';
             } else if (data['status'] === 'diterima') {
                 badgeClass = 'bg-green';
