@@ -88,11 +88,31 @@
                     },
                     {
                         data: 'start_date',
-                        name: 'start_date'
+                        name: 'start_date',
+                        render: function(data, type, row) {
+                            // Konversi format tanggal ke bahasa Indonesia
+                            let startDate = new Date(data);
+                            return startDate.toLocaleDateString('id-ID', {
+                                weekday: 'long',
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric'
+                            });
+                        }
                     },
                     {
                         data: 'end_date',
-                        name: 'end_date'
+                        name: 'end_date',
+                        render: function(data, type, row) {
+                            // Konversi format tanggal ke bahasa Indonesia
+                            let endDate = new Date(data);
+                            return endDate.toLocaleDateString('id-ID', {
+                                weekday: 'long',
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric'
+                            });
+                        }
                     },
                     {
                         data: 'quota',

@@ -24,8 +24,6 @@
                     <div class="col-md-12">
                         <div class="card">
                             {{-- <div class="card-header">
-                                <a class="btn btn-sm btn-secondary float-left text-white"
-                                        id="buttonBack"><i id="backIcon" class="fas fa-arrow-circle-left mr-2 color-white"></i> Kembali</a>
                             </div> --}}
                             <!-- /.card-header -->
                             <div class="card-body">
@@ -158,11 +156,31 @@
                         },
                         {
                             data: 'start_date',
-                            name: 'start_date'
+                            name: 'start_date',
+                            render: function(data, type, row) {
+                                let startDatePeriode = new Date(data);
+                                return startDatePeriode.toLocaleDateString(
+                                    'id-ID', {
+                                        weekday: 'long',
+                                        year: 'numeric',
+                                        month: 'long',
+                                        day: 'numeric'
+                                    });
+                            }
                         },
                         {
                             data: 'end_date',
-                            name: 'end_date'
+                            name: 'end_date',
+                            render: function(data, type, row) {
+                                let endDatePeriode = new Date(data);
+                                return endDatePeriode.toLocaleDateString(
+                                    'id-ID', {
+                                        weekday: 'long',
+                                        year: 'numeric',
+                                        month: 'long',
+                                        day: 'numeric'
+                                    });
+                            }
                         },
                         {
                             data: 'action',
@@ -226,11 +244,32 @@
                                     },
                                     {
                                         data: 'start_date',
-                                        name: 'start_date'
+                                        name: 'start_date',
+                                        render: function(data, type, row) {
+                                            let startDateIntern = new Date(data);
+                                            return startDateIntern
+                                                .toLocaleDateString(
+                                                    'id-ID', {
+                                                        weekday: 'long',
+                                                        year: 'numeric',
+                                                        month: 'long',
+                                                        day: 'numeric'
+                                                    });
+                                        }
                                     },
                                     {
                                         data: 'end_date',
-                                        name: 'end_date'
+                                        name: 'end_date',
+                                        render: function(data, type, row) {
+                                            let endDateIntern = new Date(data);
+                                            return endDateIntern.toLocaleDateString(
+                                                'id-ID', {
+                                                    weekday: 'long',
+                                                    year: 'numeric',
+                                                    month: 'long',
+                                                    day: 'numeric'
+                                                });
+                                        }
                                     },
                                     {
                                         data: 'status',
@@ -317,7 +356,17 @@
                                     },
                                     {
                                         data: 'date',
-                                        name: 'date'
+                                        name: 'date',
+                                        render: function(data, type, row) {
+                                            let dateReport = new Date(data);
+                                            return dateReport.toLocaleDateString(
+                                                'id-ID', {
+                                                    weekday: 'long',
+                                                    year: 'numeric',
+                                                    month: 'long',
+                                                    day: 'numeric'
+                                                });
+                                        }
                                     },
                                     {
                                         data: 'presence',
@@ -325,7 +374,17 @@
                                     },
                                     {
                                         data: 'attendance_hours',
-                                        name: 'attendance_hours'
+                                        name: 'attendance_hours',
+                                        render: function(data, type, row) {
+                                            // Jika data adalah format waktu
+                                            if (type === 'display' && data) {
+                                                // Mengambil hanya jam dan menit
+                                                let time = data.split(':').slice(0,
+                                                    2).join(':');
+                                                return time;
+                                            }
+                                            return data;
+                                        }
                                     },
                                     {
                                         data: 'agency',

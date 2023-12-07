@@ -185,6 +185,32 @@
 
         <script>
             let tableReport = new DataTable('#tableReport', {
+                "createdRow": function(row, data, dataIndex) {
+                    let badgeClass = '';
+                    let textColor = 'text-white';
+
+                    if (data['presence'] !== null) {
+                        if (data['presence'] === 'masuk') {
+                            badgeClass = 'bg-green';
+                        } else if (data['presence'] === 'remote') {
+                            badgeClass = 'bg-purple';
+                        } else if (data['presence'] === 'izin') {
+                            badgeClass = 'bg-orange';
+                        } else if (data['presence'] === 'libur') {
+                            badgeClass = 'bg-red';
+                        }
+
+                        // Tambahkan badge ke dalam sel jika nilai presence tidak null
+                        $(row).find('td:eq(2)').html(
+                            '<span class="badge text-capitalize text-white px-2 ' +
+                            badgeClass + ' ' + textColor + '">' +
+                            data['presence'] + '</span>');
+                    } else {
+                        // Kosongkan sel jika nilai presence null
+                        $(row).find('td:eq(2)').html('');
+                    }
+
+                },
                 dom: 'Bfrtip',
                 buttons: [
                     'copyHtml5',
@@ -209,7 +235,17 @@
                     },
                     {
                         data: 'date',
-                        name: 'date'
+                        name: 'date',
+                        render: function(data, type, row) {
+                            let dateReport = new Date(data);
+                            return dateReport.toLocaleDateString(
+                                'id-ID', {
+                                    weekday: 'long',
+                                    year: 'numeric',
+                                    month: 'long',
+                                    day: 'numeric'
+                                });
+                        }
                     },
                     {
                         data: 'presence',
@@ -217,7 +253,17 @@
                     },
                     {
                         data: 'attendance_hours',
-                        name: 'attendance_hours'
+                        name: 'attendance_hours',
+                        render: function(data, type, row) {
+                            // Jika data adalah format waktu
+                            if (type === 'display' && data) {
+                                // Mengambil hanya jam dan menit
+                                let time = data.split(':').slice(0,
+                                    2).join(':');
+                                return time;
+                            }
+                            return data;
+                        }
                     },
                     {
                         data: 'agency',
@@ -310,14 +356,14 @@
                                 icon: 'error',
                                 title: 'Gagal!',
                             });
-                            
+
                             // $('.alert-danger').removeClass('d-none');
                             // // $('.alert-danger').html("<ul>");
                             // $.each(response.errors, function(key, value) {
                             //     $('.alert-danger').find('ul').append("<li>" + value + "</li>");
                             // });
                             // $('.alert-danger').append("</ul>");
-                            
+
 
                         } else {
                             Swal.fire({
