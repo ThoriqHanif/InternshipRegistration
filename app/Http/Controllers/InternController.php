@@ -453,8 +453,8 @@ class InternController extends Controller
     {
         $data = Intern::find($id);
         $status = $request->input('status');
-        $newPositionId = $request->input('position_id');   
-         
+        $newPositionId = $request->input('position_id');
+
         $previousStatus = $data->status;
 
         if ($request->status === 'diterima' || $request->status === 'pending' || $request->status === 'interview' || $request->status === 'ditolak') {
@@ -466,13 +466,9 @@ class InternController extends Controller
             // Pindahkan logika pengiriman email ke luar dari kondisi 'diterima'
             if ($status === 'ditolak') {
                 if ($previousStatus === 'diterima') {
-                    $positionId = $data->position_id;
-                    $currentDate = $data->created_at;
+                    $periodeId = $data->periode_id;
 
-                    $periode = Intern::where('periode_id', $positionId)
-                        ->where('start_date', '<=', $currentDate)
-                        ->where('end_date', '>=', $currentDate)
-                        ->first();
+                    $periode = Periode::find($periodeId);
 
                     if ($periode) {
                         $periode->quota++;
@@ -485,13 +481,9 @@ class InternController extends Controller
                 Mail::to($data->email)->send(new InternStatus($data, 'ditolak', $data->messages));
             } elseif ($status === 'pending') {
                 if ($previousStatus === 'diterima') {
-                    $positionId = $data->position_id;
-                    $currentDate = $data->created_at;
+                    $periodeId = $data->periode_id;
 
-                    $periode = Periode::where('position_id', $positionId)
-                        ->where('start_date', '<=', $currentDate)
-                        ->where('end_date', '>=', $currentDate)
-                        ->first();
+                    $periode = Periode::find($periodeId);
 
                     if ($periode) {
                         $periode->quota++;
@@ -504,13 +496,9 @@ class InternController extends Controller
                 Mail::to($data->email)->send(new InternStatus($data, 'pending', $data->messages));
             } elseif ($status === 'interview') {
                 if ($previousStatus === 'diterima') {
-                    $positionId = $data->position_id;
-                    $currentDate = $data->created_at;
+                    $periodeId = $data->periode_id;
 
-                    $periode = Periode::where('position_id', $positionId)
-                        ->where('start_date', '<=', $currentDate)
-                        ->where('end_date', '>=', $currentDate)
-                        ->first();
+                    $periode = Periode::find($periodeId);
 
                     if ($periode) {
                         $periode->quota++;
@@ -525,12 +513,10 @@ class InternController extends Controller
                 // UPDATE JADI DITERIMA
             } elseif ($status === 'diterima') {
 
-                $position = Position::find($data->position_id);
-                $periode = Periode::where('position_id', $data->position_id)
-                    ->where('start_date', '<=', $data->created_at)
-                    ->where('end_date', '>=', $data->created_at)
-                    ->where('quota', '>', 0)
-                    ->first();
+                $periodeId = $data->periode_id;
+
+                // Dapatkan periode berdasarkan periode_id dari data intern
+                $periode = Periode::find($periodeId);
 
                 if (!$periode) {
                     // Jika tidak ada periode yang tersedia
@@ -542,11 +528,8 @@ class InternController extends Controller
                     return response()->json(['message' => 'Maaf, kuota untuk posisi ini sudah penuh.'], 400);
                 }
 
-                if ($position && $periode) {
-                    // Perbarui kuota pada periode yang sesuai
-                    $periode->quota--;
-                    $periode->save();
-                }
+                $periode->quota--;
+                $periode->save();
 
                 // CREATE USER
                 $username = $data->username;
@@ -605,23 +588,23 @@ class InternController extends Controller
         if ($data->position_id != $newPositionId) {
             $newPosition = Position::find($newPositionId);
             $newPeriode = null;
-        
+
             if ($newPosition) {
                 // Temukan periode baru yang terkait dengan posisi baru
                 $newPeriode = Periode::where('position_id', $newPositionId)->first();
-        
+
                 if ($newPeriode) {
                     $availableQuota = $newPeriode->quota;
-        
+
                     // Cek apakah posisi baru memiliki kuota tersedia
                     if ($availableQuota > 0) {
                         $data->position_id = $newPositionId;
                         $data->periode_id = $newPeriode->id;
-        
+
                         // Kurangi kuota yang tersedia karena pemagang pindah posisi
                         $newPeriode->quota -= 1;
                         $newPeriode->save();
-        
+
                         // Simpan perubahan pada data pemagang untuk posisi_id dan periode_id
                         if ($data->save(['position_id', 'periode_id'])) {
                             return response()->json(['success' => true]);
@@ -632,7 +615,7 @@ class InternController extends Controller
                 }
             }
         }
-        
+
 
         // edit input    
         $data->update([

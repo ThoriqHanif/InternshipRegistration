@@ -23,8 +23,17 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="card">
-                            {{-- <div class="card-header">
-                            </div> --}}
+                            <div class="card-header">
+                                <a href="" class="btn btn-primary display" style="display: none" id="pdfPrint"><i
+                                        class="fas fa-print mr-2"></i>Print PDF</a>
+                                @foreach ($intern as $intern)
+                                    <a class="btn btn-success display verif-all" data-intern-id="{{ $intern->id }}"
+                                        style="display: none" id="verifAll"><i
+                                            class="fas fa-check-double mr-2"></i>Verifikasi
+                                        Semua</a>
+                                @endforeach
+
+                            </div>
                             <!-- /.card-header -->
                             <div class="card-body">
                                 <div class="d-flex justify-content-between mb-4">
@@ -305,6 +314,7 @@
                 $(document).on('click', '.btn-view-report', function() {
                     let internId = $(this).data('intern-id');
                     console.log(internId);
+                    $('#verifAll').attr('data-intern-id', internId).show();
 
                     $.ajax({
                         url: '/admin/daily/' + internId,
@@ -428,6 +438,9 @@
                                     $('#tablePeriode').hide();
                                     $('#internByPeriode').hide();
                                     $('#reportByIntern').show();
+                                    $("#pdfPrint").show();
+                                    $("#verifAll").show();
+
                                 }
                             });
                         },
@@ -438,7 +451,7 @@
                 });
             });
 
-            // Menangani klik pada tombol 'Vermin'
+            // vermin
             $(document).on('click', '.btn-vermin', function(e) {
                 e.preventDefault();
                 let reportId = $(this).data('report-id');
@@ -491,6 +504,73 @@
                                 Swal.fire(
                                     'Error!',
                                     'Terjadi kesalahan saat memverifikasi laporan.',
+                                    'error'
+                                );
+                            }
+                        });
+                    }
+                });
+            });
+
+            $(document).on('click', '.verif-all', function(e) {
+                e.preventDefault();
+                var internId = $(this).attr('data-intern-id');
+                console.log(internId);
+
+                // Tampilkan SweetAlert konfirmasi untuk verifikasi semua
+                Swal.fire({
+                    title: 'Verifikasi Semua Laporan',
+                    text: "Anda yakin ingin memverifikasi semua laporan?",
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Ya, Verifikasi Semua!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire({
+                            title: 'Mohon Tunggu!',
+                            html: 'Sedang verifikasi semua laporan...',
+                            allowOutsideClick: false,
+                            showConfirmButton: false,
+                            willOpen: () => {
+                                Swal.showLoading();
+                            },
+                        });
+
+                        // Vermin all
+                        $.ajax({
+                            method: 'POST',
+                            url: '/admin/report/' + internId + '/verify-all',
+                            data: {
+                                _token: '{{ csrf_token() }}',
+                            },
+                            success: function(response) {
+                                Swal.fire(
+                                    'Terverifikasi!',
+                                    'Berhasil memverifikasi semua laporan.',
+                                    'success'
+                                );
+
+                                $('.btn-vermin').each(function() {
+                                    if ($(this).hasClass('btn-primary')) {
+                                        // Hanya ubah tombol yang belum 'Terverifikasi'
+                                        $(this).html(
+                                            '<i class="nav-icon fas fa-check-circle mr-1"></i> Terverifikasi'
+                                        );
+                                        $(this).removeClass('btn-primary').addClass(
+                                            'btn-success');
+                                        $(this).removeClass('btn-vermin').addClass(
+                                            'btn-verified');
+                                    }
+                                });
+
+                                reportByIntern.ajax.reload();
+                            },
+                            error: function(error) {
+                                console.error(error);
+                                // Tampilkan pesan kesalahan jika terjadi kesalahan dalam verifikasi semua
+                                Swal.fire(
+                                    'Error!',
+                                    'Terjadi kesalahan saat memverifikasi semua laporan.',
                                     'error'
                                 );
                             }

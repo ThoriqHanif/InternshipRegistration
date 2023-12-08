@@ -13,10 +13,11 @@ class ReportAdminController extends Controller
     //
     public function index(Request $request)
     {
+        $intern = Intern::select('*')->get();
+
         if ($request->ajax()) {
 
             $periodes = Periode::select('*');
-
 
             return DataTables::of($periodes)
                 ->addColumn('action', function ($periode) {
@@ -27,7 +28,7 @@ class ReportAdminController extends Controller
                 ->make(true);
         }
 
-        return view('pages.admin.report.index');
+        return view('pages.admin.report.index', compact('intern'));
     }
 
     public function getInternsByPeriode(Request $request, $id)
@@ -87,10 +88,19 @@ class ReportAdminController extends Controller
 
     public function getStatus()
     {
-        $reports = Report::where('status', 'vermin')->get(); // Mengambil laporan dengan status 'vermin'
+        $reports = Report::where('status', 'vermin')->get();
 
         return response()->json($reports);
     }
 
-   
+    public function verifAll($id)
+    {
+        $intern = Intern::find($id);
+        if($intern) {
+            $intern->reports()->update(['status' => 'vermin']);
+            return response()->json(['message' => 'Berhasil memverifikasi semua laporan']);
+        } else {
+            return response()->json(['message' => 'Gagal memverifikasi laporan'], 404);
+        }
+    }
 }

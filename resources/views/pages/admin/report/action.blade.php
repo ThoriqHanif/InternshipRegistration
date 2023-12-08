@@ -1,6 +1,6 @@
-<a class="btn btn-sm bg-info text-white font-weight-bold text-xs btn-view-interns" data-periode-id="{{ $periode->id }}"
+<a class="btn btn-sm bg-info text-white  btn-view-interns" data-periode-id="{{ $periode->id }}"
     data-toggle="tooltip" data-placement="top" title="Lihat Pemagang">
-    <i class="fas fa-users"></i> {{ $periode->id }}
+    <i class="fas fa-users mr-2"></i> Lihat Pemagang
 </a>
 
 

@@ -63,6 +63,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/daily/{id}', [ReportAdminController::class, 'getReportByIntern'])->name('admin.report.intern');
     Route::post('/admin/report/verify/{id}', [ReportAdminController::class, 'verifyReport'])->name('admin.report.verify');
     Route::get('/admin/report/status',  [ReportAdminController::class, 'getStatus'])->name('admin.report.status');
+    Route::post('/admin/report/{id}/verify-all', [ReportAdminController::class, 'verifAll'])->name('report.verifyAll');
 
     
 });
