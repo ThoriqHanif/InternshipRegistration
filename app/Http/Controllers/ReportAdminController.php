@@ -5,7 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Intern;
 use App\Models\Periode;
 use App\Models\Report;
+// use Barryvdh\DomPDF\PDF;
+
 use Illuminate\Http\Request;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 use Yajra\DataTables\Facades\DataTables;
 
 class ReportAdminController extends Controller
@@ -13,7 +17,9 @@ class ReportAdminController extends Controller
     //
     public function index(Request $request)
     {
-        $intern = Intern::select('*')->get();
+        $interns = Intern::select('*')->get();
+        $periode = Periode::select('*')->get();
+        $internPDF = Intern::select('*')->get();
 
         if ($request->ajax()) {
 
@@ -28,12 +34,11 @@ class ReportAdminController extends Controller
                 ->make(true);
         }
 
-        return view('pages.admin.report.index', compact('intern'));
+        return view('pages.admin.report.index', compact('interns', 'periode', 'internPDF'));
     }
 
     public function getInternsByPeriode(Request $request, $id)
     {
-
 
         if ($request->ajax()) {
             $internPeriode = Intern::with('position', 'periode')
@@ -96,11 +101,82 @@ class ReportAdminController extends Controller
     public function verifAll($id)
     {
         $intern = Intern::find($id);
-        if($intern) {
+        if ($intern) {
             $intern->reports()->update(['status' => 'vermin']);
             return response()->json(['message' => 'Berhasil memverifikasi semua laporan']);
         } else {
             return response()->json(['message' => 'Gagal memverifikasi laporan'], 404);
         }
     }
+
+    public function getInternDetail($id)
+    {
+        $intern = Intern::with('position')->find($id);
+        return response()->json($intern);
+    }
+
+    public function internByPeriodePDF($periodeId){
+
+        $periode = Periode::find($periodeId);
+        $interns = Intern::where('periode_id', $periodeId)->with('reports')->get();
+
+        $pdf = app('dompdf.wrapper')->loadView('pages.admin.report.reportIntern', compact('interns', 'periode'));
+    
+        // Mengatur ukuran kertas menjadi A4 dan orientasinya menjadi lanskap
+        $pdf->setPaper('legal', 'landscape');
+    
+        // Opsi tambahan jika diperlukan
+        $pdf->setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true]);
+    
+        return $pdf->stream('internByPeriode_' . $periodeId . '.pdf');
+
+    }
+
+
+    // public function pdfIntern($id)
+    // {
+    //     $interns = Intern::where('periode_id', $id)->with('reports')->get();
+
+    //     $pdfData = [];
+    //     foreach ($interns as $intern) {
+    //         $pdfData[] = [
+    //             'intern' => $intern,
+    //             'reports' => $intern->reports,
+    //         ];
+    //     }
+
+    //     $pdf = $this->generatePdf('reportIntern', compact('pdfData', 'interns'));
+    //     return $pdf->stream('internByPeriode.pdf');
+    // }
+
+    private function generatePdf($view, $data)
+    {
+        $options = new Options();
+        $options->set('isHtml5ParserEnabled', true);
+        $options->set('isRemoteEnabled', true);
+
+        $dompdf = new Dompdf($options);
+
+        $html = view('pages.admin.report.' . $view, $data)->render();
+        $dompdf->loadHtml($html);
+
+        $dompdf->setPaper('A4', 'landscape');
+        $dompdf->render();
+
+        return $dompdf;
+    }
+
+    public function pdfReportByIntern($id)
+    {
+        $internPDF = Intern::with('reports')->find($id);
+
+        if (!$internPDF) {
+            abort(404);
+        }
+
+        $pdf = $this->generatePdf('reportIntern', compact('internPDF'));
+        return $pdf->stream('reportByIntern.pdf');
+    }
+
+    
 }

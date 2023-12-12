@@ -24,21 +24,66 @@
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-header">
-                                <a href="" class="btn btn-primary display" style="display: none" id="pdfPrint"><i
-                                        class="fas fa-print mr-2"></i>Print PDF</a>
-                                @foreach ($intern as $intern)
+                                {{-- @foreach ($internPDF as $intern)
+                                    <a class="btn btn-primary btn-export-pdf display" style="display: none" id="pdfPrint"
+                                        data-intern-id="{{ $intern->id }}"><i class="fas fa-print mr-2"></i>Print PDF</a>
+                                @endforeach --}}
+
+                                @foreach ($periode as $periode)
+                                    <a class="btn btn-primary btn-export-pdf-intern display" style="display: none"
+                                        id="pdfPrintIntern" data-periode-id="{{ $periode->id }}"
+                                        data-periode-name="{{ $periode->name }}"><i class="fas fa-print mr-2"></i>Print
+                                        PDF</a>
+                                @endforeach
+
+                                @foreach ($interns as $intern)
                                     <a class="btn btn-success display verif-all" data-intern-id="{{ $intern->id }}"
                                         style="display: none" id="verifAll"><i
                                             class="fas fa-check-double mr-2"></i>Verifikasi
                                         Semua</a>
                                 @endforeach
 
+
                             </div>
                             <!-- /.card-header -->
                             <div class="card-body">
-                                <div class="d-flex justify-content-between mb-4">
+                                <div class="d-flex justify-content-between mb-4 row">
+                                    <div class="col-6">
+
+                                        <div class="card px-3 py-3" id="internInfo" style="display: none">
+                                            <h4 class="text-bold mb-4"> Detail Pemagang</h4>
+                                            <div class="row px-3">
+                                                <p class="text-bold mr-4">Nama Lengkap </p> <span>:</span>
+                                                <p class="ml-4 text-primary" id="name"></p>
+                                            </div>
+                                            <div class="row px-3">
+                                                <p class="text-bold mr-4">Asal Sekolah </p><span class="ml-3">:</span>
+                                                <p class="ml-4 text-primary" id="school"></p>
+                                            </div>
+                                            <div class="row px-3">
+                                                <p class="text-bold mr-4">Posisi Magang </p><span class="ml-2">:</span>
+                                                <p class="ml-4 text-primary" id="position"></p>
+                                            </div>
+                                        </div>
+                                    </div>
 
                                 </div>
+                                {{-- <div class="row invoice-info mb-3">
+                                    
+                                    <div class="col-sm-4 invoice-col">
+                                        Detail Pemagang
+                                        <address>
+                                            <strong>{{$intern->name}}</strong><br>
+                                            {{$intern->address}}<br>
+                                            Phone: {{$intern->phone_number}}<br>
+                                            Email: <a href="mail:to{{$intern->email}}">{{$intern->email}}</a>
+                                            
+                                        </address>
+                                    </div>
+                                    <!-- /.col -->
+                                   
+                                    <!-- /.col -->
+                                </div> --}}
 
                                 @include('components.alert')
                                 <div class="table-responsive">
@@ -301,6 +346,7 @@
                                     $('#tablePeriode').hide();
                                     $('#reportByIntern').hide();
                                     $('#internByPeriode').show();
+                                    $("#pdfPrintIntern").show();
                                 }
                             });
                         },
@@ -315,6 +361,10 @@
                     let internId = $(this).data('intern-id');
                     console.log(internId);
                     $('#verifAll').attr('data-intern-id', internId).show();
+                    $("#pdfPrint").show();
+                    $("#verifAll").show();
+                    $("#internInfo").show();
+
 
                     $.ajax({
                         url: '/admin/daily/' + internId,
@@ -438,9 +488,25 @@
                                     $('#tablePeriode').hide();
                                     $('#internByPeriode').hide();
                                     $('#reportByIntern').show();
-                                    $("#pdfPrint").show();
-                                    $("#verifAll").show();
 
+                                }
+                            });
+
+                            $.ajax({
+                                url: '/admin/intern/detail/' +
+                                    internId, // URL untuk mengambil detail informasi intern berdasarkan intern_id
+                                method: 'GET',
+                                success: function(internInfo) {
+                                    console.log(internInfo);
+
+                                    // Update HTML elements with intern information
+                                    $('#internInfo').show();
+                                    $('#name').text(internInfo.full_name);
+                                    $('#school').text(internInfo.school);
+                                    $('#position').text(internInfo.position.name);
+                                },
+                                error: function(error) {
+                                    console.error(error);
                                 }
                             });
                         },
@@ -578,6 +644,152 @@
                     }
                 });
             });
+
+            // $(document).on('click', '.btn-export-pdf', function() {
+            //     let periodeId = $(this).data('periode-id');
+            //     console.log(periodeId);
+            //     $.ajax({
+            //         url: '/admin/export-pdf/' + periodeId, // Sesuaikan dengan endpoint Anda
+            //         method: 'GET',
+            //         success: function(data) {
+            //             $.ajax({
+            //                 url: '/admin/generate-pdf', // Sesuaikan dengan endpoint Anda
+            //                 method: 'POST',
+            //                 data: {
+            //                     _token: '{{ csrf_token() }}',
+            //                     pdfData: data // Data yang akan dijadikan PDF
+            //                 },
+            //                 success: function(response) {
+            //                     // Jika PDF berhasil di-generate, berikan link untuk mengunduhnya
+            //                     window.open('/admin/download-pdf/' + response
+            //                         .fileName); // Sesuaikan dengan endpoint Anda
+            //                 },
+            //                 error: function(error) {
+            //                     console.error(error);
+            //                 }
+            //             });
+            //         },
+            //         error: function(error) {
+            //             console.error(error);
+            //         }
+            //     });
+            // });
+
+            // $(document).on('click', '.btn-export-pdf-intern', function() {
+            //     let periodeId = $(this).data('periode-id');
+            //     let periodeName = $(this).data('periode-name');
+            //     let link = document.createElement('a');
+
+
+            //     console.log(periodeId);
+
+            //     Swal.fire({
+            //         title: 'Mohon Tunggu!',
+            //         html: 'Generate PDF..',
+            //         allowOutsideClick: false,
+            //         showConfirmButton: false,
+            //         willOpen: () => {
+            //             Swal.showLoading();
+            //         },
+            //     });
+
+            //     $.ajax({
+            //         url: '/admin/export/internByPeriode/' + periodeId,
+            //         method: 'GET',
+            //         xhrFields: {
+            //             responseType: 'blob'
+            //         },
+            //         success: function(blob) {
+            //             Swal.close();
+            //             var link = document.createElement('a');
+            //             link.href = window.URL.createObjectURL(new Blob([blob], {
+            //                 type: 'application/pdf'
+            //             }));
+            //             link.download = 'Laporan Magang Periode :' + periodeName + '.pdf';
+            //             link.href = '/admin/export/internByPeriode/' + periodeId;
+
+
+            //             // Tambahkan tautan ke dokumen dan klik otomatis
+            //             document.body.appendChild(link);
+            //             link.click();
+
+            //             // Hapus tautan setelah diunduh
+            //             document.body.removeChild(link);
+            //         },
+            //         error: function(error) {
+            //             console.error(error);
+
+            //             Swal.fire({
+            //                 icon: 'error',
+            //                 title: 'Oops...',
+            //                 text: 'Terjadi Kesahalahan'
+            //             });
+            //         }
+            //     });
+            // });
+            $(document).on('click', '.btn-export-pdf-intern', function() {
+                let periodeId = $(this).data('periode-id');
+                let periodeName = $(this).data('periode-name');
+
+                Swal.fire({
+                    title: 'Mohon Tunggu!',
+                    html: 'Generate PDF..',
+                    allowOutsideClick: false,
+                    showConfirmButton: false,
+                    willOpen: () => {
+                        Swal.showLoading();
+                    },
+                });
+
+                // Buat request langsung ke endpoint PDF
+                fetch('/admin/export/internByPeriode/' + periodeId)
+                    .then(response => {
+                        Swal.close();
+                        return response.blob();
+                    })
+                    .then(blob => {
+                        const url = window.URL.createObjectURL(blob);
+                        const link = document.createElement('a');
+                        link.href = url;
+                        link.download = 'Laporan Magang Periode :' + periodeName + '.pdf';
+
+                        // Tambahkan tautan ke dokumen dan klik otomatis
+                        document.body.appendChild(link);
+                        link.click();
+
+                        // Hapus tautan setelah diunduh
+                        document.body.removeChild(link);
+                    })
+                    .catch(error => {
+                        console.error(error);
+
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Terjadi Kesahalahan'
+                        });
+                    });
+            });
+
+
+            // $(document).on('click', '.btn-export-pdf', function() {
+            //     let internId = $(this).data('intern-id');
+            //     console.log(internId);
+
+            //     $.ajax({
+            //         url: '/admin/export/' + internId,
+            //         method: 'GET',
+            //         success: function(response) {
+            //             console.log('PDF generated:', response);
+
+            //             // window.open('/admin/download-pdf/' + response.fileName);
+            //         },
+            //         error: function(error) {
+            //             // Tangani kesalahan jika permintaan gagal
+            //             console.error('Failed to generate PDF:', error);
+            //         }
+            //     });
+            // });
         </script>
     @endpush
 @endsection

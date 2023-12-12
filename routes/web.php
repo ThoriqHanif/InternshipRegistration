@@ -64,8 +64,18 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('/admin/report/verify/{id}', [ReportAdminController::class, 'verifyReport'])->name('admin.report.verify');
     Route::get('/admin/report/status',  [ReportAdminController::class, 'getStatus'])->name('admin.report.status');
     Route::post('/admin/report/{id}/verify-all', [ReportAdminController::class, 'verifAll'])->name('report.verifyAll');
+    Route::get('/admin/intern/detail/{id}', [ReportAdminController::class, 'getInternDetail'])->name('admin.intern.detail');
+    Route::get('/admin/export/internByPeriode/{periodeId}', [ReportAdminController::class, 'internByPeriodePDF'])->name('admin.export.intern.pdf');
+
+    Route::get('/admin/export/{id}', [ReportAdminController::class, 'pdfReportByIntern'])->name('admin.export.pdf');
+
+
 
     
+    // Route::get('/report/intern/{internId}/pdf', [ReportController::class, 'pdfReportByIntern'])->name('report.intern.pdf');
+    // Route::get('/admin/export-pdf/reportByIntern/{internId}', [ReportAdminController::class, 'pdfIntern'])->name('admin.export.pdf');
+
+
 });
 
 Route::middleware(['auth'])->group(function () {
