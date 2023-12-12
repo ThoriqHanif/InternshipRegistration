@@ -122,61 +122,26 @@ class ReportAdminController extends Controller
 
         $pdf = app('dompdf.wrapper')->loadView('pages.admin.report.reportIntern', compact('interns', 'periode'));
     
-        // Mengatur ukuran kertas menjadi A4 dan orientasinya menjadi lanskap
         $pdf->setPaper('legal', 'landscape');
     
-        // Opsi tambahan jika diperlukan
         $pdf->setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true]);
     
-        return $pdf->stream('internByPeriode_' . $periodeId . '.pdf');
+        return $pdf->download('internByPeriode' . $periodeId . '.pdf');
 
     }
 
+    public function reportByInternPDF($internId){
 
-    // public function pdfIntern($id)
-    // {
-    //     $interns = Intern::where('periode_id', $id)->with('reports')->get();
+        $intern = Intern::with('reports')->find($internId);
+       
+        $pdf = app('dompdf.wrapper')->loadView('pages.admin.report.internReport', compact('intern'));
+        
+        $pdf->setPaper('legal', 'landscape');
 
-    //     $pdfData = [];
-    //     foreach ($interns as $intern) {
-    //         $pdfData[] = [
-    //             'intern' => $intern,
-    //             'reports' => $intern->reports,
-    //         ];
-    //     }
+        $pdf->setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true]);
+    
+        return $pdf->download('reportByIntern' . $internId . '.pdf');
 
-    //     $pdf = $this->generatePdf('reportIntern', compact('pdfData', 'interns'));
-    //     return $pdf->stream('internByPeriode.pdf');
-    // }
-
-    private function generatePdf($view, $data)
-    {
-        $options = new Options();
-        $options->set('isHtml5ParserEnabled', true);
-        $options->set('isRemoteEnabled', true);
-
-        $dompdf = new Dompdf($options);
-
-        $html = view('pages.admin.report.' . $view, $data)->render();
-        $dompdf->loadHtml($html);
-
-        $dompdf->setPaper('A4', 'landscape');
-        $dompdf->render();
-
-        return $dompdf;
     }
-
-    public function pdfReportByIntern($id)
-    {
-        $internPDF = Intern::with('reports')->find($id);
-
-        if (!$internPDF) {
-            abort(404);
-        }
-
-        $pdf = $this->generatePdf('reportIntern', compact('internPDF'));
-        return $pdf->stream('reportByIntern.pdf');
-    }
-
     
 }

@@ -24,10 +24,11 @@
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-header">
-                                {{-- @foreach ($internPDF as $intern)
+                                @foreach ($interns as $intern)
                                     <a class="btn btn-primary btn-export-pdf display" style="display: none" id="pdfPrint"
-                                        data-intern-id="{{ $intern->id }}"><i class="fas fa-print mr-2"></i>Print PDF</a>
-                                @endforeach --}}
+                                        data-intern-id="{{ $intern->id }}" data-intern-name="{{ $intern->full_name }}"><i
+                                            class="fas fa-print mr-2"></i>Print PDF</a>
+                                @endforeach
 
                                 @foreach ($periode as $periode)
                                     <a class="btn btn-primary btn-export-pdf-intern display" style="display: none"
@@ -150,39 +151,6 @@
     </div>
 
     @push('table-report-intern')
-        {{-- <script>
-            $(document).ready(function() {
-                // Fungsi untuk memuat status 'vermin' saat halaman dimuat
-                function loadStatusVermin() {
-                    $.ajax({
-                        url: "{{ route('admin.report.status') }}",
-                        method: 'GET',
-                        success: function(response) {
-                            // Loop melalui data 'vermin' yang diterima dari server
-                            response.forEach(function(report) {
-                                let reportId = report.id;
-                                console.log(reportId);
-
-                                // Temukan tombol dengan ID yang sesuai dan ubahnya menjadi 'Terverifikasi'
-                                $(`.btn-vermin[data-report-id="${reportId}"]`).html(
-                                    '<i class="nav-icon fas fa-check-circle mr-1"></i> Terverifikasi'
-                                    );
-                                $(`.btn-vermin[data-report-id="${reportId}"]`).removeClass(
-                                    'btn-primary').addClass('btn-success');
-                            });
-                        },
-                        error: function(error) {
-                            console.error(error);
-                        }
-                    });
-                }
-
-                // Panggil fungsi untuk memuat status 'vermin' saat halaman dimuat pertama kali
-                loadStatusVermin();
-
-                // ... Sisanya dari kode Anda tetap seperti yang Anda miliki sebelumnya
-            });
-        </script> --}}
         <script>
             let tablePeriode;
             let internByPeriode;
@@ -247,7 +215,11 @@
                 // table Intern
                 $(document).on('click', '.btn-view-interns', function() {
                     let periodeId = $(this).data('periode-id');
+                    let periodeName = $(this).data('periode-name');
                     console.log(periodeId);
+                    console.log(periodeName);
+                    $("#pdfPrintIntern").attr('data-periode-id', periodeId).attr('data-periode-name',
+                        periodeName).show();
 
                     $.ajax({
                         url: '/admin/intern/' + periodeId,
@@ -335,6 +307,8 @@
                                             // console.log(row.id); 
                                             return '<a class="btn btn-sm btn-primary btn-view-report" data-intern-id="' +
                                                 row.id +
+                                                '" data-intern-name="' +
+                                                row.full_name +
                                                 '"><i class="nav-icon fas fa-clipboard mr-1"></i> Daily Report</a>';
                                         },
                                         orderable: false,
@@ -359,11 +333,14 @@
                 // tableReport
                 $(document).on('click', '.btn-view-report', function() {
                     let internId = $(this).data('intern-id');
+                    let internName = $(this).data('intern-name');
                     console.log(internId);
+                    console.log(internName);
                     $('#verifAll').attr('data-intern-id', internId).show();
-                    $("#pdfPrint").show();
+                    $("#pdfPrint").attr('data-intern-id', internId).attr('data-intern-name', internName).show();
                     $("#verifAll").show();
                     $("#internInfo").show();
+                    $("#pdfPrintIntern").hide();
 
 
                     $.ajax({
@@ -488,7 +465,7 @@
                                     $('#tablePeriode').hide();
                                     $('#internByPeriode').hide();
                                     $('#reportByIntern').show();
-
+                                    $("#pdfPrintIntern").hide();
                                 }
                             });
 
@@ -645,91 +622,10 @@
                 });
             });
 
-            // $(document).on('click', '.btn-export-pdf', function() {
-            //     let periodeId = $(this).data('periode-id');
-            //     console.log(periodeId);
-            //     $.ajax({
-            //         url: '/admin/export-pdf/' + periodeId, // Sesuaikan dengan endpoint Anda
-            //         method: 'GET',
-            //         success: function(data) {
-            //             $.ajax({
-            //                 url: '/admin/generate-pdf', // Sesuaikan dengan endpoint Anda
-            //                 method: 'POST',
-            //                 data: {
-            //                     _token: '{{ csrf_token() }}',
-            //                     pdfData: data // Data yang akan dijadikan PDF
-            //                 },
-            //                 success: function(response) {
-            //                     // Jika PDF berhasil di-generate, berikan link untuk mengunduhnya
-            //                     window.open('/admin/download-pdf/' + response
-            //                         .fileName); // Sesuaikan dengan endpoint Anda
-            //                 },
-            //                 error: function(error) {
-            //                     console.error(error);
-            //                 }
-            //             });
-            //         },
-            //         error: function(error) {
-            //             console.error(error);
-            //         }
-            //     });
-            // });
-
-            // $(document).on('click', '.btn-export-pdf-intern', function() {
-            //     let periodeId = $(this).data('periode-id');
-            //     let periodeName = $(this).data('periode-name');
-            //     let link = document.createElement('a');
-
-
-            //     console.log(periodeId);
-
-            //     Swal.fire({
-            //         title: 'Mohon Tunggu!',
-            //         html: 'Generate PDF..',
-            //         allowOutsideClick: false,
-            //         showConfirmButton: false,
-            //         willOpen: () => {
-            //             Swal.showLoading();
-            //         },
-            //     });
-
-            //     $.ajax({
-            //         url: '/admin/export/internByPeriode/' + periodeId,
-            //         method: 'GET',
-            //         xhrFields: {
-            //             responseType: 'blob'
-            //         },
-            //         success: function(blob) {
-            //             Swal.close();
-            //             var link = document.createElement('a');
-            //             link.href = window.URL.createObjectURL(new Blob([blob], {
-            //                 type: 'application/pdf'
-            //             }));
-            //             link.download = 'Laporan Magang Periode :' + periodeName + '.pdf';
-            //             link.href = '/admin/export/internByPeriode/' + periodeId;
-
-
-            //             // Tambahkan tautan ke dokumen dan klik otomatis
-            //             document.body.appendChild(link);
-            //             link.click();
-
-            //             // Hapus tautan setelah diunduh
-            //             document.body.removeChild(link);
-            //         },
-            //         error: function(error) {
-            //             console.error(error);
-
-            //             Swal.fire({
-            //                 icon: 'error',
-            //                 title: 'Oops...',
-            //                 text: 'Terjadi Kesahalahan'
-            //             });
-            //         }
-            //     });
-            // });
             $(document).on('click', '.btn-export-pdf-intern', function() {
                 let periodeId = $(this).data('periode-id');
                 let periodeName = $(this).data('periode-name');
+                console.log(periodeId);
 
                 Swal.fire({
                     title: 'Mohon Tunggu!',
@@ -741,7 +637,6 @@
                     },
                 });
 
-                // Buat request langsung ke endpoint PDF
                 fetch('/admin/export/internByPeriode/' + periodeId)
                     .then(response => {
                         Swal.close();
@@ -771,25 +666,50 @@
                     });
             });
 
+            $(document).on('click', '.btn-export-pdf', function() {
+                let internId = $(this).data('intern-id');
+                let internName = $(this).data('intern-name');
+                console.log(internId)
+                console.log(internName)
 
-            // $(document).on('click', '.btn-export-pdf', function() {
-            //     let internId = $(this).data('intern-id');
-            //     console.log(internId);
+                Swal.fire({
+                    title: 'Mohon Tunggu!',
+                    html: 'Generate PDF..',
+                    allowOutsideClick: false,
+                    showConfirmButton: false,
+                    willOpen: () => {
+                        Swal.showLoading();
+                    },
+                });
 
-            //     $.ajax({
-            //         url: '/admin/export/' + internId,
-            //         method: 'GET',
-            //         success: function(response) {
-            //             console.log('PDF generated:', response);
+                fetch('/admin/export/reportByIntern/' + internId)
+                    .then(response => {
+                        Swal.close();
+                        return response.blob();
+                    })
+                    .then(blob => {
+                        const url = window.URL.createObjectURL(blob);
+                        const link = document.createElement('a');
+                        link.href = url;
+                        link.download = 'Laporan Magang :' + internName + '.pdf';
 
-            //             // window.open('/admin/download-pdf/' + response.fileName);
-            //         },
-            //         error: function(error) {
-            //             // Tangani kesalahan jika permintaan gagal
-            //             console.error('Failed to generate PDF:', error);
-            //         }
-            //     });
-            // });
+                        // Tambahkan tautan ke dokumen dan klik otomatis
+                        document.body.appendChild(link);
+                        link.click();
+
+                        // Hapus tautan setelah diunduh
+                        document.body.removeChild(link);
+                    })
+                    .catch(error => {
+                        console.error(error);
+
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Terjadi Kesahalahan'
+                        });
+                    });
+            });
         </script>
     @endpush
 @endsection
