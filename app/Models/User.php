@@ -54,7 +54,7 @@ class User extends Authenticatable
 
     public function intern()
     {
-        return $this->hasMany(Intern::class);
+        return $this->hasOne(Intern::class);
     }
 
     public function position()

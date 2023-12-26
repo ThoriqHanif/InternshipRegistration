@@ -18,10 +18,10 @@ class ReportController extends Controller
     public function index(Request $request)
     {
         $userId = Auth::id();
-        $intern = Intern::where('user_id', $userId)->first();
+        $interns = Intern::where('user_id', $userId)->first();
 
-        if ($intern) {
-            $internId = $intern->id;
+        if ($interns) {
+            $internId = $interns->id;
 
             if ($request->ajax()) {
                 $reports = Report::where('intern_id', $internId)->select('*')->get();
@@ -35,10 +35,23 @@ class ReportController extends Controller
             }
 
             $reports = Report::where('intern_id', $internId)->get();
-            return view('pages.users.report.index', compact('internId', 'reports')); // Kirimkan data ke view
+            return view('pages.users.report.index', compact('internId', 'reports', 'interns')); // Kirimkan data ke view
         }
     }
 
+    public function reportByInternPDF($internId){
+
+        $intern = Intern::with('reports')->find($internId);
+       
+        $pdf = app('dompdf.wrapper')->loadView('pages.users.report.internReport', compact('intern'));
+        
+        $pdf->setPaper('legal', 'landscape');
+
+        $pdf->setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true]);
+    
+        return $pdf->download('reportByIntern' . $internId . '.pdf');
+
+    }
 
 
 

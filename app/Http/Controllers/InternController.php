@@ -182,7 +182,7 @@ class InternController extends Controller
     }
     /**
      * Display the specified resource.
-     */
+     */ 
 
     public function convertDocxToHtml($docxFilePath, $fileType)
 
@@ -210,19 +210,6 @@ class InternController extends Controller
 
         return $htmlFilePath;
 
-        // $phpWord = IOFactory::load($docxFilePath);
-        // $htmlWriter = new \PhpOffice\PhpWord\Writer\HTML($phpWord);
-
-        // // Definisikan path di mana hasil HTML akan disimpan
-        // $htmlFilePath = public_path('files/motivation_letter/' . pathinfo($docxFilePath, PATHINFO_FILENAME) . '.html');
-
-        // $htmlWriter->save($htmlFilePath);
-
-        // // Setel path file HTML yang dihasilkan
-        // $motivationLetterHtmlPath = asset('files/motivation_letter/' . pathinfo($docxFilePath, PATHINFO_FILENAME) . '.html');
-
-        // // Kembalikan path file HTML
-        // return $motivationLetterHtmlPath;
     }
 
     public function show($id)
@@ -281,7 +268,7 @@ class InternController extends Controller
                 $portfolioHtmlPath = $htmlPath;
             }
         } else {
-            $portfoliorUrl = null;
+            $portfolioUrl = null;
             $portfolioExtension = null;
         }
 
@@ -392,7 +379,7 @@ class InternController extends Controller
                 $portfolioHtmlPath = $htmlPath;
             }
         } else {
-            $portfoliorUrl = null;
+            $portfolioUrl = null;
             $portfolioExtension = null;
         }
 

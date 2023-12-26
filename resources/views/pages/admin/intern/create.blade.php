@@ -197,7 +197,7 @@
                                                                 @enderror
                                                             </div>
                                                         </div>
-                                                        <input type="hidden" name="periode_id" value="">
+                                                        <input type="" name="periode_id" value="">
 
                                                         <div class="col-md-6">
                                                             <div class="form-group">
@@ -372,10 +372,11 @@
             // Event handler ketika posisi dipilih
             $('select[name="position_id"]').on('change', function () {
                 var positionId = $(this).val();
+                console.log(positionId);
     
                 // Lakukan AJAX request untuk mendapatkan periode_id
                 $.ajax({
-                    url: '/getPeriodeId/' + positionId, // Gantilah dengan endpoint yang sesuai di aplikasi Anda
+                    url: '{{ route("get.periode.id", ":positionId") }}'.replace(':positionId', positionId),
                     type: 'GET',
                     success: function (response) {
                         // Set nilai periode_id sesuai dengan hasil dari server

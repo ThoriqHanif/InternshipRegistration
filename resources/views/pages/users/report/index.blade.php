@@ -28,6 +28,11 @@
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-header">
+                                <a class="btn btn-primary btn-export-pdf display float-right" id="pdfPrint"
+                                    data-intern-id="{{ $internId }}" data-intern-name="{{ $interns->name }}">
+                                    <i class="fas fa-print mr-2"></i>
+                                    Print PDF
+                                </a>
 
                             </div>
                             <!-- /.card-header -->
@@ -212,12 +217,30 @@
 
                 },
                 dom: 'Bfrtip',
-                buttons: [
-                    'copyHtml5',
-                    'excelHtml5',
-                    'csvHtml5',
-                    'pdfHtml5'
+                buttons: [{
+                        extend: 'copyHtml5',
+                        exportOptions: {
+                            columns: ':not(.exclude)'
+                        }
+                    },
+                    {
+                        extend: 'excelHtml5',
+                        exportOptions: {
+                            columns: ':not(.exclude)'
+                        }
+                    },
+                    {
+                        extend: 'csvHtml5',
+                        exportOptions: {
+                            columns: ':not(.exclude)'
+                        }
+                    },
+                   
                 ],
+                columnDefs: [{
+                    targets: 'exclude',
+                    visible: false
+                }],
 
                 processing: true,
                 serverSide: true,
@@ -283,7 +306,9 @@
                     },
                     {
                         data: 'action',
-                        name: 'action'
+                        name: 'action',
+                        className: 'exclude' // Tambahkan ini untuk menandai kolom 'action'
+
                     },
                 ]
             });
@@ -296,116 +321,107 @@
 
             // 03_PROSES EDIT 
             $(document).on('click', '#btn-edit', function(e) {
+                var reportDate = new Date($(this).data('report-date'));
+                var currentDate = new Date();
+
+                if (reportDate > currentDate) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Eitss',
+                        text: 'Belum waktunya mengisi report',
+                    });
+                } else {
+                    var id = $(this).data('report-id');
+                    // console.log(id)
+                    $.ajax({
+                        url: '{{ route('reports.edit', ':id') }}'.replace(':id', id),
+                        type: 'GET',
+                        success: function(response) {
+                            $('#reportModal').modal('show');
+                            $('#report_id').val(response.result.id);
+                            $('#date').val(response.result.date);
+                            $('#presence').val(response.result.presence);
+                            $('#attendance_hours').val(response.result.attendance_hours);
+                            $('#agency').val(response.result.agency);
+                            $('#project_name').val(response.result.project_name);
+                            $('#job').val(response.result.job);
+                            $('#description').val(response.result.description);
+
+                        }
+                    });
+                }
                 // console.log('Tekan')
-                var id = $(this).data('report-id');
-                // console.log(id)
-                $.ajax({
-                    url: 'reports/' + id + '/edit',
-                    type: 'GET',
-                    success: function(response) {
-                        $('#reportModal').modal('show');
-                        $('#report_id').val(response.result.id);
-                        $('#date').val(response.result.date);
-                        $('#presence').val(response.result.presence);
-                        $('#attendance_hours').val(response.result.attendance_hours);
-                        $('#agency').val(response.result.agency);
-                        $('#project_name').val(response.result.project_name);
-                        $('#job').val(response.result.job);
-                        $('#description').val(response.result.description);
-                        // console.log(response.result);
-                        // $('.tombol-update').click(function() {
-                        //     console.log('ID yang dikirim ke update:', id);
-                        //     update(id);
-                        // });
-                        // console.log(response.result);
 
-                    }
-                });
             });
 
-            $(document).on('click', '.tombol-update', function(e) {
-                // function update(id = '') {
-                // console.log(id);
-                // if (id == '') {
-                //     var var_url = 'reports';
-                //     var var_type = 'POST';
-                // } else {
-                //     var var_url = 'reports/' + id;
-                //     var var_type = 'PUT';
-                // }
-                let reportId = $('#report_id').val();
-                var var_url = 'reports/' + reportId;
-                var var_type = 'PUT';
-                $.ajax({
-                    url: var_url,
-                    type: var_type,
-                    data: {
-                        date: $('#date').val(),
-                        presence: $('#presence').val(),
-                        attendance_hours: $('#attendance_hours').val(),
-                        agency: $('#agency').val(),
-                        project_name: $('#project_name').val(),
-                        job: $('#job').val(),
-                        description: $('#description').val(),
-                    },
-                    success: function(response) {
-                        if (response.errors) {
-                            console.log(response.errors);
+                $(document).on('click', '.tombol-update', function(e) {
 
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Gagal!',
-                            });
+                    let reportId = $('#report_id').val();
+                    var var_url = '{{ route('reports.update', ':reportId') }}'.replace(':reportId', reportId);
+                    var var_type = 'PUT';
+                    $.ajax({
+                        url: var_url,
+                        type: var_type,
+                        data: {
+                            date: $('#date').val(),
+                            presence: $('#presence').val(),
+                            attendance_hours: $('#attendance_hours').val(),
+                            agency: $('#agency').val(),
+                            project_name: $('#project_name').val(),
+                            job: $('#job').val(),
+                            description: $('#description').val(),
+                        },
+                        success: function(response) {
+                            if (response.errors) {
+                                console.log(response.errors);
 
-                            // $('.alert-danger').removeClass('d-none');
-                            // // $('.alert-danger').html("<ul>");
-                            // $.each(response.errors, function(key, value) {
-                            //     $('.alert-danger').find('ul').append("<li>" + value + "</li>");
-                            // });
-                            // $('.alert-danger').append("</ul>");
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Gagal!',
+                                });
 
 
-                        } else {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Berhasil!',
-                                text: 'Data berhasil disimpan.',
-                            });
+                            } else {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Berhasil!',
+                                    text: 'Data berhasil disimpan.',
+                                });
 
-                            tableReport.ajax.reload(null, false);
+                                tableReport.ajax.reload(null, false);
 
-                            $('#reportModal').modal('hide');
+                                $('#reportModal').modal('hide');
 
-                        }
-                    },
-                    error: function(xhr) {
-                        if (xhr.status === 422) {
-                            // Menampilkan pesan validasi error SweetAlert
-                            var errorMessages = '';
-                            var errors = xhr.responseJSON.errors;
-                            for (var key in errors) {
-                                if (errors.hasOwnProperty(key)) {
-                                    errorMessages += errors[key][0] + '<br>';
-                                }
                             }
+                        },
+                        error: function(xhr) {
+                            if (xhr.status === 422) {
+                                // Menampilkan pesan validasi error SweetAlert
+                                var errorMessages = '';
+                                var errors = xhr.responseJSON.errors;
+                                for (var key in errors) {
+                                    if (errors.hasOwnProperty(key)) {
+                                        errorMessages += errors[key][0] + '<br>';
+                                    }
+                                }
 
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Gagal!',
-                                html: errorMessages,
-                            });
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Gagal!',
+                                    html: errorMessages,
+                                });
 
-                        } else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Gagal!',
-                                text: 'Terjadi kesalahan saat update data.',
-                            });
-                        }
-                    },
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Gagal!',
+                                    text: 'Terjadi kesalahan saat update data.',
+                                });
+                            }
+                        },
+                    });
+                    // }
                 });
-                // }
-            });
 
             $('#reportModal').on('hidden.bs.modal', function() {
                 $('#date').val('');
@@ -422,6 +438,48 @@
                 $('.alert-success').addClass('d-none');
                 $('.alert-success').html('');
 
+            });
+
+            $(document).on('click', '.btn-export-pdf', function() {
+                let internId = $(this).data('intern-id');
+                let internName = $(this).data('intern-name');
+                console.log(internId)
+                console.log(internName)
+
+                Swal.fire({
+                    title: 'Mohon Tunggu!',
+                    html: 'Generate PDF..',
+                    allowOutsideClick: false,
+                    showConfirmButton: false,
+                    willOpen: () => {
+                        Swal.showLoading();
+                    },
+                });
+
+                fetch('/intern/export/reportByIntern/' + internId)
+                    .then(response => {
+                        Swal.close();
+                        return response.blob();
+                    })
+                    .then(blob => {
+                        const url = window.URL.createObjectURL(blob);
+                        const link = document.createElement('a');
+                        link.href = url;
+                        link.download = 'Laporan Harian Magang :' + '.pdf';
+                        document.body.appendChild(link);
+                        link.click();
+
+                        document.body.removeChild(link);
+                    })
+                    .catch(error => {
+                        console.error(error);
+
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Terjadi Kesahalahan'
+                        });
+                    });
             });
         </script>
     @endpush

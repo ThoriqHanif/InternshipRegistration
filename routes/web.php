@@ -56,7 +56,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::delete('/position/force-delete/{id}', [PositionController::class, 'forceDelete'])->name('position.forceDelete');
 
     // Route::get('report/admin', [ReportAdminController::class, 'index'])->name('report.admin.index');
-    Route::get('/getPeriodeId/{positionId}', [InternController::class, 'getPeriodeId']);
+    Route::get('/getPeriodeId/{positionId}', [InternController::class, 'getPeriodeId'])->name('get.periode.id');
 
     Route::get('/admin/report', [ReportAdminController::class, 'index'])->name('admin.report.index');
     Route::get('/admin/intern/{id}', [ReportAdminController::class, 'getInternsByPeriode'])->name('admin.intern.periode');
@@ -79,6 +79,8 @@ Route::middleware(['auth', 'user'])->group(function () {
     Route::resource('/reports', ReportController::class);
     Route::get('/profile', [ProfileController::class, 'user'])->name('profile');
     Route::put('/profile', [ProfileController::class, 'updateUser'])->name('profile.update');
+    Route::get('/intern/export/reportByIntern/{internId}', [ReportController::class, 'reportByInternPDF'])->name('intern.export.report.pdf');
+
     // Route::get('/user/report', function () {
     //     return view('pages.user.report');
     // });

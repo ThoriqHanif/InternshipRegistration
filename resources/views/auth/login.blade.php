@@ -24,7 +24,7 @@
         <!-- /.login-logo -->
         <div class="card card-outline card-primary">
             <div class="card-header text-center">
-                <img src="{{ asset('img/logo/logofull.png') }}" alt="" class="mt-2 mb-2 img-fluid">
+                <a href="https://internship.kadangkoding.com/thoriq/pendaftaran-magang/"><img src="{{ asset('img/logo/logofull.png') }}" alt="" class="mt-2 mb-2 img-fluid"></a>
             </div>
             @if (Session::has('profile-updated'))
             <div class="px-4 mt-3">

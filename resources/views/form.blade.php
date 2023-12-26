@@ -471,7 +471,7 @@
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Berhasil!',
-                                text: 'Data berhasil disimpan. Data akan kami proses secepatnya, Terimakasih.',
+                                text: 'Selamat! Pendaftaran Anda berhasil disimpan. Mohon periksa email Anda (baik di Inbox maupun folder spam) untuk langkah selanjutnya.',
                             }).then(function() {
                                 // Redirect ke halaman indeks setelah menutup SweetAlert
                                 window.location.href = '{{ url('/') }}';

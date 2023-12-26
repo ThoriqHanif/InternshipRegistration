@@ -721,10 +721,6 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
 </head>
 
 <body>
-    @php
-        $totalInterns = count($interns);
-    @endphp
-    @foreach ($interns as $key => $intern)
         <div>
             <div class="py-4">
                 <div class="px-14 py-6">
@@ -745,10 +741,10 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
                                                     <td class="pl-4">
                                                         <div>
                                                             <p class="whitespace-nowrap text-slate-400 text-right">
-                                                                Periode
+                                                                Intern
                                                             </p>
                                                             <p class="whitespace-nowrap font-bold text-main text-right">
-                                                                {{ $periode->name }}</p>
+                                                                {{ $intern->full_name }}</p>
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -760,33 +756,6 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
                         </tbody>
                     </table>
                 </div>
-
-                {{-- <div class="bg-slate-100 px-14 py-6 text-sm">
-                    <table class="w-full border-collapse border-spacing-0">
-                        <tbody>
-                            <tr>
-                                <td class="w-1/2 align-top">
-                                    <div class="text-sm text-neutral-600">
-                                        <p class="font-bold">{{$periode->name}}</p>
-                                        <p>Posisi : {{$periode->position->name}}</p>
-                                        <p>Tanggal Mulai : {{$periode->start_date}}</p>
-                                        <p>Tanggal Selesai : {{$periode->end_date}}</p>
-                                    </div>
-                                </td>
-                                <td class="w-1/2 align-top text-right">
-                                    <div class="text-sm text-neutral-600">
-                                        <p class="font-bold">Customer Company</p>
-                                        <p>Number: 123456789</p>
-                                        <p>VAT: 23456789</p>
-                                        <p>9552 Vandervort Spurs</p>
-                                        <p>Paradise, 43325</p>
-                                        <p>United States</p>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div> --}}
 
                 <div class="px-14 text-sm text-neutral-700">
                     <p class="text-main font-bold">INTERN DETAILS</p>
@@ -821,7 +790,6 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
                         <tbody>
                             @foreach ($intern->reports as $report)
                                 <tr>
-
                                     <td class="border-b py-3 pl-23">
                                         {{ $report->date ? \Carbon\Carbon::parse($report->date)->locale('id')->isoFormat('dddd, D MMMM YYYY') : '' }}
                                     </td>
@@ -830,6 +798,7 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
                                         @if ($report->attendance_hours)
                                             {{ date('H:i', strtotime($report->attendance_hours)) }}
                                         @else
+                                            
                                         @endif
                                     <td class="border-b py-3 pl-2 text-center">{{ $report->agency }}</td>
                                     <td class="border-b py-3 pl-2 text-center">{{ $report->project_name }}</td>
@@ -840,15 +809,9 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
                                     </td>
                                 </tr>
                             @endforeach
-
                         </tbody>
                     </table>
                 </div>
             </div>
-            @if ($key !== $totalInterns - 1)
-                <div style="page-break-before: always;"></div>
-            @endif
-    @endforeach
 </body>
-
 </html>

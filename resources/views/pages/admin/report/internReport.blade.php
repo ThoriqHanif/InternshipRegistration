@@ -792,7 +792,8 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
                                 <tr>
 
                                     <td class="border-b py-3 pl-23">
-                                        {{ strftime('%A, %d %B %Y', strtotime($report->date)) }}</td>
+                                        {{ $report->date ? \Carbon\Carbon::parse($report->date)->locale('id')->isoFormat('dddd, D MMMM YYYY') : '' }}
+                                    </td>
                                     <td class="text-capitalize border-b py-3 pl-2">{{ $report->presence }}</td>
                                     <td class="border-b py-3 pl-2 text-center">
                                         @if ($report->attendance_hours)
