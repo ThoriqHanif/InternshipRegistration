@@ -1,131 +1,170 @@
 @extends('layouts.app')
 
 @section('content')
+    <header class="mb-3">
+        <a href="#" class="burger-btn d-block d-xl-none">
+            <i class="bi bi-justify fs-3"></i>
+        </a>
+    </header>
+    <div class="page-title">
+        <div class="row">
+            <div class="col-12 col-md-6 order-md-1 order-last">
+                <h3>Daftar Periode</h3>
+                <p class="text-subtitle text-muted">Berikut daftar Periode magang Kadang Koding Indonesia</p>
+            </div>
+            <div class="col-12 col-md-6 order-md-2 order-first">
+                <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{ url('admin/dashboard') }}">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('periode.index') }}">Periode</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Daftar Periode</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
         <section class="content-header">
             <div class="container-fluid">
                 <div class="row mb-2">
-                    <div class="col-sm-6">
-                        <h1>Periode Management</h1>
-                    </div>
-                    <div class="col-sm-6">
-                        <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="#">Master Data</a></li>
-                            <li class="breadcrumb-item active">Periode Management</li>
-                        </ol>
-                    </div>
+
                 </div>
             </div><!-- /.container-fluid -->
         </section>
-        <section class="content">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="card">
-                            <div class="card-header">
-                                @if (auth()->check() && auth()->user()->role == 'admin')
-                                    <a class="btn btn-sm btn-success float-right" href="{{ route('periode.create') }}"><i
-                                            class="fas fa-plus mr-2 sm"></i>
-                                        Periode</a>
-                                @endif
-                            </div>
-                            <!-- /.card-header -->
-                            <div class="card-body">
+        <section class="section mt-2">
+            <div class="card">
+                @if (auth()->check() && auth()->user()->role == 'admin')
+                    <div class="card-header mb-2"
+                        style="display: flex; justify-content: space-between; align-items: center;">
+                        <a class="" onclick="showDeleted()" id="showDeletedButton">
+                            {{-- <i class="bi bi-trash-fill mr-5" style="margin-right: 10px" id="showDeletedIcon"></i> --}}
 
-
-
-                                @include('components.alert')
-                                <div class="table-responsive">
-                                    <table class="table table-bordered table-hover" id="tablePeriode">
-                                        <thead>
-                                            <tr>
-                                                <th style="width: 10px">No</th>
-                                                <th>Nama</th>
-                                                <th>Posisi</th>
-                                                <th>Tanggal Mulai</th>
-                                                <th>Tanggal Selesai</th>
-                                                <th>Kuota</th>
-                                                <th style="width: 140px">Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-
-                                        </tbody>
-
-                                    </table>
-                                </div>
-                            </div>
-
-                        </div>
+                        </a>
+                        <a href="{{ route('periode.create') }}" class="btn btn-sm btn-primary tombol-create"
+                            data-placement="top" id="btn-create" data-tooltip-toggle="tooltip" title="Tambah Data Periode">
+                            + Tambah Periode
+                        </a>
                     </div>
+                @endif
+
+
+                <div class="card-body">
+                    @include('components.alert')
+                    <table class="table table-striped table-sm" id="tablePeriode">
+                        <thead>
+                            <tr>
+                                <th class="table-fit">No</th>
+                                <th>Nama</th>
+                                <th class="table-fit">Tanggal Mulai</th>
+                                <th class="table-fit">Tanggal Selesai</th>
+                                <th class="table-fit">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
 
                 </div>
+            </div>
         </section>
-    </div>
-    @push('table-periode')
-        <script>
-            let tablePeriode = new DataTable('#tablePeriode', {
-                processing: true,
-                serverSide: true,
-                responsive: true,
-                ajax: {
-                    url: "{{ route('periode.index') }}"
-                },
-                columns: [{
-                        data: 'DT_RowIndex',
-                        name: 'DT_RowIndex',
-                        orderable: false,
-                        searchable: false
+        @include('pages.admin.periode.show')
+        @push('table-periode')
+            <script>
+                let tablePeriode = new DataTable('#tablePeriode', {
+                    processing: true,
+                    serverSide: true,
+                    responsive: true,
+                    ajax: {
+                        url: "{{ route('periode.index') }}"
                     },
-                    {
-                        data: 'name',
-                        name: 'name'
-                    },
-                    {
-                        data: 'position.name',
-                        name: 'position.name'
-                    },
-                    {
-                        data: 'start_date',
-                        name: 'start_date',
-                        render: function(data, type, row) {
-                            // Konversi format tanggal ke bahasa Indonesia
-                            let startDate = new Date(data);
-                            return startDate.toLocaleDateString('id-ID', {
-                                weekday: 'long',
-                                year: 'numeric',
-                                month: 'long',
-                                day: 'numeric'
-                            });
-                        }
-                    },
-                    {
-                        data: 'end_date',
-                        name: 'end_date',
-                        render: function(data, type, row) {
-                            // Konversi format tanggal ke bahasa Indonesia
-                            let endDate = new Date(data);
-                            return endDate.toLocaleDateString('id-ID', {
-                                weekday: 'long',
-                                year: 'numeric',
-                                month: 'long',
-                                day: 'numeric'
-                            });
-                        }
-                    },
-                    {
-                        data: 'quota',
-                        name: 'quota'
-                    },
-                    {
-                        data: 'action',
-                        name: 'action'
-                    },
+                    columns: [{
+                            data: 'DT_RowIndex',
+                            name: 'DT_RowIndex',
+                            orderable: false,
+                            searchable: false,
+                            class: 'table-fit'
+                        },
+                        {
+                            data: 'name',
+                            name: 'name',
+                        },
+                        {
+                            data: 'start_date',
+                            name: 'start_date',
+                            class: 'table-fit',
+
+                            render: function(data, type, row) {
+                                let startDate = new Date(data);
+                                return startDate.toLocaleDateString('id-ID', {
+                                    weekday: 'long',
+                                    year: 'numeric',
+                                    month: 'long',
+                                    day: 'numeric'
+                                });
+                            }
+                        },
+                        {
+                            data: 'end_date',
+                            name: 'end_date',
+                            class: 'table-fit',
+                            render: function(data, type, row) {
+                                let endDate = new Date(data);
+                                return endDate.toLocaleDateString('id-ID', {
+                                    weekday: 'long',
+                                    year: 'numeric',
+                                    month: 'long',
+                                    day: 'numeric'
+                                });
+                            }
+                        },
+                        {
+                            data: 'action',
+                            name: 'action',
+                            class: 'table-fit'
+                        },
 
 
-                ]
-            });
-        </script>
-    @endpush
-@endsection
+                    ]
+                });
+            </script>
+
+            <script>
+                $(document).ready(function() {
+                    $('#tablePeriode').on('click', 'a.detail-periode', function() {
+                        var id = $(this).data('periode-id');
+
+                        $.ajax({
+                            url: '{{ route('periode.show', ':id') }}'.replace(':id', id),
+                            type: 'GET',
+                            success: function(response) {
+                                $('#detailPeriode').modal('show');
+                                $('#id').val(response.result.id);
+                                $('#name_detail').text(response.result.name);
+                                $('#start_date_detail').text(response.result.start_date_formatted);
+                                $('#end_date_detail').text(response.result.end_date_formatted);
+                                $('#created_at_detail').text(response.result.created_at_formatted);
+                                $('#updated_at_detail').text(response.result.updated_at_formatted);
+
+                                $('#position_detail').empty();
+                                $('#quota_detail').empty();
+
+                                if (response.positions && response.positions.length > 0) {
+                                    response.positions.forEach(function(position) {
+                                        $('#position_detail').append('<li>' + position.name +
+                                            ' (' + position.pivot.quota + ')</li>');
+                                    });
+                                } else {
+                                    $('#position_detail').append('<li>Tidak ada posisi</li>');
+                                }
+                            },
+                            error: function(xhr) {
+                                console.log(xhr.responseText);
+                            }
+                        });
+                    });
+                });
+            </script>
+        @endpush
+    @endsection

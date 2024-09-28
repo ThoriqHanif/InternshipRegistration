@@ -8,18 +8,18 @@ use Illuminate\Database\Eloquent\Model;
 class Periode extends Model
 {
     protected $table = 'periodes';
-    
+    protected $dates = ['start_date', 'end_date'];
+
     protected $fillable = [
         'name',
         'start_date',
         'end_date',
-        'quota',
         'description'
     ];
 
-    public function position()
+    public function positions()
     {
-        return $this->belongsTo(Position::class);
+        return $this->belongsToMany(Position::class, 'periode_positions')->withPivot('quota');
     }
 
     public function isActive() {
@@ -31,5 +31,5 @@ class Periode extends Model
         return $this->hasMany(Intern::class);
     }
 
-    
+
 }

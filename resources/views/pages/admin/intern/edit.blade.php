@@ -1,21 +1,33 @@
 @extends('layouts.app')
 
 @section('content')
+
+    <header class="mb-3">
+        <a href="#" class="burger-btn d-block d-xl-none">
+            <i class="bi bi-justify fs-3"></i>
+        </a>
+    </header>
+    <div class="page-title">
+        <div class="row">
+            <div class="col-12 col-md-6 order-md-1 order-last">
+                <h3>Edit Pemagang</h3>
+                <p class="text-subtitle text-muted">Masukkan data yang ingin diubah Informasi Pemagang</p>
+            </div>
+            <div class="col-12 col-md-6 order-md-2 order-first">
+                <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                    {{ Breadcrumbs::render('intern.edit') }}
+                </nav>
+            </div>
+        </div>
+    </div>
+
     <div class="content-wrapper">
 
         <!-- Content Header (Page header) -->
         <section class="content-header">
             <div class="container-fluid">
                 <div class="row mb-2">
-                    <div class="col-sm-6">
-                        <h1>Edit pemagang</h1>
-                    </div>
-                    <div class="col-sm-6">
-                        <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="#">Master Data</a></li>
-                            <li class="breadcrumb-item active">Intern Management</li>
-                        </ol>
-                    </div>
+
                 </div>
             </div><!-- /.container-fluid -->
         </section>
@@ -33,8 +45,8 @@
                             </div>
                             <!-- /.card-header -->
                             <!-- form start -->
-                            <form method="POST" action="{{ route('intern.update', $id) }}" enctype="multipart/form-data"
-                                id="formEditIntern">
+                            <form method="POST" action="{{ route('intern.update', $intern->id) }}"
+                                enctype="multipart/form-data" id="formEditIntern">
                                 @csrf
                                 @method('PUT')
                                 <div class="">
@@ -46,13 +58,13 @@
                                                     <div class="row">
                                                         <div class="col-md-6">
                                                             <input type="hidden" name="id"
-                                                                value="{{ $id }}">
+                                                                value="{{ $intern->id }}">
                                                             <div class="form-group">
                                                                 <label class="form-control-label">Email address<span
                                                                         class="text-danger"> *</span></label>
                                                                 <input
                                                                     class="form-control @error('email') is-invalid @enderror"
-                                                                    type="email" value="{{ $email }}"
+                                                                    type="email" value="{{ $intern->email }}"
                                                                     name="email" placeholder="Masukkan Email">
                                                                 @error('email')
                                                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -65,7 +77,7 @@
                                                                         class="text-danger"> *</span></label>
                                                                 <input
                                                                     class="form-control  @error('full_name') is-invalid @enderror"
-                                                                    type="text" value="{{ $full_name }}"
+                                                                    type="text" value="{{ $intern->full_name }}"
                                                                     name="full_name" placeholder="Masukkan Nama Lengkap">
                                                                 @error('full_name')
                                                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -78,7 +90,7 @@
                                                                         class="text-danger"> *</span></label>
                                                                 <input
                                                                     class="form-control  @error('username') is-invalid @enderror"
-                                                                    type="text" value="{{ $username }}"
+                                                                    type="text" value="{{ $intern->username }}"
                                                                     name="username" placeholder="Masukkan Nama Panggilan">
                                                                 @error('username')
                                                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -91,7 +103,7 @@
                                                                         class="text-danger"> *</span></label>
                                                                 <input
                                                                     class="form-control @error('phone_number') is-invalid @enderror"
-                                                                    type="number" value="{{ $phone_number }}"
+                                                                    type="number" value="{{ $intern->phone_number }}"
                                                                     name="phone_number" placeholder="Masukkan Telp">
                                                                 @error('phone_number')
                                                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -108,12 +120,12 @@
                                                                     name="gender">
                                                                     <option value="" selected>Pilih Jenis Kelamin
                                                                     </option>
-                                                                    @foreach ($genders as $key => $value)
-                                                                        <option value="{{ $key }}"
-                                                                            {{ $gender == $key ? 'selected' : '' }}>
-                                                                            {{ $value }}
-                                                                        </option>
-                                                                    @endforeach
+                                                                    <option value="male"
+                                                                        {{ $intern->gender === 'male' ? 'selected' : '' }}>
+                                                                        Laki-Laki</option>
+                                                                    <option value="female"
+                                                                        {{ $intern->gender === 'female' ? 'selected' : '' }}>
+                                                                        Perempuan</option>
                                                                 </select>
 
                                                                 @error('gender')
@@ -131,7 +143,7 @@
                                                                         class="text-danger"> *</span></label>
                                                                 <input
                                                                     class="form-control @error('school') is-invalid @enderror"
-                                                                    type="text" value="{{ $school }}"
+                                                                    type="text" value="{{ $intern->school }}"
                                                                     name="school" placeholder="Masukkan Asal Sekolah">
                                                                 @error('school')
                                                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -144,7 +156,8 @@
                                                                         class="text-danger"> *</span></label>
                                                                 <input
                                                                     class="form-control @error('major') is-invalid @enderror"
-                                                                    type="text" value="{{ old('major', $major) }}"
+                                                                    type="text"
+                                                                    value="{{ old('major', $intern->major) }}"
                                                                     name="major" placeholder="Masukkan Jurusan">
                                                                 @error('major')
                                                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -161,7 +174,7 @@
                                                                 <label class="form-control-label">Alamat<span
                                                                         class="text-danger"> *</span></label>
                                                                 <textarea class="form-control @error('address') is-invalid @enderror" type="text" value="" name="address"
-                                                                    placeholder="Masukkan Alamat">{{ $address }}</textarea>
+                                                                    placeholder="Masukkan Alamat">{{ $intern->address }}</textarea>
                                                                 @error('address')
                                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                                 @enderror
@@ -172,7 +185,7 @@
                                                     <hr class="horizontal dark">
                                                     <p class="text-uppercase text-sm">Intern Information</p>
                                                     <div class="row">
-                                                        <div class="col-md-6">
+                                                        {{-- <div class="col-md-6">
                                                             <div class="form-group">
                                                                 <label class="form-control-label">Posisi<span
                                                                         class="text-danger"> *</span></label>
@@ -193,17 +206,85 @@
                                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                                 @enderror
                                                             </div>
+                                                        </div> --}}
+                                                        <div class="col-md-6">
+
+                                                            <div class="form-group">
+
+                                                                <label for="example-text-input"
+                                                                    class="form-control-label mb-2">Posisi<span
+                                                                        class="text-danger"> *</span></label>
+
+                                                                <select
+                                                                    class="form-select form-control @error('position_id') is-invalid @enderror"
+                                                                    name="position_id">
+
+                                                                    <!-- Ubah 'position' menjadi 'position_id' -->
+
+                                                                    <option value="" selected disabled>Pilih Posisi
+                                                                        Magang</option>
+
+                                                                    {{-- @foreach ($activePositions as $position)
+                                                                        <option value="{{ $position->id }}">{{ $position->name }}</option>
+                                                                    @endforeach --}}
+
+                                                                    @foreach ($positions as $position)
+                                                                        <option value="{{ $position->id }}"
+                                                                            {{ $intern->position_id == $position->id ? 'selected' : '' }}>
+                                                                            {{ $position->name }}</option>
+                                                                    @endforeach
+
+
+
+                                                                </select>
+
+                                                                @error('position_id')
+                                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                                @enderror
+
+                                                            </div>
+
                                                         </div>
-                                                        
+
+                                                        <div class="col-md-6">
+
+                                                            <div class="form-group">
+
+                                                                <label for="example-text-input"
+                                                                    class="form-control-label mb-2">Periode<span
+                                                                        class="text-danger"> *</span></label>
+
+                                                                <select
+                                                                    class="form-select form-control @error('periode_id') is-invalid @enderror"
+                                                                    name="periode_id">
+
+                                                                    <option value="" selected disabled>Pilih Periode
+                                                                    </option>
+
+                                                                    @foreach ($periodes as $periode)
+                                                                        <option value="{{ $periode->id }}"
+                                                                            {{ $intern->periode_id == $periode->id ? 'selected' : '' }}>
+                                                                            {{ $periode->name }}</option>
+                                                                    @endforeach
+                                                                </select>
+
+                                                                @error('position_id')
+                                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                                @enderror
+
+                                                            </div>
+
+                                                        </div>
+
                                                         <div class="col-md-6">
                                                             <div class="form-group">
                                                                 <label class="form-control-label">Tanggal Mulai<span
                                                                         class="text-danger"> *</span></label>
                                                                 <div class="input-group date" id="datepicker">
                                                                     <input type="date" id="start_date"
-                                                                        class=" form-control @error('start_date') is-invalid @enderror"
+                                                                        class=" form-control flatpickr-no-config @error('start_date') is-invalid @enderror"
                                                                         id="date" name="start_date"
-                                                                        value="{{ $start_date }}" />
+                                                                        value="{{ $intern->start_date }}" />
                                                                     @error('start_date')
                                                                         <div class="invalid-feedback">{{ $message }}
                                                                         </div>
@@ -217,9 +298,9 @@
                                                                         class="text-danger"> *</span></label>
                                                                 <div class="input-group date">
                                                                     <input type="date" id="end_date"
-                                                                        class="form-control  @error('end_date') is-invalid @enderror"
+                                                                        class="form-control flatpickr-no-config @error('end_date') is-invalid @enderror"
                                                                         id="date" name="end_date"
-                                                                        value="{{ $end_date }}" />
+                                                                        value="{{ $intern->end_date }}" />
                                                                     @error('end_date')
                                                                         <div class="invalid-feedback">{{ $message }}
                                                                         </div>
@@ -237,36 +318,32 @@
                                                                         class="text-danger"> *</span></label>
                                                                 <div class="custom-file">
                                                                     <input
-                                                                        class="custom-file-input @error('cv') is-invalid @enderror"
+                                                                        class="form-control @error('cv') is-invalid @enderror"
                                                                         type="file" id="fileCV" name="cv"
                                                                         accept=".pdf, .docx, .png">
-                                                                    <label class="custom-file-label" for="fileCV">Choose
-                                                                        file</label>
                                                                 </div>
 
                                                                 @if ($cvUrl)
                                                                     @if ($cvExtension == 'pdf' || $cvExtension == 'docx')
-                                                                        <a class="btn mt-2" id="cv-link"
-                                                                            data-toggle="modal" data-target="#cvModal"
-                                                                            {{-- href="/public/files/cv/DUMMY DOCUMENT TEST.pdf" --}}
-                                                                            data-caption="CV {{ $full_name }}"
-                                                                            class="text-sm text-primary"
-                                                                            style="background-color: #7066e0"
+                                                                        <a class="btn mt-2 btn-primary" id="cv-link"
+                                                                            data-bs-toggle="modal"
+                                                                            data-bs-target="#cvModal"
+                                                                            data-caption="CV {{ $intern->full_name }}"
                                                                             data-toggle="tooltip" data-placement="top"
                                                                             title="Lihat CV">
-                                                                            <li class="fas fa-eye text-white"></li>
+                                                                            <i class="bi bi-eye"></i>
                                                                         </a>
                                                                     @endif
                                                                     <a class="btn btn-info mt-2"
                                                                         href="{{ $cvUrl }}" download
                                                                         data-toggle="tooltip" data-placement="top"
                                                                         title="Unduh CV">
-                                                                        <li class="fas fa-download"></li>
+                                                                        <i class="bi bi-download"></i>
                                                                     </a>
                                                                     @if ($cvExtension == 'png')
                                                                         <div class="mt-3">
                                                                             <a data-fancybox
-                                                                                data-caption="CV {{ $full_name }}"
+                                                                                data-caption="CV {{ $intern->full_name }}"
                                                                                 href="{{ $cvUrl }}">
                                                                                 <img src="{{ $cvUrl }}"
                                                                                     class="mt-3" alt="CV"
@@ -275,7 +352,7 @@
                                                                         </div>
                                                                     @endif
                                                                 @else
-                                                                    <p class="text-sm text-danger">Belum ada CV</p>
+                                                                    <p class="text-sm text-danger mt-2">Belum ada CV</p>
                                                                 @endif
                                                                 @error('cv')
                                                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -287,7 +364,7 @@
                                                                         <div class="modal-content">
                                                                             <div class="modal-header">
                                                                                 <h5 class="modal-title" id="cvModalLabel">
-                                                                                    CV {{ $full_name }}</h5>
+                                                                                    CV {{ $intern->full_name }}</h5>
                                                                                 <button type="button" class="close"
                                                                                     data-dismiss="modal"
                                                                                     aria-label="Close">
@@ -305,7 +382,6 @@
                                                                                             instead.</p>
                                                                                     </object>
                                                                                 @elseif ($cvExtension == 'docx')
-                                                                                    <!-- Tampilkan sesuai dengan format DOCX, misalnya dengan iframe -->
                                                                                     <iframe src="{{ $cvHtmlPath }}"
                                                                                         style="width: 100%; height: 600px;"></iframe>
                                                                                 @else
@@ -328,45 +404,43 @@
                                                                         class="text-danger"> *</span></label>
                                                                 <div class="custom-file">
                                                                     <input
-                                                                        class="custom-file-input @error('motivation_letter') is-invalid @enderror"
+                                                                        class="form-control @error('motivation_letter') is-invalid @enderror"
                                                                         type="file" id="fileMotivation"
                                                                         name="motivation_letter"
                                                                         accept=".pdf, .docx, .png">
-                                                                    <label class="custom-file-label" for="fileCV">Choose
-                                                                        file</label>
+
                                                                 </div>
-                                                                @if ($motivationLetterUrl)
+                                                                @if ($motivation_letterUrl)
                                                                     @if ($motivation_letterExtension == 'pdf' || $motivation_letterExtension == 'docx')
-                                                                        <a class="btn mt-2" id="ml-link"
-                                                                            data-toggle="modal" data-target="#mlModal"
-                                                                            {{-- href="/public/files/cv/DUMMY DOCUMENT TEST.pdf" --}}
-                                                                            data-caption="Motivation Letter {{ $full_name }}"
-                                                                            class="text-sm text-primary"
-                                                                            style="background-color: #7066e0"
+                                                                        <a class="btn mt-2 btn-primary" id="ml-link"
+                                                                            data-bs-toggle="modal"
+                                                                            data-bs-target="#mlModal"
+                                                                            data-caption="Motivation Letter {{ $intern->full_name }}"
                                                                             data-toggle="tooltip" data-placement="top"
                                                                             title="Lihat Motivation Letter">
-                                                                            <li class="fas fa-eye text-white"></li>
+                                                                            <i class="bi bi-eye"></i>
                                                                         </a>
                                                                     @endif
                                                                     <a class="btn btn-info mt-2"
-                                                                        href="{{ $motivationLetterUrl }}" download
+                                                                        href="{{ $motivation_letterUrl }}" download
                                                                         data-toggle="tooltip" data-placement="top"
                                                                         title="Unduh Motivation Letter">
-                                                                        <li class="fas fa-download"></li>
+                                                                        <i class="bi bi-download"></i>
                                                                     </a>
                                                                     @if ($motivation_letterExtension == 'png')
                                                                         <div class="mt-3">
                                                                             <a data-fancybox
-                                                                                data-caption="Motivation Letter {{ $full_name }}"
-                                                                                href="{{ $motivationLetterUrl }}">
-                                                                                <img src="{{ $motivationLetterUrl }}"
+                                                                                data-caption="Motivation Letter {{ $intern->full_name }}"
+                                                                                href="{{ $motivation_letterUrl }}">
+                                                                                <img src="{{ $motivation_letterUrl }}"
                                                                                     class="mt-3" alt="Motivation Letter"
                                                                                     width="200">
                                                                             </a>
                                                                         </div>
                                                                     @endif
                                                                 @else
-                                                                    <p class="text-sm text-danger">Belum ada Motivation
+                                                                    <p class="text-sm text-danger mt-2">Belum ada
+                                                                        Motivation
                                                                         Letter</p>
                                                                 @endif
                                                                 @error('motivation_letter')
@@ -379,7 +453,8 @@
                                                                         <div class="modal-content">
                                                                             <div class="modal-header">
                                                                                 <h5 class="modal-title" id="mlModalLabel">
-                                                                                    Motivation Letter {{ $full_name }}
+                                                                                    Motivation Letter
+                                                                                    {{ $intern->full_name }}
                                                                                 </h5>
                                                                                 <button type="button" class="close"
                                                                                     data-dismiss="modal"
@@ -390,22 +465,21 @@
                                                                             <div class="modal-body">
                                                                                 @if ($motivation_letterExtension == 'pdf')
                                                                                     <object
-                                                                                        data="{{ $motivationLetterUrl }}"
+                                                                                        data="{{ $motivation_letterUrl }}"
                                                                                         type="application/pdf"
                                                                                         width="100%" height="600px">
                                                                                         <p>Unable to display PDF file. <a
-                                                                                                href="{{ $motivationLetterUrl }}"
+                                                                                                href="{{ $motivation_letterUrl }}"
                                                                                                 target="_blank">Download</a>
                                                                                             instead.</p>
                                                                                     </object>
                                                                                 @elseif ($motivation_letterExtension == 'docx')
-                                                                                    <!-- Tampilkan sesuai dengan format DOCX, misalnya dengan iframe -->
                                                                                     <iframe
-                                                                                        src="{{ $motivationLetterHtmlPath }}"
+                                                                                        src="{{ $motivation_letterHtmlPath }}"
                                                                                         style="width: 100%; height: 600px;"></iframe>
                                                                                 @else
                                                                                     <p>File format not supported. <a
-                                                                                            href="{{ $motivationLetterUrl }}"
+                                                                                            href="{{ $motivation_letterUrl }}"
                                                                                             target="_blank">Download</a>
                                                                                         instead.</p>
                                                                                 @endif
@@ -422,45 +496,41 @@
                                                                     Pengantar</label>
                                                                 <div class="custom-file">
                                                                     <input
-                                                                        class="custom-file-input @error('cover_letter') is-invalid @enderror"
+                                                                        class="form-control @error('cover_letter') is-invalid @enderror"
                                                                         type="file" id="fileSurat" name="cover_letter"
                                                                         accept=".pdf, .docx, .png">
-                                                                    <label class="custom-file-label"
-                                                                        for="fileSurat">Choose file</label>
                                                                 </div>
 
-                                                                @if ($coverLetterUrl)
+                                                                @if ($cover_letterUrl)
                                                                     @if ($cover_letterExtension == 'pdf' || $cover_letterExtension == 'docx')
-                                                                        <a class="btn mt-2" id="ml-link"
-                                                                            data-toggle="modal" data-target="#clModal"
-                                                                            {{-- href="/public/files/cv/DUMMY DOCUMENT TEST.pdf" --}}
-                                                                            data-caption="Surat Pengantar {{ $full_name }}"
-                                                                            class="text-sm text-primary"
-                                                                            style="background-color: #7066e0"
+                                                                        <a class="btn btn-primary mt-2" id="ml-link"
+                                                                            data-bs-toggle="modal"
+                                                                            data-bs-target="#clModal"
+                                                                            data-caption="Surat Pengantar {{ $intern->full_name }}"
                                                                             data-toggle="tooltip" data-placement="top"
                                                                             title="Lihat Surat Pengantar">
-                                                                            <li class="fas fa-eye text-white"></li>
+                                                                            <i class="bi bi-eye"></i>
                                                                         </a>
                                                                     @endif
                                                                     <a class="btn btn-info mt-2"
-                                                                        href="{{ $coverLetterUrl }}" download
+                                                                        href="{{ $cover_letterUrl }}" download
                                                                         data-toggle="tooltip" data-placement="top"
                                                                         title="Unduh Surat Pengantar">
-                                                                        <li class="fas fa-download"></li>
+                                                                        <i class="bi bi-download"></i>
                                                                     </a>
                                                                     @if ($cover_letterExtension == 'png')
                                                                         <div class="mt-3">
                                                                             <a data-fancybox
-                                                                                data-caption="Surat Pengantar {{ $full_name }}"
-                                                                                href="{{ $coverLetterUrl }}">
-                                                                                <img src="{{ $coverLetterUrl }}"
+                                                                                data-caption="Surat Pengantar {{ $intern->full_name }}"
+                                                                                href="{{ $cover_letterUrl }}">
+                                                                                <img src="{{ $cover_letterUrl }}"
                                                                                     class="mt-3" alt="Surat Pengantar"
                                                                                     width="200">
                                                                             </a>
                                                                         </div>
                                                                     @endif
                                                                 @else
-                                                                    <p class="text-sm text-danger">Belum ada Surat
+                                                                    <p class="text-sm text-danger mt-2">Belum ada Surat
                                                                         Pengantar</p>
                                                                 @endif
                                                                 @error('motivation_letter')
@@ -473,7 +543,8 @@
                                                                         <div class="modal-content">
                                                                             <div class="modal-header">
                                                                                 <h5 class="modal-title" id="clModalLabel">
-                                                                                    Surat Pengantar {{ $full_name }}
+                                                                                    Surat Pengantar
+                                                                                    {{ $intern->full_name }}
                                                                                 </h5>
                                                                                 <button type="button" class="close"
                                                                                     data-dismiss="modal"
@@ -483,22 +554,21 @@
                                                                             </div>
                                                                             <div class="modal-body">
                                                                                 @if ($cover_letterExtension == 'pdf')
-                                                                                    <object data="{{ $coverLetterUrl }}"
+                                                                                    <object data="{{ $cover_letterUrl }}"
                                                                                         type="application/pdf"
                                                                                         width="100%" height="600px">
                                                                                         <p>Unable to display PDF file. <a
-                                                                                                href="{{ $coverLetterUrl }}"
+                                                                                                href="{{ $cover_letterUrl }}"
                                                                                                 target="_blank">Download</a>
                                                                                             instead.</p>
                                                                                     </object>
                                                                                 @elseif ($cover_letterExtension == 'docx')
-                                                                                    <!-- Tampilkan sesuai dengan format DOCX, misalnya dengan iframe -->
                                                                                     <iframe
                                                                                         src="{{ $coverLetterHtmlPath }}"
                                                                                         style="width: 100%; height: 700px;"></iframe>
                                                                                 @else
                                                                                     <p>File format not supported. <a
-                                                                                            href="{{ $coverLetterUrl }}"
+                                                                                            href="{{ $cover_letterUrl }}"
                                                                                             target="_blank">Download</a>
                                                                                         instead.</p>
                                                                                 @endif
@@ -515,36 +585,32 @@
                                                                     class="form-control-label">Portfolio</label>
                                                                 <div class="custom-file">
                                                                     <input
-                                                                        class="custom-file-input @error('portfolio') is-invalid @enderror"
+                                                                        class="form-control @error('portfolio') is-invalid @enderror"
                                                                         type="file" id="filePortfolio"
                                                                         name="portfolio" accept=".pdf, .docx, .png">
-                                                                    <label class="custom-file-label"
-                                                                        for="fileSurat">Choose file</label>
                                                                 </div>
 
                                                                 @if ($portfolioUrl)
                                                                     @if ($portfolioExtension == 'pdf' || $portfolioExtension == 'docx')
-                                                                        <a class="btn mt-2" id="p-link"
-                                                                            data-toggle="modal" data-target="#pModal"
-                                                                            {{-- href="/public/files/cv/DUMMY DOCUMENT TEST.pdf" --}}
-                                                                            data-caption="Portfolio {{ $full_name }}"
-                                                                            class="text-sm text-primary"
-                                                                            style="background-color: #7066e0"
+                                                                        <a class="btn mt-2 btn-primary" id="p-link"
+                                                                            data-bs-toggle="modal"
+                                                                            data-bs-target="#pModal"
+                                                                            data-caption="Portfolio {{ $intern->full_name }}"
                                                                             data-toggle="tooltip" data-placement="top"
                                                                             title="Lihat Portfolio">
-                                                                            <li class="fas fa-eye text-white"></li>
+                                                                            <i class="bi bi-eye"></i>
                                                                         </a>
                                                                     @endif
                                                                 @endif
                                                                 <a class="btn btn-info mt-2" href="{{ $portfolioUrl }}"
                                                                     download data-toggle="tooltip" data-placement="top"
                                                                     title="Unduh Portfolio">
-                                                                    <li class="fas fa-download"></li>
+                                                                    <i class="bi bi-download"></i>
                                                                 </a>
                                                                 @if ($portfolioExtension == 'png')
                                                                     <div class="mt-3">
                                                                         <a data-fancybox
-                                                                            data-caption="Portfolio{{ $full_name }}"
+                                                                            data-caption="Portfolio{{ $intern->full_name }}"
                                                                             href="{{ $portfolioUrl }}">
                                                                             <img src="{{ $portfolioUrl }}" class="mt-3"
                                                                                 alt="Portfolio" width="200">
@@ -560,7 +626,7 @@
                                                                     <div class="modal-dialog modal-lg" role="document">
                                                                         <div class="modal-content">
                                                                             <div class="modal-header">Portfolio
-                                                                                {{ $full_name }}</h5>
+                                                                                {{ $intern->full_name }}</h5>
                                                                                 <button type="button" class="close"
                                                                                     data-dismiss="modal"
                                                                                     aria-label="Close">
@@ -578,7 +644,6 @@
                                                                                             instead.</p>
                                                                                     </object>
                                                                                 @elseif ($portfolioExtension == 'docx')
-                                                                                    <!-- Tampilkan sesuai dengan format DOCX, misalnya dengan iframe -->
                                                                                     <iframe src="{{ $portfolioHtmlPath }}"
                                                                                         style="width: 100%; height: 600px;"></iframe>
                                                                                 @else
@@ -600,11 +665,9 @@
                                                                     Foto<span class="text-danger"> *</span></label>
                                                                 <div class="custom-file">
                                                                     <input
-                                                                        class="custom-file-input @error('photo') is-invalid @enderror"
+                                                                        class="form-control @error('photo') is-invalid @enderror"
                                                                         type="file" id="filefoto" name="photo"
                                                                         accept=".jpg, .jpeg, .png, .webp">
-                                                                    <label class="custom-file-label"
-                                                                        for="fileSurat">Choose file</label>
                                                                 </div>
 
                                                                 @if ($photoUrl)
@@ -631,12 +694,18 @@
                                                                     id="status" name="status">
                                                                     <option value="" selected disabled>Pilih Status
                                                                     </option>
-                                                                    @foreach ($st as $key => $value)
-                                                                        <option value="{{ $key }}"
-                                                                            {{ $intern->status == $key ? 'selected' : '' }}>
-                                                                            {{ $value }}
-                                                                        </option>
-                                                                    @endforeach
+                                                                    <option value="pending"
+                                                                        {{ $intern->status === 'pending' ? 'selected' : '' }}>
+                                                                        Pending</option>
+                                                                    <option value="interview"
+                                                                        {{ $intern->status === 'interview' ? 'selected' : '' }}>
+                                                                        Interview</option>
+                                                                    <option value="accepted"
+                                                                        {{ $intern->status === 'accepted' ? 'selected' : '' }}>
+                                                                        Diterima</option>
+                                                                    <option value="rejected"
+                                                                        {{ $intern->status === 'rejected' ? 'selected' : '' }}>
+                                                                        Ditolak</option>
                                                                 </select>
                                                                 @error('status')
                                                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -650,25 +719,21 @@
                                                     <div class="col-md-14">
                                                         <div class="card card-primary card-outline">
                                                             <div class="card-header">
-                                                                <h3 class="card-title">Kirim Pesan untuk Pemagang</h3>
+                                                                <h4 class="card-title">Kirim Pesan untuk Pemagang</h4>
                                                             </div>
-                                                            <!-- /.card-header -->
                                                             <div class="card-body">
 
                                                                 <div class="form-group">
-                                                                    <textarea id="messages" class="form-control" name="messages" style="height: 300px"
-                                                                        data-previous-value="{{ $messages }}">
-                                                                    
-                                                                    {{ $intern->messages }}
-                                                                    </textarea>
-                                                                </div>
-                                                                
-                                                            </div>
-                                                            <!-- /.card-body -->
+                                                                    <div id="messages" class="form-control messages"
+                                                                        name="messages" style="height: 300px"
+                                                                        data-previous-value="{{ $intern->messages }}">
 
-                                                            <!-- /.card-footer -->
+                                                                        {!! $intern->messages !!}
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
                                                         </div>
-                                                        <!-- /.card -->
                                                     </div>
 
 
@@ -676,7 +741,7 @@
                                                         <button type="button" class="btn btn-md btn-secondary"
                                                             onclick="window.history.back();">Cancel</button>
                                                         <button type=""
-                                                            class="btn btn-md btn-success">Update</button>
+                                                            class="btn btn-md btn-primary">Update</button>
                                                     </div>
 
                                                 </div>
@@ -695,14 +760,16 @@
         <!-- /.content -->
     </div>
 
+    @push('script-edit-intern')
+        <script src="{{ asset('admin/assets/extensions/summernote/summernote-lite.min.js') }}"></script>
+        <script src="{{ asset('admin/assets/static/js/pages/summernote.js') }}"></script>
+    @endpush
 
     <script>
         $(document).ready(function() {
-            // Simpan status awal dan pesan awal
             var initialStatus = '{{ $intern->status }}';
-            var initialMessages = '{{ $intern->messages }}';
 
-            // Inisialisasi Summernote pada saat dokumen siap
+            var initialMessages = '{{ $intern->messages }}';
             $('#messages').summernote({
                 placeholder: 'Masukkan Pesan',
                 tabsize: 2,
@@ -714,12 +781,9 @@
                 var selectedStatus = $(this).val();
                 var messagesTextarea = $('#messages');
 
-                // Jika status yang dipilih tidak sama dengan status awal
                 if (selectedStatus !== initialStatus) {
-                    // Hapus konten Summernote
                     messagesTextarea.summernote('code', '');
                 } else {
-                    // Jika status sama dengan status awal, isi dengan pesan awal
                     messagesTextarea.summernote('code', initialMessages);
                 }
             });
@@ -728,27 +792,24 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Dapatkan elemen input tanggal mulai dan tanggal selesai
             var startDateInput = document.getElementById('start_date');
             var endDateInput = document.getElementById('end_date');
 
-            // Parse tanggal hari ini
             var today = new Date();
-            today.setHours(0, 0, 0, 0); // Atur jam ke tengah malam
+            today.setHours(0, 0, 0, 0);
 
-            // Tambahkan event listener pada perubahan input tanggal selesai
             endDateInput.addEventListener('change', function() {
-                // Parse tanggal mulai dan tanggal selesai ke dalam objek Date
                 var startDate = new Date(startDateInput.value);
                 var endDate = new Date(endDateInput.value);
 
-                // Bandingkan tanggal dan lakukan validasi
                 if (startDate > endDate) {
                     Swal.fire({
                         icon: 'error',
                         title: 'Oopss...',
                         text: 'Tanggal selesai harus setelah tanggal mulai',
-                        confirmButtonText: 'Ok'
+                        confirmButtonText: 'Ok',
+                        confirmButtonColor: '#435EBE',
+                        cancelButtonColor: '#CDD3D8',
                     });
 
                     endDateInput.value = '';
@@ -757,25 +818,26 @@
                         icon: 'error',
                         title: 'Oopss...',
                         text: 'Tanggal selesai tidak boleh kurang dari tanggal hari Ini',
-                        confirmButtonText: 'Ok'
+                        confirmButtonText: 'Ok',
+                        confirmButtonColor: '#435EBE',
+                        cancelButtonColor: '#CDD3D8',
                     });
 
                     endDateInput.value = '';
                 }
             });
 
-            // Tambahkan event listener pada perubahan input tanggal mulai
             startDateInput.addEventListener('change', function() {
-                // Parse tanggal mulai ke dalam objek Date
                 var startDate = new Date(startDateInput.value);
 
-                // Bandingkan tanggal mulai dengan tanggal hari ini
                 if (startDate < today) {
                     Swal.fire({
                         icon: 'error',
                         title: 'Oopss...',
                         text: 'Tanggal mulai tidak boleh kurang dari tanggal hari Ini',
-                        confirmButtonText: 'Ok'
+                        confirmButtonText: 'Ok',
+                        confirmButtonColor: '#435EBE',
+                        cancelButtonColor: '#CDD3D8',
                     });
 
                     startDateInput.value = '';
@@ -791,7 +853,11 @@
 
                 var internId = "{{ $intern->id }}";
 
-                // Tampilkan pesan "loading" saat akan mengirim permintaan AJAX
+                var messagesContent = $('#messages').summernote('code');
+
+                var formData = new FormData(this);
+                formData.append('messages', messagesContent);
+
                 Swal.fire({
                     title: 'Mohon Tunggu!',
                     html: 'Sedang memproses data...',
@@ -802,30 +868,27 @@
                     },
                 });
 
-                // Kirim data ke server menggunakan AJAX
                 $.ajax({
                     type: 'POST',
                     url: '{{ route('intern.update', ['intern' => ':internId']) }}'.replace(
                         ':internId', internId),
-                    data: new FormData(this),
+                    data: formData,
                     processData: false,
                     contentType: false,
                     success: function(response) {
-                        // Tutup pesan "loading" saat berhasil
                         Swal.close();
 
                         if (response.success) {
-                            // Redirect ke halaman index dengan pesan "success"
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Berhasil!',
                                 text: 'Data berhasil diupdate.',
+                                confirmButtonColor: '#435EBE',
+                                cancelButtonColor: '#CDD3D8',
                             }).then(function() {
-                                // Redirect ke halaman indeks setelah menutup SweetAlert
                                 window.location.href = '{{ route('intern.index') }}';
                             });
                         } else {
-                            // Jika validasi gagal, tampilkan pesan-pesan kesalahan
                             if (response.errors) {
                                 var errorMessages = '';
                                 for (var key in response.errors) {
@@ -843,7 +906,6 @@
                     error: function(xhr) {
                         Swal.close();
                         if (xhr.status === 422) {
-                            // Menampilkan pesan validasi error SweetAlert
                             var errorMessages = '';
                             var errors = xhr.responseJSON.errors;
                             for (var key in errors) {
@@ -853,11 +915,9 @@
                             }
                             Swal.fire('Gagal', errorMessages, 'error');
                         } else {
-                            // Menampilkan pesan kesalahan dari respons JSON
                             var errorMessage = xhr.responseJSON
-                                .message; // Mendapatkan pesan kesalahan dari controller
                             Swal.fire('Gagal', errorMessage,
-                                'error'); // Menampilkan pesan kesalahan di SweetAlert
+                                'error');
                         }
                     },
 

@@ -13,6 +13,7 @@
     "dependencies": {
         "@fancyapps/fancybox": "^3.5.7",
         "@fancyapps/ui": "^5.0.24",
+        "flag-icon-css": "^4.1.7",
         "sweetalert2": "^11.7.32"
     }
 }

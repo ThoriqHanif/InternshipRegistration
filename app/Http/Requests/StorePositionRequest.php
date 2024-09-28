@@ -24,17 +24,18 @@ class StorePositionRequest extends FormRequest
         return [
             'name' => 'required',
             'description' => 'nullable',
-            'requirements' => 'required|array|min:1'
+            'requirements' => 'required|array|min:1',
+            'image' => 'required'
         ];
     }
 
     public function messages(): array
     {
         return [
-            'name.required' => 'Nama tidak boleh kosong',
-            'requirements.required' => 'Harus memilih syarat',
-            // 'requirements.array' => 'Syarat harus dalam format array.',
+            'name.required' => 'Mohon isi nama posisi',
+            'requirements.required' => 'Minimal satu syarat harus dipilih.',
             'requirements.min' => 'Minimal satu syarat harus dipilih.',
+            'image.required' => 'Harap unggah Gambar',
         ];
     }
 }

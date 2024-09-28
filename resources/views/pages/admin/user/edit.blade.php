@@ -1,21 +1,35 @@
 @extends('layouts.app')
 
 @section('content')
+<header class="mb-3">
+    <a href="#" class="burger-btn d-block d-xl-none">
+        <i class="bi bi-justify fs-3"></i>
+    </a>
+</header>
+<div class="page-title">
+    <div class="row">
+        <div class="col-12 col-md-6 order-md-1 order-last">
+            <h3>Edit User</h3>
+            <p class="text-subtitle text-muted">Masukkan data yang ingin diubah Informasi User</p>
+        </div>
+        <div class="col-12 col-md-6 order-md-2 order-first">
+            <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ url('admin/dashboard') }}">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('users.index') }}">User</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Edit User</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+</div>
     <div class="content-wrapper">
 
         <!-- Content Header (Page header) -->
         <section class="content-header">
             <div class="container-fluid">
                 <div class="row mb-2">
-                    <div class="col-sm-6">
-                        <h1>Edit User</h1>
-                    </div>
-                    <div class="col-sm-6">
-                        <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="#">Master Data</a></li>
-                            <li class="breadcrumb-item active">User Management</li>
-                        </ol>
-                    </div>
+                    
                 </div>
             </div><!-- /.container-fluid -->
         </section>
@@ -28,9 +42,6 @@
                     <div class="col-md-12">
                         <!-- general form elements -->
                         <div class="card card-primary">
-                            <div class="card-header">
-                                <h3 class="card-title">Form Edit User</h3>
-                            </div>
                             <!-- /.card-header -->
                             <!-- form start -->
                             {{-- <form method="POST" action="{{url ('users/'.$id)}}" enctype="multipart/form-data"> --}}
@@ -42,7 +53,7 @@
                                     <div class="row">
                                         <div class="col-12">
                                             <div class="card">
-                                                <div class="card-body">
+                                                <div class="card-body mt-2">
                                                     <p class="text-uppercase text-sm">User Information</p>
                                                     <div class="row">
                                                         <input type="hidden" name="id" value="{{ $id }}">
@@ -121,11 +132,11 @@
                                                         </div>
                                                     </div>
                                                     <div class="inline-block mt-3">
-                                                        <button type=""
-                                                            class="btn btn-md btn-success">Update</button>
-                                                        <button type="button" class="btn btn-md btn-secondary"
-                                                            onclick="window.history.back();">Cancel</button>
-
+                                                       
+                                                        <a type="button" class="btn btn-md btn-light-secondary"
+                                                            href="{{ route('users.index') }}">Cancel</a>
+                                                            <button type=""
+                                                            class="btn btn-md btn-primary">Update</button>
                                                     </div>
 
                                                 </div>

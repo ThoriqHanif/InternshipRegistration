@@ -1,180 +1,212 @@
-  <!-- Main Sidebar Container -->
-  <aside class="main-sidebar sidebar-dark-primary elevation-4">
-      <!-- Brand Logo -->
-      <a href="index3.html" class="brand-link">
-          <img src="{{ asset('img/logo/logo2.png') }}" alt="AdminLTE Logo" class="brand-image" style="opacity: .8">
-          <span class="brand-text font-weight-light">Kadang Koding</span>
-      </a>
+<div id="sidebar">
+    <div class="sidebar-wrapper active">
+        <div class="sidebar-header position-relative">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="logo">
+                    <a href="{{ url('dashboard') }}"><img src="{{ asset('img/logo/logo2.png') }}" alt="Logo"
+                            srcset="" style="width: 100px; height: 80px;"></a>
+                </div>
+                <div class="theme-toggle d-flex gap-2  align-items-center mt-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                        aria-hidden="true" role="img" class="iconify iconify--system-uicons" width="20"
+                        height="20" preserveAspectRatio="xMidYMid meet" viewBox="0 0 21 21">
+                        <g fill="none" fill-rule="evenodd" stroke="currentColor" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <path
+                                d="M10.5 14.5c2.219 0 4-1.763 4-3.982a4.003 4.003 0 0 0-4-4.018c-2.219 0-4 1.781-4 4c0 2.219 1.781 4 4 4zM4.136 4.136L5.55 5.55m9.9 9.9l1.414 1.414M1.5 10.5h2m14 0h2M4.135 16.863L5.55 15.45m9.899-9.9l1.414-1.415M10.5 19.5v-2m0-14v-2"
+                                opacity=".3"></path>
+                            <g transform="translate(-210 -1)">
+                                <path d="M220.5 2.5v2m6.5.5l-1.5 1.5"></path>
+                                <circle cx="220.5" cy="11.5" r="4"></circle>
+                                <path d="m214 5l1.5 1.5m5 14v-2m6.5-.5l-1.5-1.5M214 18l1.5-1.5m-4-5h2m14 0h2">
+                                </path>
+                            </g>
+                        </g>
+                    </svg>
+                    <div class="form-check form-switch fs-6">
+                        <input class="form-check-input  me-0" type="checkbox" id="toggle-dark" style="cursor: pointer">
+                        <label class="form-check-label"></label>
+                    </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                        aria-hidden="true" role="img" class="iconify iconify--mdi" width="20" height="20"
+                        preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
+                        <path fill="currentColor"
+                            d="m17.75 4.09l-2.53 1.94l.91 3.06l-2.63-1.81l-2.63 1.81l.91-3.06l-2.53-1.94L12.44 4l1.06-3l1.06 3l3.19.09m3.5 6.91l-1.64 1.25l.59 1.98l-1.7-1.17l-1.7 1.17l.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95l2.06.05m-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85c-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14c.4-.4.82-.76 1.27-1.08c.75-.53 1.93.36 1.85 1.19c-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82c-2.81 3.14-2.7 7.96.31 10.98c3.02 3.01 7.84 3.12 10.98.31Z">
+                        </path>
+                    </svg>
+                </div>
+                <div class="sidebar-toggler  x">
+                    <a href="#" class="sidebar-hide d-xl-none d-block"><i class="bi bi-x bi-middle"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="sidebar-menu">
+            <?php
+            $currentUrl = Request::url();
+            ?>
+            @if (auth()->check() && auth()->user()->role == 'admin')
+                <ul class="menu">
+                    <li class="sidebar-title">Menu</li>
 
-      <!-- Sidebar -->
-      <div class="sidebar">
-          <!-- Sidebar user panel (optional) -->
-          <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-              <div class="image">
-                  @if (auth()->check() && auth()->user()->role == 'user')
-                      @auth
-                          @if (auth()->user()->intern && auth()->user()->intern->photo)
-                              <img src="{{ asset('files/photo/' . auth()->user()->intern->photo) }}" class=" elevation-2"
-                                  alt="User Image" width="300px" height="150px">
-                          @else
-                              <!-- Tampilkan foto default atau pesan jika tidak ada foto -->
-                              <img src="{{ asset('img/profile1.jpg') }}" class="img-circle elevation-2" alt="User Image">
-                          @endif
-                      @endauth
-                  @endif
-                  @if (auth()->check() && auth()->user()->role == 'admin')
-                      <img src="{{ asset('img/admin.jpg') }}" class="img-circle elevation-2" alt="User Image">
-                  @endif
-              </div>
-              <div class="info">
-                  <span class="ms-1 font-weight-bold text-white">
-                      @auth
-                          {{ auth()->user()->name }}
-                      @else
-                          Kadang Koding
-                      @endauth
-                  </span>
-              </div>
-          </div>
+                    <li class="sidebar-item {{ Request::is('admin/dashboard') ? 'active' : '' }} ">
+                        <a href="{{ url('admin/dashboard') }}" class='sidebar-link'>
+                            <i class="bi bi-grid-fill"></i>
+                            <span>Dashboard</span>
+                        </a>
 
-          <!-- SidebarSearch Form -->
-          <div class="form-inline " hidden>
-              <div class="input-group" data-widget="sidebar-search">
-                  <input class="form-control form-control-sidebar" type="search" placeholder="Search"
-                      aria-label="Search">
-                  <div class="input-group-append">
-                      <button class="btn btn-sidebar">
-                          <i class="fas fa-search fa-fw"></i>
-                      </button>
-                  </div>
-              </div>
-          </div>
+                    </li>
 
-          <!-- Sidebar Menu -->
-          <nav class="mt-2">
-              <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
-                  data-accordion="false">
-                  @if (auth()->check() && auth()->user()->role == 'admin')
-                      <li class="nav-item">
-                          <a class="nav-link {{ str_contains(request()->url(), 'admin/dashboard') == true ? 'active' : '' }} "
-                              href="{{ url('admin/dashboard') }}">
-                              <i class="nav-icon fas fa-tachometer-alt"></i>
-                              <p>
-                                  Dashboard
-                              </p>
-                          </a>
-                      </li>
+                    <li class="sidebar-title">Master Data</li>
+                    <li class="sidebar-item   {{ Request::is('intern*') ? 'active' : '' }}">
+                        <a href="{{ route('intern.index') }}" class='sidebar-link'>
+                            <i class="bi bi-people-fill"></i>
+                            <span>Data Pemagang</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item   {{ Request::is('position*') ? 'active' : '' }}">
+                        <a href="{{ route('position.index') }}" class='sidebar-link'>
+                            <i class="bi bi-stack"></i>
+                            <span>Data Posisi</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item   {{ Request::is('periode*') ? 'active' : '' }}">
+                        <a href="{{ route('periode.index') }}" class='sidebar-link'>
+                            <i class="bi bi-calendar-week-fill"></i>
+                            <span>Data Periode</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item   {{ Request::is('users*') ? 'active' : '' }}">
+                        <a href="{{ route('users.index') }}" class='sidebar-link'>
+                            <i class="bi bi-person-badge-fill"></i>
+                            <span>Data User</span>
+                        </a>
+                    </li>
+                    </li>
 
-                      <li class="nav-header">Master Data</li>
-                      <li class="nav-item">
-                          <a class="nav-link {{ request()->is('intern*') ? 'active' : '' }}" href="{{ url('intern') }}">
-                              <i class="nav-icon fas fa-list-ul"></i>
-                              <p>
-                                  Intern Management
-                              </p>
-                          </a>
-                      </li>
-                      <li class="nav-item">
-                          <a class="nav-link {{ request()->is('position*') ? 'active' : '' }}"
-                              href="{{ url('position') }}">
-                              <i class="nav-icon fas fa-briefcase"></i>
-                              <p>
-                                  Position Management
-                              </p>
-                          </a>
-                      </li>
-                      <li class="nav-item">
-                          <a class="nav-link {{ request()->is('periode*') ? 'active' : '' }}"
-                              href="{{ url('periode') }}">
-                              <i class="nav-icon fas fa-clock"></i>
-                              <p>
-                                  Periode Management
-                              </p>
-                          </a>
-                      </li>
-                      <li class="nav-item">
-                          <a class="nav-link {{ request()->is('users*') ? 'active' : '' }}"
-                              href="{{ url('users') }}">
-                              <i class="nav-icon fas fa-users"></i>
-                              <p>
-                                  User Management
-                              </p>
-                          </a>
-                      </li>
-                      <li class="nav-header">Report</li>
-                      <li class="nav-item">
-                          <a class="nav-link {{ request()->is('admin/report*') ? 'active' : '' }}"
-                              href="{{ route('admin.report.index') }}">
-                              <i class="nav-icon fas fa-clipboard"></i>
-                              <p>
-                                  Report Management
-                              </p>
-                          </a>
-                      </li>
+                    <li class="sidebar-title">Blog</li>
+                    <li class="sidebar-item {{ Request::is('blog-categories*') ? 'active' : '' }}">
+                        <a href="{{ route('blog-categories.index') }}" class='sidebar-link'>
+                            <i class="bi bi-card-list"></i>
+                            <span>Kategori Blog</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item {{ Request::is('tags*') ? 'active' : '' }}">
+                        <a href="{{ route('tags.index') }}" class='sidebar-link'>
+                            <i class="bi bi-tags-fill"></i>
+                            <span>Data Tags</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item {{ Request::is('blogs*') ? 'active' : '' }}">
+                        <a href="{{ route('blogs.index') }}" class='sidebar-link'>
+                            <i class="bi bi-stickies-fill"></i>
+                            <span>Blog</span>
+                        </a>
+                    </li>
 
-                      <li class="nav-header">Account Pages</li>
-                      <li class="nav-item">
-                          <a class="nav-link {{ request()->is('admin/profile*') ? 'active' : '' }}"
-                              href="{{ url('admin/profile') }}">
-                              <i class="nav-icon fas fa-user"></i>
-                              <p>
-                                  Profile
-                              </p>
-                          </a>
-                      </li>
-                  @endif
-                  {{-- </ul> --}}
-                  @if (auth()->check() && auth()->user()->role == 'user')
-                      <li class="nav-item " hidden>
-                          <a class="nav-link {{ str_contains(request()->url(), 'user/dashboard') == true ? 'active' : '' }} "
-                              href="{{ url('user/dashboard') }}">
-                              <i class="nav-icon fas fa-tachometer-alt"></i>
-                              <p>
-                                  Dashboard
-                              </p>
-                          </a>
-                      </li>
-                      <li class="nav-header">Report</li>
-                      {{-- <li class="nav-item">
-                              <a class="nav-link {{ request()->is('intern*') ? 'active' : '' }}" href="{{url('intern')}}">
-                                  <i class="nav-icon fas fa-list-ul"></i>
-                                  <p>
-                                      Intern Management
-                                  </p>
-                              </a>
-                          </li>
-                          <li class="nav-item">
-                              <a class="nav-link {{ request()->is('position*') ? 'active' : '' }}" href="{{url('position')}}">
-                                  <i class="nav-icon fas fa-briefcase"></i>
-                                  <p>
-                                      Position Management
-                                  </p>
-                              </a>
-                          </li> --}}
-                      <li class="nav-item">
-                          <a class="nav-link {{ request()->is('report*') ? 'active' : '' }}"
-                              href="{{ url('reports') }}">
-                              <i class="nav-icon fas fa-folder"></i>
-                              <p>
-                                  Daily Report
-                              </p>
-                          </a>
-                      </li>
+                    <li class="sidebar-title">Report</li>
 
-                      <li class="nav-header">Account Pages</li>
-                      <li class="nav-item">
-                          <a class="nav-link {{ request()->is('profile*') ? 'active' : '' }}"
-                              href="{{ url('profile') }}">
-                              <i class="nav-icon fas fa-user"></i>
-                              <p>
-                                  Profile
-                              </p>
-                          </a>
-                      </li>
-                  @endif
-              </ul>
-          </nav>
-          <!-- /.sidebar-menu -->
-      </div>
-      <!-- /.sidebar -->
-  </aside>
+                    <li class="sidebar-item   {{ Request::is('admin/report*') ? 'active' : '' }}">
+                        <a href="{{ route('admin.report.index') }}" class='sidebar-link'>
+                            <i class="bi bi-calendar-week"></i>
+                            <span>Report Management</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item   {{ Request::is('evaluations*') ? 'active' : '' }}">
+                        <a href="{{ route('evaluations.index') }}" class='sidebar-link'>
+                            <i class="bi bi-clipboard-check-fill"></i>
+                            <span>Penilaian</span>
+                        </a>
+                    </li>
+
+                    </li>
+
+                    <li class="sidebar-title">Account Page</li>
+
+
+                    <li class="sidebar-item {{ Request::is('admin/profile*') ? 'active' : '' }}">
+                        <a href="{{ url('admin/profile') }}" class='sidebar-link'>
+                            <i class="bi bi-person-fill-gear"></i>
+                            <span>Profile</span>
+                        </a>
+
+                    </li>
+
+                    <li class="sidebar-title mt-5">Logout</li>
+
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <li class="sidebar-item mb-5">
+                            <button type="submit" class='btn btn-danger w-100 sidebar-link text-white'>
+                                <i class="bi bi-box-arrow-left"></i>
+                                <span>Logout</span>
+                            </button>
+
+
+                        </li>
+                    </form>
+            @endif
+
+
+            @if (auth()->check() && auth()->user()->role == 'user')
+                <ul class="menu">
+
+                    <li class="sidebar-title">Menu</li>
+                    <li class="sidebar-item   {{ Request::is('report*') ? 'active' : '' }}">
+                        <a href="{{ url('reports') }}" class='sidebar-link'>
+                            <i class="bi bi-calendar-week"></i>
+                            <span>Daily Report</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item   {{ Request::is('evaluation*') ? 'active' : '' }}">
+                        <a href="{{ url('evaluation') }}" class='sidebar-link'>
+                            <i class="bi bi-clipboard-check-fill"></i>
+                            <span>Penilaian</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-title">Manage</li>
+
+                    <li class="sidebar-item   {{ Request::is('blog*') ? 'active' : '' }}">
+                        <a href="{{ url('blogs') }}" class='sidebar-link'>
+                            <i class="bi bi-stickies-fill"></i>
+                            <span>Blogs</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item   {{ Request::is('social-medias*') ? 'active' : '' }}">
+                        <a href="{{ url('social-medias') }}" class='sidebar-link'>
+                            <i class="bi bi-share-fill"></i>
+                            <span>Social Media</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-title">Account Page</li>
+                    <li class="sidebar-item {{ Request::is('profile*') ? 'active' : '' }}">
+                        <a href="{{ url('profile') }}" class='sidebar-link'>
+                            <i class="bi bi-person-fill-gear"></i>
+                            <span>Profile</span>
+                        </a>
+
+                    </li>
+
+                    <li class="sidebar-title mt-5">Logout</li>
+
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <li class="sidebar-item mb-5">
+                            <button type="submit" class='btn btn-danger w-100 sidebar-link text-white'>
+                                <i class="bi bi-box-arrow-left"></i>
+                                <span>Logout</span>
+                            </button>
+
+
+                        </li>
+                    </form>
+                </ul>
+            @endif
+
+            {{-- <ul class="menu"> --}}
+
+            {{-- </ul> --}}
+
+            </ul>
+        </div>
+    </div>
+</div>

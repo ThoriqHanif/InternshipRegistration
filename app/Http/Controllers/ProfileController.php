@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UpdateProfileRequest;
 use App\Models\Intern;
+use App\Models\SocialMedia;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -20,7 +21,6 @@ class ProfileController extends Controller
         return view('pages.admin.profile', [
             'admin' => $admin,
             'id' => $admin->id,
-
             'email' => $admin->email,
             'name' => $admin->name,
             'role' => $admin->role,
@@ -32,19 +32,16 @@ class ProfileController extends Controller
 
     public function user(User $users, Intern $intern)
     {
-        $user = User::with('intern.position')->find(Auth::user()->id);
+        $userId = Auth::id();
+        $user = User::with('intern.position')->find($userId);
 
-        // $photoUrl = null;
-
-        // Cari data intern terkait dengan pengguna yang sedang login
         $internData = $user->intern;
-        if ($internData->photo) {
-            $photoUrl = asset('files/photo/' . $internData->photo);
-            $photoExtension = pathinfo($internData->photo, PATHINFO_EXTENSION);
-        } else {
-            $photoUrl = null; // perbaikan penulisan variabel $photoUrl
-            $photoExtension = null;
-        }
+        $photoUrl = $internData->photo ? asset('uploads/photo/' . $internData->photo) : null;
+        $photoExtension = $internData->photo ? pathinfo($internData->photo, PATHINFO_EXTENSION) : null;
+
+        $social_medias = SocialMedia::with('intern')
+            ->where('intern_id', $internData->id)
+            ->get();
 
 
         return view('pages.users.profile', [
@@ -61,6 +58,7 @@ class ProfileController extends Controller
             'major' => $user->major,
             'photoUrl' => $photoUrl,
             'password' => $user->password,
+            'social_medias' => $social_medias
 
 
 
@@ -76,7 +74,7 @@ class ProfileController extends Controller
 
     //     // Mengecek apakah user dan foto ada
     //     if ($intern) {
-    //         $photoUrl = asset('public/files/photo/' . $intern->photo);
+    //         $photoUrl = asset('public/uploads/photo/' . $intern->photo);
     //     }
 
     //     return view('pages.users.profile', compact('user', 'photoUrl'));
@@ -87,13 +85,11 @@ class ProfileController extends Controller
     {
         $data = $users::findOrFail(Auth::user()->id);
 
-        // Ambil data yang diperlukan dari request
         $newName = $request->input('name');
         $newEmail = $request->input('email');
         $newPassword = $request->input('password');
 
         if ($newName === $data->name && $newEmail === $data->email && empty($newPassword)) {
-            // Tidak ada perubahan, berikan pesan kesalahan
             return response()->json(['success' => false, 'message' => 'Data tidak ada yang berubah']);
         }
 
@@ -102,30 +98,20 @@ class ProfileController extends Controller
         $data->save();
 
         if ($newEmail !== $data->email || $newPassword) {
-            // Email atau password berubah, maka kita perlu memperbarui email dan/atau password
 
             if ($newEmail !== $data->email) {
-                // Update email jika berubah
                 $data->email = $newEmail;
             }
 
             if ($newPassword) {
-                // Update password jika berubah
                 $data->password = Hash::make($newPassword);
             }
 
             $data->save();
             Session::flash('profile-updated', 'Data profile anda telah berubah.');
-            // Lakukan logout jika ada perubahan pada email atau password
             Auth::logout();
-
-            // Set a flash message for the user
-            // Session::flash('success', 'Data Profile telah diubah. Anda telah logout.');
-
-            // Redirect to the login page
             return response()->json(['success' => true]);
         } else {
-            // Jika tidak ada perubahan email atau password, tidak perlu logout
             return response()->json(['success' => true]);
         }
     }
@@ -135,7 +121,6 @@ class ProfileController extends Controller
 
         $userId = Auth::id();
 
-        // Mengambil data user berdasarkan ID
         $user = User::findOrFail($userId);
         $intern = Intern::where('user_id', $userId)->first();
 
@@ -143,16 +128,16 @@ class ProfileController extends Controller
         $newName = $request->input('name');
         $newEmail = $request->input('email');
         $newPassword = $request->input('password');
-
         $newFullName = $request->input('full_name');
         $newPhoneNumber = $request->input('phone_number');
         $newSchool = $request->input('school');
         $newMajor = $request->input('major');
         $newAddress = $request->input('address');
+        $newUrl = $request->input('url');
         $newPhoto = $request->file('photo');
 
 
-        if ($newName === $user->name && $newEmail === $user->email && empty($newPassword) && $newFullName === $user->intern->full_name && $newPhoneNumber === $user->intern->phone_number && $newAddress === $user->intern->address && $newSchool === $user->intern->school && $newMajor === $user->intern->major && !$newPhoto ) {
+        if ($newName === $user->name && $newEmail === $user->email && empty($newPassword) && $newFullName === $user->intern->full_name && $newPhoneNumber === $user->intern->phone_number && $newAddress === $user->intern->address && $newUrl === $user->intern->url && $newSchool === $user->intern->school && $newMajor === $user->intern->major && !$newPhoto) {
             // Tidak ada perubahan, berikan pesan kesalahan
             return response()->json(['success' => false, 'message' => 'Data tidak ada yang berubah']);
         }
@@ -167,21 +152,20 @@ class ProfileController extends Controller
             'address' => $request->input('address'),
             'school' => $request->input('school'),
             'major' => $request->input('major'),
+            'url' => $request->input('url'),
         ];
 
-        // Menyimpan data intern, baik baru maupun yang sudah ada
-        $intern = $user->intern ?? new Intern(); // Jika belum ada data intern, buat instance baru
+        $intern = $user->intern ?? new Intern();
 
-        $intern->fill($internData); // Isi data dari formulir ke model Intern
+        $intern->fill($internData);
 
-        // Simpan data intern melalui relasi dengan user
         $user->intern()->save($intern);
 
         if ($request->hasFile('photo')) {
 
             $photoFile = $request->file('photo');
             $photoFileName = $photoFile->getClientOriginalName();
-            $photoFile->move(public_path('files/photo'), $photoFileName);
+            $photoFile->move(public_path('uploads/photo'), $photoFileName);
             if ($intern->photo !== $photoFileName) {
                 $intern->photo = $photoFileName;
                 $intern->save();
@@ -190,7 +174,6 @@ class ProfileController extends Controller
 
 
         if ($newEmail !== $user->email || $newPassword) {
-            // Email atau password berubah, maka kita perlu memperbarui email dan/atau password
 
             if ($newEmail !== $user->email) {
                 $user->email = $newEmail;

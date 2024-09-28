@@ -5,8 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Periode;
 use App\Http\Requests\StorePeriodeRequest;
 use App\Http\Requests\UpdatePeriodeRequest;
+use App\Models\PeriodePosition;
 use App\Models\Position;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 
 class PeriodeController extends Controller
@@ -16,11 +19,9 @@ class PeriodeController extends Controller
      */
     public function index(Request $request)
     {
-        //
         if ($request->ajax()) {
-            // $periode = Periode::select('*');
-            $periode = Periode::with('position')->select('periodes.*');
-            
+            $periode = Periode::with('positions')->select('periodes.*');
+
             return DataTables::of($periode)
                 ->addColumn('action', function ($periode) {
                     return view('pages.admin.periode.action', compact('periode'));
@@ -36,11 +37,11 @@ class PeriodeController extends Controller
     /**
      * Show the form for creating a new resource.
      */
+
     public function create()
     {
-        //
-        $position = Position::all();
-        return view('pages.admin.periode.create', compact('position'));
+        $positions = Position::all();
+        return view('pages.admin.periode.create', compact('positions'));
     }
 
     /**
@@ -48,18 +49,30 @@ class PeriodeController extends Controller
      */
     public function store(StorePeriodeRequest $request)
     {
-        //
-        
+
         $periode = new Periode();
-        // $periode->user_id = null;
         $periode->name = $request->name;
-        $periode->position_id = $request->position_id;
         $periode->start_date = $request->start_date;
         $periode->end_date = $request->end_date;
-        $periode->quota = $request->quota;
         $periode->description = $request->description;
 
         if ($periode->save()) {
+            foreach ($request->positions as $position) {
+                $existingPeriodePosition = PeriodePosition::where('periode_id', $periode->id)
+                    ->where('position_id', $position['id'])
+                    ->first();
+
+                if ($existingPeriodePosition) {
+                    $existingPeriodePosition->quota += $position['quota'];
+                    $existingPeriodePosition->save();
+                } else {
+                    PeriodePosition::create([
+                        'periode_id' => $periode->id,
+                        'position_id' => $position['id'],
+                        'quota' => $position['quota'],
+                    ]);
+                }
+            }
             return response()->json(['success' => true]);
         } else {
             return response()->json(['success' => false]);
@@ -71,33 +84,26 @@ class PeriodeController extends Controller
      */
     public function show($id)
     {
-        //
-        $periode = Periode::find($id);
-        $position_id = $periode->position_id;
-        $positions = Position::all();
 
-        return view('pages.admin.periode.show', [
-            'periode' => $periode,
-            'id' => $periode->id,
-            'name' => $periode->name,
-            'position_id' => $position_id,
-            'positions' => $positions,
-            'start_date' => $periode->start_date,
-            'end_date' => $periode->end_date,
-            'quota'=> $periode->quota,
-            'description'=> $periode->description
+        $periode = Periode::with('positions')->findOrFail($id);
 
+        $periode->start_date_formatted = Carbon::parse($periode->start_date)->translatedFormat('d F Y');
+        $periode->end_date_formatted = Carbon::parse($periode->end_date)->translatedFormat('d F Y');
+        $periode->created_at_formatted = Carbon::parse($periode->created_at)->translatedFormat('d F Y H:i');
+        $periode->updated_at_formatted = Carbon::parse($periode->updated_at)->translatedFormat('d F Y H:i');
+
+        return response()->json([
+            'result' => $periode,
+            'positions' => $periode->positions
         ]);
-        return view('pages.admin.periode.show', compact('periode', 'position'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit( $id)
+    public function edit($id)
     {
-        //
-        $periode = Periode::find($id);
+        $periode = Periode::with('positions')->findOrFail($id);
         $position_id = $periode->position_id;
         $positions = Position::all();
 
@@ -109,56 +115,41 @@ class PeriodeController extends Controller
             'positions' => $positions,
             'start_date' => $periode->start_date,
             'end_date' => $periode->end_date,
-            'quota'=> $periode->quota,
-            'description'=> $periode->description
+            'quota' => $periode->quota,
+            'description' => $periode->description
 
         ]);
-        return view('pages.admin.periode.edit', compact('periode', 'position'));
+        return view('pages.admin.periode.edit', compact('periode', 'positions'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(UpdatePeriodeRequest $request, $id)
     {
-        //
-        $periode = Periode::find($id);
-        $newPositionId = $request->input('position_id');
+        $periode = Periode::with('positions')->findOrFail($id);
 
-        if ($periode->position_id != $newPositionId) {
-            // Periksa apakah posisi yang baru ada
-            $newPosition = Position::find($newPositionId);
-
-            if ($newPosition) {
-                // Hapus relasi dengan posisi lama
-                $oldPosition = Position::find($periode->position_id);
-                if ($oldPosition) {
-                    $periode->position()->dissociate();
-                    $periode->save();
-                }
-
-                // Atur relasi dengan posisi baru
-                $periode->position_id = $newPositionId;
-                $periode->save();
-            }
-        }
-
-        $periode->update([
-            'name' => $request->input('name'),
-            'start_date' => $request->input('start_date'),
-            'end_date' => $request->input('end_date'),
-            'position_id' => $request->input('position_id'),
-            'quota' => $request->input('quota'),
-            'description' => $request->input('description'),
-
-        ]);
+        $periode->name = $request->name;
+        $periode->start_date = $request->start_date;
+        $periode->end_date = $request->end_date;
+        $periode->description = $request->description;
 
         if ($periode->save()) {
+
+            $positionIds = collect(json_decode($request->positions, true))->pluck('id');
+            $periode->positions()->whereNotIn('position_id', $positionIds)->detach();
+
+            foreach (json_decode($request->positions, true) as $positionData) {
+                $position = $periode->positions()->where('position_id', $positionData['id'])->first();
+
+                if ($position) {
+                    $position->pivot->quota = $positionData['quota'];
+                    $position->pivot->save();
+                } else {
+                    $periode->positions()->attach($positionData['id'], ['quota' => $positionData['quota']]);
+                }
+            }
             return response()->json(['success' => true]);
         } else {
             return response()->json(['success' => false]);
         }
-
     }
 
     /**

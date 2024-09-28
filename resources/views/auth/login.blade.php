@@ -4,35 +4,29 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Internship Kadang Koding</title>
+    <title>Login - Internship Admin Dashboard</title>
 
     <link rel="shortcut icon" href="{{ asset('img/logo/logo2.png') }}" type="image/x-icon">
 
-    <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="{{ asset('adminlte/plugins/fontawesome-free/css/all.min.css') }}">
-    <!-- icheck bootstrap -->
-    <link rel="stylesheet" href="{{ asset('adminlte/plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
-    <!-- Theme style -->
-    <link rel="stylesheet" href="{{ asset('adminlte/dist/css/adminlte.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin/assets/compiled/css/app.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin/assets/compiled/css/app-dark.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin/assets/compiled/css/auth.css') }}">
 </head>
 
-<body class="hold-transition login-page">
+{{-- <body class="hold-transition login-page">
     <div class="login-box">
         <!-- /.login-logo -->
         <div class="card card-outline card-primary">
             <div class="card-header text-center">
-                <a href="https://internship.kadangkoding.com/thoriq/pendaftaran-magang/"><img src="{{ asset('img/logo/logofull.png') }}" alt="" class="mt-2 mb-2 img-fluid"></a>
+                <a href="https://internship.kadangkoding.com/thoriq/pendaftaran-magang/"><img
+                        src="{{ asset('img/logo/logofull.png') }}" alt="" class="mt-2 mb-2 img-fluid"></a>
             </div>
             @if (Session::has('profile-updated'))
-            <div class="px-4 mt-3">
-              <div class="alert alert-danger ">
-                {{ Session::get('profile-updated') }}
-            </div>
-            </div>
-                
+                <div class="px-4 mt-3">
+                    <div class="alert alert-danger ">
+                        {{ Session::get('profile-updated') }}
+                    </div>
+                </div>
             @endif
             <div class="card-body">
                 <p class="login-box-msg">Pintu ke Dashboard. Selamat Datang!</p>
@@ -121,6 +115,95 @@
         });
     </script>
 
+</body> --}}
+
+<body>
+    <script src="{{ asset('admin/assets/static/js/initTheme.js') }}"></script>
+    <div id="auth">
+
+        <div class="row h-100">
+            <div class="col-lg-5 col-12">
+                <div id="auth-left">
+                    <div class="auth-logo">
+                        <a href="https://internship.kadangkoding.com/thoriq/pendaftaran-magang/"><img
+                                src="{{ asset('img/logo/logofull.png') }}" alt="Logo"></a>
+                    </div>
+                    @if (Session::has('profile-updated'))
+                        <div class="px-4 mt-3">
+                            <div class="alert alert-danger ">
+                                {{ Session::get('profile-updated') }}
+                            </div>
+                        </div>
+                    @endif
+                    <h1 class="auth-title">@lang('login.title')</h1>
+                    <p class="auth-subtitle mb-5">@lang('login.desc')</p>
+
+                    <form action="{{ route('login', ['locale' => app()->getLocale()]) }}" method="post" class="mt-2">
+                        @csrf
+                        <div class="form-group position-relative has-icon-right mb-4">
+                            <input type="email"
+                                class="form-control form-control-xl @error('email') is-invalid @enderror" name="email"
+                                placeholder="Email">
+                            <div class="form-control-icon px-5">
+                                <i class="bi bi-person"></i>
+                            </div>
+                            @error('email')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="form-group position-relative has-icon-right mb-4">
+                            <input type="password"
+                                class="form-control form-control-xl @error('password') is-invalid @enderror"
+                                name="password" placeholder="Password" id="password">
+                            <div class="form-control-icon px-5">
+                                <i class="bi bi-eye" type="button" id="togglePassword"></i>
+                            </div>
+                            @error('password')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        {{-- <div class="form-check form-check-lg d-flex align-items-end">
+                            <input class="form-check-input me-2" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label text-gray-600" for="flexCheckDefault">
+                                Keep me logged in
+                            </label>
+                        </div> --}}
+                        <button type="submit" class="btn btn-primary btn-block btn-lg shadow-lg mt-5">@lang('login.btn')</button>
+                    </form>
+                    {{-- <div class="text-center mt-5 text-lg fs-4">
+                        <p class="text-gray-600">Don't have an account? <a href="auth-register.html"
+                                class="font-bold">Sign
+                                up</a>.</p>
+                        <p><a class="font-bold" href="auth-forgot-password.html">Forgot password?</a>.</p>
+                    </div> --}}
+                </div>
+            </div>
+            <div class="col-lg-7 d-none d-lg-block">
+                <div id="auth-right">
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const passwordField = document.getElementById('password');
+        const togglePassword = document.getElementById('togglePassword');
+        const togglePasswordIcon = document.getElementById('togglePassword');
+
+        togglePassword.addEventListener('click', function() {
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                togglePasswordIcon.classList.remove('bi-eye');
+                togglePasswordIcon.classList.add('bi-eye-slash');
+            } else {
+                passwordField.type = 'password';
+                togglePasswordIcon.classList.remove('bi-eye-slash');
+                togglePasswordIcon.classList.add('bi-eye');
+            }
+        });
+    </script>
 </body>
 
 </html>

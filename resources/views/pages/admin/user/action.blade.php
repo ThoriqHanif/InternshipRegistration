@@ -4,18 +4,18 @@
 </a> --}}
 <a href="{{ route('users.show', $users->id) }}" class="btn btn-sm bg-primary text-white font-weight-bold text-xs"
     data-toggle="tooltip" data-placement="top" title="Detail User">
-    <i class="fas fa-eye"></i>
+    <i class="bi bi-eye"></i>
 </a>
 <a href="{{ route('users.edit', $users->id) }}" class="btn btn-sm bg-warning text-white font-weight-bold text-xs"
     data-toggle="tooltip" data-placement="top" title="Edit User">
-    <i class="fas fa-edit"></i>
+    <i class="bi bi-pencil-square"></i>
 </a>
 <form style="display: inline" action="{{ route('users.destroy', $users->id) }}" method="POST">
     @csrf
     @method('DELETE')
     <button type="submit" class="btn btn-sm btn-danger delete-button" data-toggle="tooltip" data-placement="top"
         title="Hapus User">
-        <i class="fas fa-trash"></i>
+        <i class="bi bi-trash"></i>
     </button>
 </form>
 

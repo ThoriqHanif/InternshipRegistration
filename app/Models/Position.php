@@ -31,10 +31,11 @@ class Position extends Model
         return $this->hasMany(Intern::class);
     }
 
-    public function periode()
+    public function periodes()
     {
-        return $this->hasMany(Periode::class);
+        return $this->belongsToMany(Periode::class, 'periode_positions')->withPivot('quota');
     }
+
 
     public function sluggable(): array
     {

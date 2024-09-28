@@ -24,10 +24,10 @@ class StorePeriodeRequest extends FormRequest
         return [
             //
             'name' => 'required',
-            'position_id' => 'required',
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
-            'quota'=> 'required|min:1',
+            'positions.*.id' => 'required|exists:positions,id',
+            'positions.*.quota' => 'required|integer|min:1',
         ];
     }
 
@@ -35,13 +35,12 @@ class StorePeriodeRequest extends FormRequest
     {
         return [
             'name.required' => 'Nama tidak boleh kosong',
-            'position_id.required' => 'Harus memilih Posisi magang',
             'start_date.required' => 'Tanggal mulai tidak boleh kosong',
             'end_date.required' => 'Tanggal selesai tidak boleh kosong',
             'end_date.after_or_equal' => 'Tanggal selesai harus setelah atau sama dengan tanggal mulai',
+            'position_id.required' => 'Harus memilih Posisi magang',
             'quota.required' => 'Kuota Pemagang tidak boleh kosong'
 
         ];
-        
     }
 }

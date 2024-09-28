@@ -1,0 +1,100 @@
+.table-fit{
+    width: 1%;
+    white-space: nowrap;
+}
+
+.datatables-header-left{
+    display: flex;
+    justify-content: flex-start;
+}
+
+.select2-container--default
+.select2-selection--multiple{
+    border: 1px solid #dce7f1 !important;
+    border-radius: .25rem !important;
+    padding: .100rem .50rem .50rem .100rem !important;
+}
+
+.select2-container--default
+.select2-selection--multiple
+.select2-selection__choice{
+    background-color: #435EBE !important;
+    color: white !important;
+    border: none !important;
+}
+
+.select2-container--default
+.select2-selection--multiple
+.select2-selection__choice__remove{
+    color: white !important;
+}
+
+.select2-container--default .select2-selection--multiple
+.select2-selection__choice__remove:hover,
+.select2-container--default
+.select2-selection--multiple
+.select2-selection__choice__remove:focus {
+    background-color: #5e7ce9 !important;
+    color: white !important;
+}
+
+.select2-container--default .select2-results__option--highlighted.select2-results__option--selectable {
+    background-color: #435EBE !important;
+}
+
+html[data-bs-theme=dark] .select2-container--default .select2-selection--multiple {
+    background-color: #121212 !important;
+    border: 1px solid #35354f !important;
+}
+
+html[data-bs-theme=dark] .select2-container--open .select2-dropdown--below {
+    background-color: #121212 !important;
+    border: 1px solid #35354f !important;
+
+}
+
+html[data-bs-theme=dark] ul .select2-results__options{
+    padding-left: 0 !important;
+}
+
+html[data-bs-theme=dark] .note-editing-area .note-editable {
+    background-color: #121212 !important;
+    color: white !important;
+}
+
+html[data-bs-theme=dark] .note-toolbar {
+    border-bottom: 1px solid #35354f !important;
+}
+
+.btn-edit-article{
+    width: 100%;
+    background-color: #778cd649;
+    color: #435EBE;
+    border-radius: 5px;
+    padding: 10px 30px;
+    margin: 3px
+}
+
+.btn-publish:hover{
+    background-color: #5e7ce9;
+    color: white;
+}
+
+.btn-publish{
+    width: 120px;
+    height: 38px;
+    background-color: #435EBE;
+    color: white;
+    border-radius: 5px;
+    border: none;
+    margin: 3px
+}
+
+.btn-publish:hover{
+    background-color: #5e7ce9;
+    color: white;
+}
+
+.header{
+    background-color: white;
+}

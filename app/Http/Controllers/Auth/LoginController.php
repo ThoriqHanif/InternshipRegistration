@@ -5,12 +5,17 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\App;
 
 class LoginController extends Controller
 {
     //
     public function showLoginForm()
     {
+        // App::setLocale($locale);
+
+        $locale = session('locale', App::getLocale());
+        App::setLocale($locale);
         return view('auth.login');
     }
 
@@ -25,10 +30,10 @@ class LoginController extends Controller
             'password.required' => 'Password wajib diisi.',
             'password.min' => 'Password minimal harus 6 karakter.'
         ]);
-        
-    
+
+
         $credentials = $request->only('email', 'password');
-    
+
         if (Auth::attempt($credentials)) {
         //    Cek Role
             $user = Auth::user();
@@ -45,12 +50,10 @@ class LoginController extends Controller
 
     public function logout(Request $request)
     {
-        
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
-        Auth::logout(); // Logout user
-        $request->session()->invalidate(); // sesi done
-        $request->session()->regenerateToken(); // token baru
-
-        return redirect('/login'); // Redirect ke halaman login setelah logout
+        return redirect('/login');
     }
 }

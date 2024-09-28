@@ -13,8 +13,7 @@ return new class extends Migration
     {
         Schema::create('reports', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('intern_id');
-            $table->foreign('intern_id')->references('id')->on('interns')->onDelete('cascade');
+            $table->foreignId('intern_id')->constrained('interns')->onDelete('cascade');
             $table->date('date');
             $table->string('presence')->nullable();
             $table->time('attendance_hours')->nullable();

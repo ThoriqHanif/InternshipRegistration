@@ -23,7 +23,7 @@ class ReportAdminController extends Controller
 
         if ($request->ajax()) {
 
-            $periodes = Periode::select('*');
+            $periodes = Periode::with('positions')->select('*');
 
             return DataTables::of($periodes)
                 ->addColumn('action', function ($periode) {
@@ -43,18 +43,20 @@ class ReportAdminController extends Controller
         if ($request->ajax()) {
             $internPeriode = Intern::with('position', 'periode')
                 ->where('periode_id', $id)
-                ->where('status', 'diterima')
+                ->where('status', 'accepted')
                 ->get();
             return response()->json($internPeriode);
 
             return DataTables::of($internPeriode)
                 ->addColumn('action', function ($intern) {
-                    // return view('pages.admin.report.action', compact('intern'));                
+                    // return view('pages.admin.report.action', compact('intern'));
                 })
                 ->addIndexColumn()
                 ->rawColumns(['action'])
                 ->make(true);
         }
+
+
 
         return view('pages.admin.report.index', compact('internPeriode'));
     }
@@ -67,7 +69,7 @@ class ReportAdminController extends Controller
 
             return DataTables::of($reportIntern)
                 ->addColumn('action', function ($report) {
-                    // return view('pages.admin.report.action', compact('intern'));                
+                    // return view('pages.admin.report.action', compact('intern'));
                 })
                 ->addIndexColumn()
                 ->rawColumns(['action'])
@@ -121,11 +123,11 @@ class ReportAdminController extends Controller
         $interns = Intern::where('periode_id', $periodeId)->with('reports')->get();
 
         $pdf = app('dompdf.wrapper')->loadView('pages.admin.report.reportIntern', compact('interns', 'periode'));
-    
+
         $pdf->setPaper('legal', 'landscape');
-    
+
         $pdf->setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true]);
-    
+
         return $pdf->download('internByPeriode' . $periodeId . '.pdf');
 
     }
@@ -133,15 +135,15 @@ class ReportAdminController extends Controller
     public function reportByInternPDF($internId){
 
         $intern = Intern::with('reports')->find($internId);
-       
+
         $pdf = app('dompdf.wrapper')->loadView('pages.admin.report.internReport', compact('intern'));
-        
+
         $pdf->setPaper('legal', 'landscape');
 
         $pdf->setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true]);
-    
+
         return $pdf->download('reportByIntern' . $internId . '.pdf');
 
     }
-    
+
 }

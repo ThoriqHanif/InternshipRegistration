@@ -1,874 +1,666 @@
-<!DOCTYPE html>
+@extends('layouts.front.app')
 
-<html lang="en">
+@section('content')
+    <!-- ======= Header ======= -->
+    @include('layouts.front.navbar')
 
-
-
-<head>
-
-    <meta charset="utf-8">
-
-    <title>Internship Kadang Koding</title>
-
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-
-    <meta content="" name="keywords">
-
-    <meta content="" name="description">
-
-
-
-    <!-- Favicon -->
-
-    <link href="{{ asset('img/logo/logo2.png') }}" rel="icon">
-
-
-
-    <!-- Google Web Fonts -->
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500&family=Roboto:wght@500;700&display=swap"
-
-        rel="stylesheet">
-
-
-
-    <!-- Icon Font Stylesheet -->
-
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
-
-
-
-    <!-- Libraries Stylesheet -->
-
-    <link href="{{ asset('landingpage/lib/animate/animate.min.css') }}" rel="stylesheet">
-
-    <link href="{{ asset('landingpage/lib/owlcarousel/assets/owl.carousel.min.css') }}" rel="stylesheet">
-
-
-
-    <!-- Customized Bootstrap Stylesheet -->
-
-    <link href="{{ asset('landingpage/css/bootstrap.min.css') }}" rel="stylesheet">
-
-
-
-    <!-- Template Stylesheet -->
-
-    <link href="{{ asset('landingpage/css/style.css') }}" rel="stylesheet">
-
-</head>
-
-
-
-<body>
-
-    <!-- Spinner Start -->
-
-    <div id="spinner"
-
-        class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
-
-        <div class="spinner-grow text-primary" role="status"></div>
-
-    </div>
-
-    <!-- Spinner End -->
-
-
-
-
-
-    <!-- Navbar Start -->
-
-    <nav class="navbar navbar-expand-lg bg-white navbar-light sticky-top p-0 px-4 px-lg-5">
-
-        <a href="{{ url('/') }}" class="navbar-brand d-flex align-items-center">
-
-            <h2 class="m-0 "><img class="img-fluid me-2" src="{{ asset('img/logo/logo2.png') }}" alt=""
-
-                    style="width: 45px;">Kadang Koding</h2>
-
-        </a>
-
-        <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
-
-            <span class="navbar-toggler-icon"></span>
-
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarCollapse">
-
-            <div class="navbar-nav ms-auto py-4 py-lg-0">
-
-                <a href="#home" class="nav-item nav-link">Home</a>
-
-                <a href="#about" class="nav-item nav-link">About</a>
-
-                <a href="#journey" class="nav-item nav-link">Journey</a>
-
-                <a href="#posisi" class="nav-item nav-link">Positions</a>
-        <a class="btn bg-primary text-white me-2 d-lg-none" href="{{ route('login') }}">Login</a>
-
-            </div>
-
-            <div class="h-100 d-lg-inline-flex align-items-center d-none">
-
-                <a class="btn bg-primary text-white me-2" href="{{ route('login') }}">Login</a>
-
-
-
-            </div>
-
-        </div>
-
-    </nav>
-
-    <!-- Navbar End -->
-
-
-
-
-
-    <!-- Header Start -->
-
-    <div class="container-fluid hero-header bg-light py-5 mb-5" id="home">
-
-        <div class="container py-5">
-
-            <div class="row g-5 align-items-center">
-
-                <div class="col-lg-6">
-
-                    <h1 class="display-4 mb-3 animated slideInDown"><span class="text-primary">Kadang Koding</span>
-
-                        Indonesia Internship</h1>
-
-                    <p class="animated slideInDown">Dapatkan pengalaman praktis dan panduan langsung dari para ahli dalam industri teknologi. Internship kami didesain untuk membawa bakat-bakat muda menuju kesuksesan di dunia pengembangan perangkat lunak.</p>
-
-                    <a href="#posisi" class="btn btn-primary py-3 px-4 animated slideInDown">Daftar Sekarang</a>
-
-                </div>
-
-                <div class="col-lg-6 animated fadeIn">
-
-                    <img class="img-fluid animated pulse infinite" style="animation-duration: 3s;"
-
-                        src="{{ asset('landingpage/img/banner.png') }}" alt="">
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <!-- Header End -->
-
-
-
-
-
-    <!-- About Start -->
-
-    <div class="container-xxl py-5" id="about">
-
+    <!-- ======= Hero Section ======= -->
+    <section id="hero" class="hero d-flex align-items-center">
         <div class="container">
-
-            <div class="row g-5 align-items-center">
-
-                <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.1s">
-
-                    <img class="img-fluid" src="{{asset('landingpage/img/about.png')}}" alt="" style="height: 400px; width: 450px;">
-
-                </div>
-
-                <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.5s">
-
-                    <div class="h-100">
-
-                        <h1 class="display-6">About Us</h1>
-
-                        <p class="text-primary fs-5 mb-4">Internship Kadang Koding</p>
-
-                        <p>Kadang Koding Indonesia memberikan pengalaman praktis yang berharga kepada para pemagang.
-
-                            Dengan Pelatihan dan Project yang diberikan oleh Mentor.
-
-                        </p>
-
-                        <div class="d-flex align-items-center mb-2">
-
-                            <i class="fa fa-check bg-light text-primary btn-sm-square rounded-circle me-3 fw-bold"></i>
-
-                            <span>Pengalaman Berharga</span>
-
+            <div class="row">
+                <div class="col-lg-6 d-flex flex-column justify-content-center">
+                    <h1 data-aos="fade-up">@lang('home.hero_title')</h1>
+                    <h2 data-aos="fade-up" data-aos-delay="400">@lang('home.hero_desc')</h2>
+                    <div data-aos="fade-up" data-aos-delay="600">
+                        <div class="text-center text-lg-start">
+                            <a href="#about"
+                                class="btn-get-started scrollto d-inline-flex align-items-center justify-content-center align-self-center">
+                                <span>@lang('home.btn_start')</span>
+                                <i class="bi bi-arrow-right"></i>
+                            </a>
                         </div>
-
-                        <div class="d-flex align-items-center mb-2">
-
-                            <i class="fa fa-check bg-light text-primary btn-sm-square rounded-circle me-3 fw-bold"></i>
-
-                            <span>Mentorship</span>
-
-                        </div>
-
-                        <div class="d-flex align-items-center mb-4">
-
-                            <i class="fa fa-check bg-light text-primary btn-sm-square rounded-circle me-3 fw-bold"></i>
-
-                            <span>Kesempatan Pengembangan</span>
-
-                        </div>
-
-
                     </div>
-
                 </div>
-
+                <div class="col-lg-6 hero-img" data-aos="zoom-out" data-aos-delay="200">
+                    <img src="{{ asset('landing/assets/img/hero-img.png') }}" class="img-fluid" alt="">
+                </div>
             </div>
-
         </div>
 
-    </div>
+    </section>
+    <!-- End Hero -->
 
-    <!-- About End -->
-
-
-
-
-
-    <!-- Facts Start -->
-
-    <div class="container-xxl bg-light py-5 my-5">
-
-        <div class="container py-5">
-
-            <div class="row g-5">
-
-                <div class="col-lg-4 col-md-6 text-center wow fadeIn" data-wow-delay="0.1s">
-
-                    <img class="img-fluid mb-4" src="img/icon-9.png" alt="">
-
-                    <h1 class="display-4" data-toggle="counter-up">{{ $totalPendaftar }}</h1>
-
-                    <p class="fs-5 text-primary mb-0">Total Pendaftar Magang</p>
-
-                </div>
-
-                <div class="col-lg-4 col-md-6 text-center wow fadeIn" data-wow-delay="0.3s">
-
-                    <img class="img-fluid mb-4" src="img/icon-10.png" alt="">
-
-                    <h1 class="display-4" data-toggle="counter-up">{{ $posisiTersedia }}</h1>
-
-                    <p class="fs-5 text-primary mb-0">Posisi Magang tersedia</p>
-
-                </div>
-
-                <div class="col-lg-4 col-md-6 text-center wow fadeIn" data-wow-delay="0.5s">
-
-                    <img class="img-fluid mb-4" src="img/icon-2.png" alt="">
-
-                    <h1 class="display-4" data-toggle="counter-up">{{ $pemagangDiterima }}</h1>
-
-                    <p class="fs-5 text-primary mb-0">Pemagang Diterima</p>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <!-- Facts End -->
-
-
-
-
-
-    <!-- Features Start -->
-
-    <div class="container-xxl py-5" id="journey">
-
-        <div class="container">
-
-            <div class="text-center mx-auto wow fadeInUp" data-wow-delay="0.1s" style="max-width: 800px;">
-
-                <h1 class="display-6">Internship Journey</h1>
-
-                <p class="mt3 mb-8">Tertarik menjadi bagian dari tim Kadang Koding? Berikut adalah 3 langkah mudah
-
-                    untuk mendaftar magang di Kadang Koding</p>
-
-            </div>
-
-            <div class="row g-5 mt-5">
-
-                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-
-                    <div class="text-center">
-
-                        <div class="rounded-circle d-inline-block bg-light"
-
-                            style="width: 80px; height: 80px; position: relative; text-align: center; overflow: hidden;">
-
-                            <img class="img-fluid" src="{{ asset('landingpage/img/daftar.png') }}" alt=""
-
-                                style="max-width: 100%; max-height: 100%; display: inline-block; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
-
+    <main id="main">
+        <!-- ======= About Section ======= -->
+        <section id="about" class="about">
+            <div class="container" data-aos="fade-up">
+                <div class="row gx-0">
+                    <div class="col-lg-6 d-flex flex-column justify-content-center" data-aos="fade-up" data-aos-delay="200">
+                        <div class="content">
+                            <h3>@lang('home.about_title')</h3>
+                            <h2>@lang('home.about_sub_title')</h2>
+                            <p>
+                                @lang('home.hero_desc')
+                            </p>
+                            <div class="text-center text-lg-start">
+                                <a href="#journey"
+                                    class="btn-read-more d-inline-flex align-items-center justify-content-center align-self-center">
+                                    <span>@lang('home.about_more')</span>
+                                    <i class="bi bi-arrow-right"></i>
+                                </a>
+                            </div>
                         </div>
-
-
-
-                        <h5 class="mb-3 mt-3">Daftar</h5>
-
-                        <p>Kunjungi website kami dan lengkapi formulir pendaftaran dengan informasi pribadi, riwayat
-
-                            pendidikan, dan pengalaman yang relevan.</p>
-
                     </div>
 
+                    <div class="col-lg-6 d-flex align-items-center" data-aos="zoom-out" data-aos-delay="200">
+                        <img src="{{ asset('img/Scenes01.svg') }}" class="img-fluid" alt="">
+                    </div>
                 </div>
+            </div>
+        </section>
+        <!-- End About Section -->
 
-
-
-                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-
-                    <div class="text-center">
-
-                        <div class="rounded-circle d-inline-block bg-light"
-
-                            style="width: 80px; height: 80px; position: relative; text-align: center; overflow: hidden;">
-
-                            <img class="img-fluid" src="{{ asset('landingpage/img/interview.png') }}" alt=""
-
-                                style="max-width: 100%; max-height: 100%; display: inline-block; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
-
+        <!-- ======= Counts Section ======= -->
+        <section id="counts" class="counts">
+            <div class="container" data-aos="fade-up">
+                <div class="row gy-4">
+                    <div class="col-lg-4 col-md-6">
+                        <div class="count-box">
+                            <i class="bi bi-people"></i>
+                            <div>
+                                <span data-purecounter-start="0" data-purecounter-end="{{ $registerTotal }}"
+                                    data-purecounter-duration="1" class="purecounter"></span>
+                                <p>@lang('home.registered')</p>
+                            </div>
                         </div>
-
-
-
-                        <h5 class="mb-3 mt-3">Interview</h5>
-
-                        <p>Jika Anda lolos seleksi awal, Anda akan diundang untuk Interview secara tatap muka atau
-
-                            daring.</p>
-
                     </div>
 
-                </div>
-
-                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-
-                    <div class="text-center">
-
-                        <div class="rounded-circle d-inline-block bg-light"
-
-                            style="width: 80px; height: 80px; position: relative; text-align: center; overflow: hidden;">
-
-                            <img class="img-fluid" src="{{ asset('landingpage/img/lolos.png') }}" alt=""
-
-                                style="max-width: 100%; max-height: 100%; display: inline-block; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
-
+                    <div class="col-lg-4 col-md-6">
+                        <div class="count-box">
+                            <i class="bi bi-journal-richtext" style="color: #ee6c20;"></i>
+                            <div>
+                                <span data-purecounter-start="0" data-purecounter-end="{{ $availablePositions }}"
+                                    data-purecounter-duration="1" class="purecounter"></span>
+                                <p>@lang('home.available')</p>
+                            </div>
                         </div>
-
-
-
-                        <h5 class="mb-3 mt-3">Diterima</h5>
-
-                        <p>Jika Anda diterima, selamat! Anda akan menerima pemberitahuan resmi beserta detail terkait
-
-                            jadwal, lokasi, dan instruksi selanjutnya.</p>
-
                     </div>
 
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <!-- Features End -->
-
-
-
-
-
-    <!-- Service Start -->
-
-    <div class="container-xxl bg-light py-5 my-5" id="posisi">
-
-        <div class="container py-5">
-
-            <div class="text-center mx-auto wow fadeInUp" data-wow-delay="0.1s" style="max-width: 800px;">
-
-
-
-                <h1 class="display-6">Internship Positions</h1>
-
-                <p class=" mb-5">Apakah Anda mencari peluang untuk meraih pengalaman praktis yang berharga di industri
-
-                    yang menarik? Kami membuka kesempatan magang untuk bergabung dengan tim kami sebagai berikut</p>
-
-            </div>
-
-            <div class="row g-4">
-
-                @foreach ($activePositions as $position)
-
-                    @php
-
-                        $periode = $position->periode->first(); // Ambil periode pertama terkait
-
-                        $kuotaPenuh = $periode && $periode->quota <= 0;
-
-                        $startDate = \Carbon\Carbon::parse($periode->start_date)->translatedFormat('j F Y');
-
-                        $comingSoon = $periode && $currentDate < $periode->start_date;
-
-                    @endphp
-
-                    {{-- @dd($comingSoon) --}}
-
-                    <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-
-                        <div class="service-item bg-white p-5">
-
-                            <img class="img-fluid mb-4" src="{{ asset('landingpage/img/' . $position->image) }}"
-
-                                alt="{{ $position->name }}">
-
-                            <h5 class="mb-3">{{ $position->name }}</h5>
-
-                            <p>{{ $position->description }}</p>
-
-                            @if ($comingSoon)
-
-                            <a class="btn btn-outline-warning text-primary" disabled>Tersedia pada {{$startDate}}</a>
-
-                            @elseif($kuotaPenuh)
-
-                                <a class="btn btn-light text-primary" disabled>Kuota Full <i
-
-                                        class="fa fa-xmark ms-2"></i></a>
-
-                            @else
-
-                                <a class="btn btn-outline-primary"
-
-                                    href="{{ route('register.showBySlug', $position->slug) }}">Daftar posisi ini <i
-
-                                        class="fa fa-arrow-right ms-2"></i></a>
-
-                            @endif
-
+                    <div class="col-lg-4 col-md-6">
+                        <div class="count-box">
+                            <i class="bi bi-check-all" style="color: #15be56;"></i>
+                            <div>
+                                <span data-purecounter-start="0" data-purecounter-end="{{ $acceptedIntern }}"
+                                    data-purecounter-duration="1" class="purecounter"></span>
+                                <p>@lang('home.accept')</p>
+                            </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- End Counts Section -->
 
+        <!-- ======= Values Section ======= -->
+        <section id="journey" class="values">
+            <div class="container" data-aos="fade-up">
+                <header class="section-header">
+                    <h2>@lang('home.journey_title')</h2>
+                    <p>@lang('home.journey_sub_title')</p>
+                </header>
+
+                <div class="row">
+                    <div class="col-lg-4" data-aos="fade-up" data-aos-delay="200">
+                        <div class="box">
+                            <img src="assets/img/values-1.png" class="img-fluid" alt="">
+                            <h3>@lang('home.journey_1_title')</h3>
+                            <p>@lang('home.journey_1_desc')</p>
+                        </div>
                     </div>
 
-                @endforeach
+                    <div class="col-lg-4 mt-4 mt-lg-0" data-aos="fade-up" data-aos-delay="400">
+                        <div class="box">
+                            <img src="assets/img/values-2.png" class="img-fluid" alt="">
+                            <h3>@lang('home.journey_2_title')</h3>
+                            <p>@lang('home.journey_2_desc')</p>
+                        </div>
+                    </div>
 
+                    <div class="col-lg-4 mt-4 mt-lg-0" data-aos="fade-up" data-aos-delay="600">
+                        <div class="box">
+                            <img src="assets/img/values-3.png" class="img-fluid" alt="">
+                            <h3>@lang('home.journey_3_title')</h3>
+                            <p>@lang('home.journey_3_desc')</p>
+                        </div>
+                    </div>
+                </div>
             </div>
+        </section>
+        <!-- End Values Section -->
 
-        </div>
+        <!-- ======= Features Section ======= -->
+        <section id="benefit" class="features">
+            <div class="container" data-aos="fade-up">
+                <header class="section-header">
+                    <h2>@lang('home.benefit_title')</h2>
+                    <p>@lang('home.benefit_sub_title')</p>
+                </header>
 
-    </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <img src="{{ asset('landing/assets/img/features.png') }}" class="img-fluid" alt="">
+                    </div>
 
-    <!-- Service End -->
-
-
-
-
-
-
-
-    <!-- FAQs Start -->
-
-    <div class="container-xxl py-5" id="faq">
-
-        <div class="container">
-
-            <div class="text-center mx-auto wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;">
-
-                <h1 class="display-6">FAQs</h1>
-
-                <p class="text-primary fs-5 mb-5">Frequently Asked Questions</p>
-
-            </div>
-
-            <div class="row justify-content-center">
-
-                <div class="col-lg-10">
-
-                    <div class="accordion" id="accordionExample">
-
-                        <div class="accordion-item wow fadeInUp" data-wow-delay="0.1s">
-
-                            <h2 class="accordion-header" id="headingOne">
-
-                                <button class="accordion-button" type="button" data-bs-toggle="collapse"
-
-                                    data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-
-                                    Bagaimana cara mendaftar untuk magang?
-
-                                </button>
-
-                            </h2>
-
-                            <div id="collapseOne" class="accordion-collapse collapse show"
-
-                                aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-
-                                <div class="accordion-body">
-
-                                    Anda dapat mendaftar melalui formulir pendaftaran yang tersedia di website kami.
-
-                                    Pastikan untuk melengkapi semua informasi yang diminta.
-
+                    <div class="col-lg-6 mt-5 mt-lg-0 d-flex">
+                        <div class="row align-self-center gy-4">
+                            <div class="col-md-6" data-aos="zoom-out" data-aos-delay="200">
+                                <div class="feature-box d-flex align-items-center">
+                                    <i class="bi bi-check"></i>
+                                    <h3>@lang('home.benefit_1')</h3>
                                 </div>
-
                             </div>
 
-                        </div>
-
-                        <div class="accordion-item wow fadeInUp" data-wow-delay="0.2s">
-
-                            <h2 class="accordion-header" id="headingTwo">
-
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-
-                                    data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-
-                                    Kapan jadwal pendaftaran dibuka?
-
-                                </button>
-
-                            </h2>
-
-                            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
-
-                                data-bs-parent="#accordionExample">
-
-                                <div class="accordion-body">
-
-                                    Jadwal pendaftaran kami berbeda-beda untuk setiap program magang. Anda dapat melihat
-
-                                    informasi program yang tersedia di Website kami.
-
+                            <div class="col-md-6" data-aos="zoom-out" data-aos-delay="300">
+                                <div class="feature-box d-flex align-items-center">
+                                    <i class="bi bi-check"></i>
+                                    <h3>@lang('home.benefit_2')</h3>
                                 </div>
-
                             </div>
 
-                        </div>
-
-                        <div class="accordion-item wow fadeInUp" data-wow-delay="0.3s">
-
-                            <h2 class="accordion-header" id="headingThree">
-
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-
-                                    data-bs-target="#collapseThree" aria-expanded="false"
-
-                                    aria-controls="collapseThree">
-
-                                    Bagaimana proses seleksi dilakukan?
-
-                                </button>
-
-                            </h2>
-
-                            <div id="collapseThree" class="accordion-collapse collapse"
-
-                                aria-labelledby="headingThree" data-bs-parent="#accordionExample">
-
-                                <div class="accordion-body">
-
-                                    Proses seleksi melibatkan peninjauan aplikasi, wawancara, dan dalam beberapa kasus,
-
-                                    uji keterampilan tertulis atau praktis.
-
+                            <div class="col-md-6" data-aos="zoom-out" data-aos-delay="400">
+                                <div class="feature-box d-flex align-items-center">
+                                    <i class="bi bi-check"></i>
+                                    <h3>@lang('home.benefit_3')</h3>
                                 </div>
-
                             </div>
 
-                        </div>
-
-                        <div class="accordion-item wow fadeInUp" data-wow-delay="0.4s">
-
-                            <h2 class="accordion-header" id="headingFour">
-
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-
-                                    data-bs-target="#collapseFour" aria-expanded="true" aria-controls="collapseFour">
-
-                                    Berapa lama waktu yang dibutuhkan untuk pengumuman hasil seleksi?
-
-                                </button>
-
-                            </h2>
-
-                            <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour"
-
-                                data-bs-parent="#accordionExample">
-
-                                <div class="accordion-body">
-
-                                    Waktu yang diperlukan untuk pengumuman hasil seleksi bervariasi tergantung pada
-
-                                    jumlah pelamar dan tahapan seleksi. Kami berusaha memberikan informasi terkait
-
-                                    jadwal pengumuman kepada setiap peserta.
-
+                            <div class="col-md-6" data-aos="zoom-out" data-aos-delay="500">
+                                <div class="feature-box d-flex align-items-center">
+                                    <i class="bi bi-check"></i>
+                                    <h3>@lang('home.benefit_4')</h3>
                                 </div>
-
                             </div>
 
-                        </div>
-
-                        <div class="accordion-item wow fadeInUp" data-wow-delay="0.5s">
-
-                            <h2 class="accordion-header" id="headingFive">
-
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-
-                                    data-bs-target="#collapseFive" aria-expanded="false"
-
-                                    aria-controls="collapseFive">
-
-                                    Apakah magang ini dilakukan secara daring atau tatap muka?
-
-                                </button>
-
-                            </h2>
-
-                            <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive"
-
-                                data-bs-parent="#accordionExample">
-
-                                <div class="accordion-body">
-
-                                    Kebanyakan program magang kami menawarkan pengalaman tatap muka di tempat kerja.
-
-                                    Namun, jika domisili tidak berada di Surakarta dapat melakukan secara Remote.
-
+                            <div class="col-md-6" data-aos="zoom-out" data-aos-delay="600">
+                                <div class="feature-box d-flex align-items-center">
+                                    <i class="bi bi-check"></i>
+                                    <h3>@lang('home.benefit_5')</h3>
                                 </div>
-
                             </div>
 
+                            <div class="col-md-6" data-aos="zoom-out" data-aos-delay="700">
+                                <div class="feature-box d-flex align-items-center">
+                                    <i class="bi bi-check"></i>
+                                    <h3>@lang('home.benefit_6')</h3>
+                                </div>
+                            </div>
                         </div>
-
                     </div>
 
                 </div>
+            </div>
+        </section>
+        <!-- End Features Section -->
+
+        <!-- ======= Services Section ======= -->
+        <section id="position" class="services">
+            <div class="container" data-aos="fade-up">
+                <header class="section-header">
+                    <h2>@lang('home.positions_title')</h2>
+                    <p>@lang('home.positions_sub_title')</p>
+                </header>
+
+                <div class="row gy-4">
+                    @forelse ($checkActivePositions as $data)
+                        @php
+                            $position = $data['position'];
+                            $quotaFull = $data['quotaFull'];
+                            $startDate = $data['startDate'];
+                            $comingSoon = $data['comingSoon'];
+                        @endphp
+                        <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+                            <div class="service-box blue">
+                                <div class="icon">
+                                    <img width="60px" height="60px"
+                                        src="{{ asset('uploads/image/' . $position->image) }}"></img>
+                                </div>
+                                <h3>{{ $position->name }}</h3>
+                                <p>{{ $position->description }}</p>
+                                @if ($comingSoon)
+                                    <a href="" class="read-more" disabled><span>@lang('home.positions_soon')
+                                            {{ $startDate }}</span> </a>
+                                @elseif($quotaFull <= 0)
+                                    <a href="" class="read-more" disabled><span>@lang('home.positions_full')</span> </a>
+                                @else
+                                    <a href="{{ route('register.showBySlug', ['locale' => app()->getLocale(), 'slug' => $position->slug]) }}"
+                                        class="read-more">
+                                        <span>@lang('home.positions_apply')</span>
+                                        <i class="bi bi-arrow-right"></i>
+                                    </a>
+                                @endif
+                            </div>
+                        </div>
+                    @empty
+                        <div class="row justify-content-center text-center">
+                            <div class="col-lg-12">
+                                @if (app()->getLocale() == 'en')
+                                    <p>No positions available for now.</p>
+                                @else
+                                    <p>Tidak ada posisi yang tersedia untuk sekarang.</p>
+                                @endif
+                            </div>
+                        </div>
+                    @endforelse
+                </div>
+            </div>
+        </section>
+        <!-- End Services Section -->
+
+        <!-- Team Section -->
+        <section id="magang" class="team">
+            <div class="container" data-aos="fade-up">
+                @if ($periodes->isNotEmpty())
+                    <div class="interns-slider swiper">
+                        <div class="swiper-wrapper align-items-center">
+                            @foreach ($periodes as $periode)
+                                <div class="swiper-slide">
+                                    <header class="section-header">
+                                        <h2>@lang('home.magang')</h2>
+                                        <p>{{ $periode->name }}</p>
+                                    </header>
+                                    <div class="row gy-4" style="padding-left: 100px; padding-right: 100px">
+                                        @if ($internByPeriod[$periode->id]->isEmpty())
+                                            <div class="col-12 text-center">
+                                                @if (app()->getLocale() == 'en')
+                                                    <p>No interns available for this period.</p>
+                                                @else
+                                                    <p>Tidak ada maganger di periode ini.</p>
+                                                @endif
+                                            </div>
+                                        @else
+                                            @foreach ($internByPeriod[$periode->id] as $intern)
+                                                <div class="col-lg-3 col-md-6 d-flex align-items-stretch"
+                                                    data-aos="fade-up" data-aos-delay="100">
+                                                    <div class="member">
+                                                        <div class="member-img">
+                                                            <img src="{{ asset('uploads/photo/' . $intern->photo) }}"
+                                                                class="img-fluid" alt="{{ $intern->full_name }}"
+                                                                style="width: 320px; height: 250px; object-fit: cover;">
+                                                            <div class="social">
+                                                                <a href="{{ $intern->url }}"><i
+                                                                        class="bi bi-globe"></i></a>
+                                                                @foreach ($intern->social_medias as $socialMedia)
+                                                                    <a href="{{ $socialMedia->url }}">
+                                                                        <i class="{{ $socialMedia->icon }}"></i>
+                                                                    </a>
+                                                                @endforeach
+                                                            </div>
+                                                        </div>
+                                                        <div class="member-info">
+                                                            <h4>{{ $intern->full_name }}</h4>
+                                                            <span>{{ $intern->position->name ?? '-' }}</span>
+                                                            <p>{{ $intern->school }}</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        @endif
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                        <div class="swiper-button-next"></div>
+                        <div class="swiper-button-prev"></div>
+                        <div class="spacer" style="height: 100px;"></div>
+                        <div class="swiper-pagination"></div>
+                    </div>
+                @else
+                @endif
 
             </div>
-
-        </div>
-
-    </div>
-
-    <!-- FAQs Start -->
-
-
-
-
-
-    <!-- Footer Start -->
-
-    <div class="container-fluid bg-light footer mt-5 pt-5 wow fadeIn" data-wow-delay="0.1s">
-
-        <div class="container py-5">
-
-            <div class="row g-5">
-
-                <div class="col-md-6">
-
-                    <h1 class="text-primary mb-4"><img class="img-fluid me-2"
-
-                            src="{{ asset('img/logo/logo2.png') }}" alt="" style="width: 45px;">Kadang
-
-                        Koding</h1>
-
-                    <span>Jangan lewatkan kesempatan untuk meraih pengalaman berharga dan membangun fondasi yang kuat dalam karier teknologi Anda. Bergabunglah dengan Internship Kadang Koding sekarang!</span>
-
-                </div>
-
-
-
-                <div class="col-lg-3 col-md-6">
-
-                    <h5 class="mb-4">Get In Touch</h5>
-
-                    <p><i class="fa fa-map-marker-alt me-3"></i>Jawa Tengah</p>
-
-                    <p><i class="fa fa-phone-alt me-3"></i>+0000000</p>
-
-                    <p><i class="fa fa-envelope me-3"></i>info@example.com</p>
-
-                </div>
-
-
-
-                <div class="col-lg-3 col-md-6">
-
-                    <h5 class="mb-4">Quick Links</h5>
-
-                    <a class="btn btn-link" href="#about">About Us</a>
-
-                    <a class="btn btn-link" href="#journey">Journey</a>
-
-                    <a class="btn btn-link" href="#posisi">Positions</a>
-
-                    <a class="btn btn-link" href="#faq">FAQs</a>
-
-                </div>
-
-
-
             </div>
+        </section>
 
-        </div>
+        <section id="recent-posts" class="recent-posts section">
 
-        <div class="container-fluid copyright">
+            <!-- Section Title -->
+            <header class="section-header">
+                <h2>Blog</h2>
+                <p>@lang('blog.recent')</p>
+            </header>
 
             <div class="container">
 
+                <div class="row gy-5">
+
+                    @if ($recentBlogs->isEmpty())
+                        <div class="col-12">
+                            @if (app()->getLocale() == 'en')
+                                <p>No recent blog posts available.</p>
+                            @else
+                                <p>Tidak ada postingan blog yang terbaru.</p>
+                            @endif
+                        </div>
+                    @else
+                        @foreach ($recentBlogs as $blog)
+                            <div class="col-xl-4 col-md-6">
+                                <div class="post-item position-relative h-100" data-aos="fade-up" data-aos-delay="100">
+
+                                    <div class="post-img position-relative overflow-hidden">
+                                        <img src="{{ asset('uploads/image_thumbnail/' . $blog->image_thumbnail) }}"
+                                            class="img-fluid" alt="">
+                                        <span class="post-date" sty>
+                                            {{ app()->getLocale() == 'en' ? $blog->published_at_formatted_en : $blog->published_at_formatted }}
+                                        </span>
+                                    </div>
+
+                                    <div class="post-content d-flex flex-column">
+
+                                        <h3 class="post-title">{{ $blog->title }}</h3>
+
+                                        <div class="meta d-flex align-items-center">
+                                            <div class="d-flex align-items-center">
+                                                <i class="bi bi-person"></i> <span
+                                                    class="ps-2">{{ $blog->author->name }}</span>
+                                            </div>
+                                            <span class="px-3 text-black-50">/</span>
+                                            <div class="d-flex align-items-center">
+                                                <i class="bi bi-folder2"></i> <span
+                                                    class="ps-2">{{ $blog->category->name }}</span>
+                                            </div>
+                                        </div>
+
+                                        <hr>
+
+                                        <a href="{{ route('home.blog.detail', ['locale' => app()->getLocale(), 'slug' => app()->getLocale() == 'en' && $blog->slug_en ? $blog->slug_en : $blog->slug]) }}"
+                                            class="readmore stretched-link"><span>Read
+                                                More</span><i class="bi bi-arrow-right"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    @endif
+
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ======= F.A.Q Section ======= -->
+        <section id="faq" class="faq">
+            <div class="container" data-aos="fade-up">
+                <header class="section-header">
+                    <h2>FAQ</h2>
+                    <p>Frequently Asked Questions</p>
+                </header>
+
                 <div class="row">
+                    <div class="col-lg-6">
+                        <div class="accordion accordion-flush" id="faqlist1">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#faq-content-1">
+                                        @lang('home.faq_1_title')
+                                    </button>
+                                </h2>
+                                <div id="faq-content-1" class="accordion-collapse collapse" data-bs-parent="#faqlist1">
+                                    <div class="accordion-body">
+                                        @lang('home.faq_1_desc')
+                                    </div>
+                                </div>
+                            </div>
 
-                    <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#faq-content-2">
+                                        @lang('home.faq_2_title')
+                                    </button>
+                                </h2>
+                                <div id="faq-content-2" class="accordion-collapse collapse" data-bs-parent="#faqlist1">
+                                    <div class="accordion-body">
+                                        @lang('home.faq_2_desc')
+                                    </div>
+                                </div>
+                            </div>
 
-                        &copy; <a href="#">Kadang Koding</a>, All Right Reserved.
-
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#faq-content-3">
+                                        @lang('home.faq_3_title')
+                                    </button>
+                                </h2>
+                                <div id="faq-content-3" class="accordion-collapse collapse" data-bs-parent="#faqlist1">
+                                    <div class="accordion-body">
+                                        @lang('home.faq_3_desc')
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="col-md-6 text-center text-md-end">
+                    <div class="col-lg-6">
+                        <!-- F.A.Q List 2-->
+                        <div class="accordion accordion-flush" id="faqlist2">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#faq2-content-1">
+                                        @lang('home.faq_4_title')
+                                    </button>
+                                </h2>
+                                <div id="faq2-content-1" class="accordion-collapse collapse" data-bs-parent="#faqlist2">
+                                    <div class="accordion-body">
+                                        @lang('home.faq_4_desc')
+                                    </div>
+                                </div>
+                            </div>
 
-                        <!--/*** This template is free as long as you keep the footer authorâ€™s credit link/attribution link/backlink. If you'd like to use the template without the footer authorâ€™s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#faq2-content-2">
+                                        @lang('home.faq_5_title')
+                                    </button>
+                                </h2>
+                                <div id="faq2-content-2" class="accordion-collapse collapse" data-bs-parent="#faqlist2">
+                                    <div class="accordion-body">
+                                        @lang('home.faq_5_desc')
+                                    </div>
+                                </div>
+                            </div>
 
-                        Designed By <a href="https://htmlcodex.com">HTML Codex</a> Distributed By <a
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#faq2-content-3">
+                                        @lang('home.faq_6_title')
+                                    </button>
+                                </h2>
+                                <div id="faq2-content-3" class="accordion-collapse collapse" data-bs-parent="#faqlist2">
+                                    <div class="accordion-body">
+                                        @lang('home.faq_6_desc')
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- End F.A.Q Section -->
 
-                            href="https://themewagon.com">ThemeWagon</a>
+    </main>
+    <!-- End #main -->
+
+    <!-- ======= Footer ======= -->
+    <footer id="footer" class="footer">
+        <div class="footer-newsletter" id="subscription">
+            <div class="container">
+                <div class="row justify-content-center text-center">
+                    <div class="col-lg-6">
+                        <h4>@lang('home.news')</h4>
+                        <p>@lang('home.news-desc')</p>
+                        <form action="{{ route('subscriptions.store') }}" method="post" class="php-email-form">
+                            @csrf
+                            <div class="newsletter-form">
+                                <input type="email" name="email">
+                                <button type="submit">Subcsribe</button>
+                            </div>
+                            <div class="loading">Loading</div>
+                            <div class="error-message"></div>
+                            <div class="sent-message">Your subscription request has been sent. Thank you!</div>
+                            @if (session('success'))
+                                <div class="alert alert-success">
+                                    {{ session('success') }}
+                                </div>
+                            @endif
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-top">
+            <div class="container">
+                <div class="row gy-4">
+                    <div class="col-lg-5 col-md-12 footer-info">
+                        <a href="{{ url('/') }}" class="logo d-flex align-items-center">
+                            <img src="{{ asset('img/logo/logo2.png') }}" alt="">
+                            <span>Kadang Koding</span>
+                        </a>
+                        <p>@lang('home.footer')</p>
+                        <div class="social-links mt-3">
+                            <a href="https://www.linkedin.com/company/kadang-koding-indonesia" class="linkedin">
+                                <i class="bi bi-linkedin"></i>
+                            </a>
+                            <a href="https://instagram.com/kadangkoding" class="instagram">
+                                <i class="bi bi-instagram"></i>
+                            </a>
+                            <a href="https://twitter.com/kadangkoding" class="twitter">
+                                <i class="bi bi-twitter-x"></i>
+                            </a>
+                            <a href="https://www.facebook.com/kadangkodingindonesia" class="facebook">
+                                <i class="bi bi-facebook"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-2 col-6 footer-links">
+                        <h4>Useful Links</h4>
+                        <ul>
+                            <li><i class="bi bi-chevron-right"></i> <a href="#hero">Home</a></li>
+                            <li><i class="bi bi-chevron-right"></i> <a href="#about">About us</a></li>
+                            <li><i class="bi bi-chevron-right"></i> <a href="#journey">Journey</a></li>
+                            <li><i class="bi bi-chevron-right"></i> <a href="#position">Positions</a></li>
+                            <li><i class="bi bi-chevron-right"></i> <a href="#faq">FAQ</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="col-lg-2 col-6 footer-links">
+                        <h4>Our Services</h4>
+                        <ul>
+                            <li><i class="bi bi-chevron-right"></i> <a href="#">Cloud Solution</a></li>
+                            <li><i class="bi bi-chevron-right"></i> <a href="#">Solution by Service</a></li>
+                            <li><i class="bi bi-chevron-right"></i> <a href="#">Solution by Category</a></li>
+                            <li><i class="bi bi-chevron-right"></i> <a href="#">UI UX Solution</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="col-lg-3 col-md-12 footer-contact text-center text-md-start">
+                        <h4>Contact Us</h4>
+                        <p>
+                            Kuyudan, Dusun II, Makamhaji<br>
+                            Kartasura, Sukoharjo<br>
+                            Jawa Tengah <br><br>
+                            <strong>Phone:</strong> +62 1234 5678 90<br>
+                            <strong>Email:</strong> info@kadangkoding.com<br>
+                        </p>
 
                     </div>
 
                 </div>
-
             </div>
-
         </div>
+    </footer>
+    <!-- End Footer -->
 
-    </div>
+    <a href="#" class="back-to-top d-flex align-items-center justify-content-center">
+        <i class="bi bi-arrow-up-short"></i>
+    </a>
+@endsection
 
-    <!-- Footer End -->
-
-
-
-
-
-    <!-- Back to Top -->
-
-    <a href="#" class="btn btn-lg btn-primary btn-lg-square rounded-circle back-to-top"><i
-
-            class="bi bi-arrow-up"></i></a>
-
-
-
-
-
-    <!-- JavaScript Libraries -->
-
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-
-    <script src="{{ asset('landingpage/lib/wow/wow.min.js') }}"></script>
-
-    <script src="{{ asset('landingpage/lib/easing/easing.min.js') }}"></script>
-
-    <script src="{{ asset('landingpage/lib/waypoints/waypoints.min.js') }}"></script>
-
-    <script src="{{ asset('landingpage/lib/owlcarousel/owl.carousel.min.js') }}"></script>
-
-    <script src="{{ asset('landingpage/lib/counterup/counterup.min.js') }}"></script>
-
-
-
-    <!-- Template Javascript -->
-
-    <script src="{{ asset('landingpage/js/main.js') }}"></script>
-
-
-
+@push('script-global')
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
 
-        // Fungsi untuk menentukan link navbar yang aktif
+            if (window.location.hash) {
+                const element = document.querySelector(window.location.hash);
+                if (element) {
+                    element.scrollIntoView({
+                        behavior: 'smooth'
+                    });
 
-        function setActiveNavLink() {
-
-            const links = document.querySelectorAll(".navbar-nav .nav-link");
-
-
-
-            links.forEach(link => {
-
-                const targetId = link.getAttribute("href").substring(1); // Menghapus tanda '#' dari href
-
-                const targetElement = document.getElementById(targetId);
-
-
-
-                if (targetElement) {
-
-                    const rect = targetElement.getBoundingClientRect();
-
-                    if (
-
-                        (targetId === "home" && window.scrollY < 50) || // Atur jarak sesuai kebutuhan
-
-                        (rect.top <= 50 && rect.bottom >= 50)
-
-                    ) {
-
-                        link.classList.add("active");
-
-                    } else {
-
-                        link.classList.remove("active");
-
-                    }
-
+                    setTimeout(function() {
+                        history.replaceState(null, null, window.location.pathname + window.location.search);
+                    }, 1000);
                 }
-
-            });
-
-        }
-
-
-
-        // Panggil fungsi saat halaman dimuat dan ketika terjadi peristiwa scroll
-
-        window.addEventListener("DOMContentLoaded", setActiveNavLink);
-
-        window.addEventListener("scroll", setActiveNavLink);
-
+            }
+        });
     </script>
 
+    <script>
+        document.querySelectorAll('.change-lang').forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                const selectedLang = this.getAttribute('data-lang');
 
+                const currentUrl = window.location.pathname;
+                let urlParts = currentUrl.split('/');
 
-</body>
+                if (urlParts[1] === 'en' || urlParts[1] === 'id') {
+                    urlParts[1] = selectedLang;
+                } else {
+                    urlParts.splice(1, 0, selectedLang);
+                }
 
+                const queryString = window.location.search;
+                const newUrl = urlParts.join('/') + queryString;
+                window.location.href = newUrl;
+            });
+        });
+    </script>
+@endpush
 
+@push('style-landing')
+    <!-- Assets Landing -->
+    <link
+        href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+        rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="{{ asset('landing/assets/vendor/aos/aos.css') }}" rel="stylesheet">
+    <link href="{{ asset('landing/assets/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('landing/assets/vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
+    <link href="{{ asset('landing/assets/vendor/glightbox/css/glightbox.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('landing/assets/vendor/remixicon/remixicon.css') }}" rel="stylesheet">
+    <link href="{{ asset('landing/assets/vendor/swiper/swiper-bundle.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('landing/assets/css/style.css') }}" rel="stylesheet">
+@endpush
 
-</html>
-
+@push('script-landing')
+    <!-- Script Landing -->
+    <script src="{{ asset('landing/assets/vendor/purecounter/purecounter_vanilla.js') }}"></script>
+    <script src="{{ asset('landing/assets/vendor/aos/aos.js') }}"></script>
+    <script src="{{ asset('landing/assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('landing/assets/vendor/glightbox/js/glightbox.min.js') }}"></script>
+    <script src="{{ asset('landing/assets/vendor/isotope-layout/isotope.pkgd.min.js') }}"></script>
+    <script src="{{ asset('landing/assets/vendor/swiper/swiper-bundle.min.js') }}"></script>
+    <script src="{{ asset('landing/assets/vendor/php-email-form/validate.js') }}"></script>
+    <script src="{{ asset('landing/assets/js/main.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
+    </script>
+@endpush

@@ -1,24 +1,35 @@
 @extends('layouts.app')
 
 @section('content')
-    @push('button-datatable')
-        <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
-        <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css">
-    @endpush
+    {{-- @push('button-datatable')
+            <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+            <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css">
+        @endpush --}}
+
+    <header class="mb-3">
+        <a href="#" class="burger-btn d-block d-xl-none">
+            <i class="bi bi-justify fs-3"></i>
+        </a>
+    </header>
+    <div class="page-title">
+        <div class="row">
+            <div class="col-12 col-md-6 order-md-1 order-last">
+                <h3>Daftar Report</h3>
+                <p class="text-subtitle text-muted">Berikut daftar Daily Report </p>
+            </div>
+            <div class="col-12 col-md-6 order-md-2 order-first">
+                <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item active" aria-current="page">Report</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
     <div class="content-wrapper">
-        <!-- Content Header (Page header) -->
         <section class="content-header">
             <div class="container-fluid">
                 <div class="row mb-2">
-                    <div class="col-sm-6">
-                        <h1>Daily Report</h1>
-                    </div>
-                    <div class="col-sm-6">
-                        <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="#">Report</a></li>
-                            <li class="breadcrumb-item active">Daily Report</li>
-                        </ol>
-                    </div>
                 </div>
             </div><!-- /.container-fluid -->
         </section>
@@ -27,31 +38,34 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="card">
-                            <div class="card-header">
+                            <div class="card-header mb-2"
+                                style="display: flex; justify-content: space-between; align-items: center;">
+                                <a class="float-left text-white">
+                                </a>
                                 <a class="btn btn-primary btn-export-pdf display float-right" id="pdfPrint"
                                     data-intern-id="{{ $internId }}" data-intern-name="{{ $interns->name }}">
-                                    <i class="fas fa-print mr-2"></i>
+                                    <i class="bi bi-printer-fill mr-2" style="margin-right: 10px"></i>
                                     Print PDF
                                 </a>
-
                             </div>
+
                             <!-- /.card-header -->
                             <div class="card-body">
 
                                 @include('components.alert')
                                 <div class="table-responsive">
-                                    <table class="table table-bordered table-hover" id="tableReport">
+                                    <table class="table table-hover" id="tableReport">
                                         <thead>
                                             <tr>
-                                                <th style="width: 10px">No</th>
-                                                <th>Tanggal</th>
-                                                <th>Presensi</th>
-                                                <th style="width: 100px">Jam Hadir</th>
+                                                <th class="table-fit">No</th>
+                                                <th class="table-fit">Tanggal</th>
+                                                <th class="table-fit">Presensi</th>
+                                                <th class="table-fit">Jam Hadir</th>
                                                 <th>Instansi</th>
                                                 <th>Nama Project</th>
                                                 <th>Pekerjaan</th>
                                                 <th>Keterangan</th>
-                                                <th style="width: 50px">Action</th>
+                                                <th class="table-fit">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -158,7 +172,7 @@
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary"
                                                         data-bs-dismiss="modal">Tutup</button>
-                                                    <button type="button" class="btn btn-success tombol-update"
+                                                    <button type="button" class="btn btn-primary tombol-update"
                                                         type="submit" id="saveReportBtn">Simpan</button>
                                                 </div>
                                             </div>
@@ -175,13 +189,6 @@
     </div>
 
     @push('script-report')
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous">
-        </script>
-        <script src="https://code.jquery.com/jquery-3.6.1.js" integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI="
-            crossorigin="anonymous"></script>
-        <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
-        {{-- <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script> --}}
         <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
@@ -196,13 +203,13 @@
 
                     if (data['presence'] !== null) {
                         if (data['presence'] === 'masuk') {
-                            badgeClass = 'bg-green';
+                            badgeClass = 'bg-success';
                         } else if (data['presence'] === 'remote') {
-                            badgeClass = 'bg-purple';
+                            badgeClass = 'bg-primary';
                         } else if (data['presence'] === 'izin') {
-                            badgeClass = 'bg-orange';
+                            badgeClass = 'bg-warning';
                         } else if (data['presence'] === 'libur') {
-                            badgeClass = 'bg-red';
+                            badgeClass = 'bg-danger';
                         }
 
                         // Tambahkan badge ke dalam sel jika nilai presence tidak null
@@ -235,7 +242,7 @@
                             columns: ':not(.exclude)'
                         }
                     },
-                   
+
                 ],
                 columnDefs: [{
                     targets: 'exclude',
@@ -254,11 +261,13 @@
                         data: 'DT_RowIndex',
                         name: 'DT_RowIndex',
                         orderable: false,
-                        searchable: false
+                        searchable: false,
+                        class: 'table-fit',
                     },
                     {
                         data: 'date',
                         name: 'date',
+                        class: 'table-fit',
                         render: function(data, type, row) {
                             let dateReport = new Date(data);
                             return dateReport.toLocaleDateString(
@@ -272,15 +281,15 @@
                     },
                     {
                         data: 'presence',
-                        name: 'presence'
+                        name: 'presence',
+                        class: 'table-fit',
                     },
                     {
                         data: 'attendance_hours',
                         name: 'attendance_hours',
+                        class: 'table-fit',
                         render: function(data, type, row) {
-                            // Jika data adalah format waktu
                             if (type === 'display' && data) {
-                                // Mengambil hanya jam dan menit
                                 let time = data.split(':').slice(0,
                                     2).join(':');
                                 return time;
@@ -307,6 +316,7 @@
                     {
                         data: 'action',
                         name: 'action',
+                        class: 'table-fit',
                         className: 'exclude' // Tambahkan ini untuk menandai kolom 'action'
 
                     },
@@ -319,7 +329,7 @@
                 }
             });
 
-            // 03_PROSES EDIT 
+            // 03_PROSES EDIT
             $(document).on('click', '#btn-edit', function(e) {
                 var reportDate = new Date($(this).data('report-date'));
                 var currentDate = new Date();
@@ -329,6 +339,7 @@
                         icon: 'warning',
                         title: 'Eitss',
                         text: 'Belum waktunya mengisi report',
+                        confirmButtonColor: "#435EBE",
                     });
                 } else {
                     var id = $(this).data('report-id');
@@ -354,74 +365,78 @@
 
             });
 
-                $(document).on('click', '.tombol-update', function(e) {
+            $(document).on('click', '.tombol-update', function(e) {
 
-                    let reportId = $('#report_id').val();
-                    var var_url = '{{ route('reports.update', ':reportId') }}'.replace(':reportId', reportId);
-                    var var_type = 'PUT';
-                    $.ajax({
-                        url: var_url,
-                        type: var_type,
-                        data: {
-                            date: $('#date').val(),
-                            presence: $('#presence').val(),
-                            attendance_hours: $('#attendance_hours').val(),
-                            agency: $('#agency').val(),
-                            project_name: $('#project_name').val(),
-                            job: $('#job').val(),
-                            description: $('#description').val(),
-                        },
-                        success: function(response) {
-                            if (response.errors) {
-                                console.log(response.errors);
+                let reportId = $('#report_id').val();
+                var var_url = '{{ route('reports.update', ':reportId') }}'.replace(':reportId', reportId);
+                var var_type = 'PUT';
+                $.ajax({
+                    url: var_url,
+                    type: var_type,
+                    data: {
+                        date: $('#date').val(),
+                        presence: $('#presence').val(),
+                        attendance_hours: $('#attendance_hours').val(),
+                        agency: $('#agency').val(),
+                        project_name: $('#project_name').val(),
+                        job: $('#job').val(),
+                        description: $('#description').val(),
+                    },
+                    success: function(response) {
+                        if (response.errors) {
+                            console.log(response.errors);
 
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Gagal!',
-                                });
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Gagal!',
+                                confirmButtonColor: "#435EBE",
+                            });
 
 
-                            } else {
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Berhasil!',
-                                    text: 'Data berhasil disimpan.',
-                                });
+                        } else {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Berhasil!',
+                                text: 'Data berhasil disimpan.',
+                                confirmButtonColor: "#435EBE",
+                            });
 
-                                tableReport.ajax.reload(null, false);
+                            tableReport.ajax.reload(null, false);
 
-                                $('#reportModal').modal('hide');
+                            $('#reportModal').modal('hide');
 
-                            }
-                        },
-                        error: function(xhr) {
-                            if (xhr.status === 422) {
-                                // Menampilkan pesan validasi error SweetAlert
-                                var errorMessages = '';
-                                var errors = xhr.responseJSON.errors;
-                                for (var key in errors) {
-                                    if (errors.hasOwnProperty(key)) {
-                                        errorMessages += errors[key][0] + '<br>';
-                                    }
+                        }
+                    },
+                    error: function(xhr) {
+                        if (xhr.status === 422) {
+                            // Menampilkan pesan validasi error SweetAlert
+                            var errorMessages = '';
+                            var errors = xhr.responseJSON.errors;
+                            for (var key in errors) {
+                                if (errors.hasOwnProperty(key)) {
+                                    errorMessages += errors[key][0] + '<br>';
                                 }
-
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Gagal!',
-                                    html: errorMessages,
-                                });
-
-                            } else {
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Gagal!',
-                                    text: 'Terjadi kesalahan saat update data.',
-                                });
                             }
-                        },
-                    });
-                    // }
+
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Gagal!',
+                                html: errorMessages,
+                                confirmButtonColor: "#435EBE",
+                            });
+
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Gagal!',
+                                text: 'Terjadi kesalahan saat update data.',
+                                confirmButtonColor: "#435EBE",
+                            });
+                        }
+                    },
                 });
+                // }
+            });
 
             $('#reportModal').on('hidden.bs.modal', function() {
                 $('#date').val('');
@@ -441,45 +456,92 @@
             });
 
             $(document).on('click', '.btn-export-pdf', function() {
+
                 let internId = $(this).data('intern-id');
+
                 let internName = $(this).data('intern-name');
+
                 console.log(internId)
+
                 console.log(internName)
 
+
+
                 Swal.fire({
+
                     title: 'Mohon Tunggu!',
+
                     html: 'Generate PDF..',
+
                     allowOutsideClick: false,
+
                     showConfirmButton: false,
+
                     willOpen: () => {
+
                         Swal.showLoading();
+
                     },
+
                 });
 
-                fetch('/intern/export/reportByIntern/' + internId)
+
+
+                fetch('{{ route('intern.export.report.pdf', ':internId') }}'.replace(':internId', internId))
+
                     .then(response => {
+
                         Swal.close();
+
                         return response.blob();
+
                     })
+
                     .then(blob => {
+
                         const url = window.URL.createObjectURL(blob);
+
                         const link = document.createElement('a');
+
                         link.href = url;
+
                         link.download = 'Laporan Harian Magang :' + '.pdf';
+
+
+
+                        // Tambahkan tautan ke dokumen dan klik otomatis
+
                         document.body.appendChild(link);
+
                         link.click();
 
+
+
+                        // Hapus tautan setelah diunduh
+
                         document.body.removeChild(link);
+
                     })
+
                     .catch(error => {
+
                         console.error(error);
 
+
+
                         Swal.fire({
+
                             icon: 'error',
+
                             title: 'Oops...',
-                            text: 'Terjadi Kesahalahan'
+
+                            text: 'Terjadi Kesahalahan',
+                            confirmButtonColor: "#435EBE",
+
                         });
+
                     });
+
             });
         </script>
     @endpush

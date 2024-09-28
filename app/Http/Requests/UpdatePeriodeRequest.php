@@ -24,10 +24,10 @@ class UpdatePeriodeRequest extends FormRequest
         return [
             //
             'name' => 'required',
-            'position_id' => 'required',
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
-            'quota'=> 'required|min:1',
+            'positions.*.id' => 'required|exists:positions,id',
+            'positions.*.quota' => 'required|integer|min:1',
         ];
     }
 
@@ -42,6 +42,5 @@ class UpdatePeriodeRequest extends FormRequest
             'quota.required' => 'Kuota Pemagang tidak boleh kosong'
 
         ];
-        
     }
 }

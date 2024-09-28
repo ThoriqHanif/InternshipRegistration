@@ -10,6 +10,8 @@ use App\Models\Periode;
 use App\Models\Position;
 use App\Models\Report;
 use App\Models\User;
+use App\Service\InternService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
@@ -19,6 +21,13 @@ use ZipArchive;
 
 class InternController extends Controller
 {
+
+    protected $internService;
+
+    public function __construct(InternService $internService)
+    {
+        $this->internService = $internService;
+    }
     /**
      * Display a listing of the resource.
      */
@@ -85,9 +94,13 @@ class InternController extends Controller
 
     public function getPeriodeId($positionId)
     {
-        $periodeId = Periode::where('position_id', $positionId)
-            ->where('start_date', '<=', now())
-            ->where('end_date', '>=', now())
+        $today = now();
+
+        $periodeId = Periode::whereHas('positions', function ($query) use ($positionId) {
+            $query->where('position_id', $positionId);
+        })
+            ->where('start_date', '<=', $today)
+            ->where('end_date', '>=', $today)
             ->value('id');
 
         return response()->json(['periode_id' => $periodeId]);
@@ -95,14 +108,15 @@ class InternController extends Controller
 
     public function create()
     {
-        //
-        $activePositions = Position::whereHas('periode', function ($query) {
+        $periodes = Periode::all();
+        $positions = Position::all();
+        $activePositions = Position::whereHas('periodes', function ($query) {
             $today = now()->format('Y-m-d');
             $query->where('start_date', '<=', $today)
                 ->where('end_date', '>=', $today);
         })->get();
 
-        return view('pages.admin.intern.create', compact('activePositions'));
+        return view('pages.admin.intern.create', compact('activePositions', 'positions', 'periodes'));
     }
 
     /**
@@ -110,45 +124,42 @@ class InternController extends Controller
      */
     public function store(StoreInternRequest $request)
     {
-        //
         $cvFileName = null;
         if ($request->hasFile('cv')) {
             $cvFile = $request->file('cv');
             $cvFileName = $cvFile->getClientOriginalName();
-            $cvFile->move(public_path('files/cv'), $cvFileName);
+            $cvFile->move(public_path('uploads/cv'), $cvFileName);
         }
 
         $motivation_letterFileName = null;
         if ($request->hasFile('motivation_letter')) {
             $motivation_letterFile = $request->file('motivation_letter');
             $motivation_letterFileName = $motivation_letterFile->getClientOriginalName();
-            $motivation_letterFile->move(public_path('files/motivation_letter'), $motivation_letterFileName);
+            $motivation_letterFile->move(public_path('uploads/motivation_letter'), $motivation_letterFileName);
         }
 
         $cover_letterFileName = null;
         if ($request->hasFile('cover_letter')) {
             $cover_letterFile = $request->file('cover_letter');
             $cover_letterFileName = $cover_letterFile->getClientOriginalName();
-            $cover_letterFile->move(public_path('files/cover_letter'), $cover_letterFileName);
+            $cover_letterFile->move(public_path('uploads/cover_letter'), $cover_letterFileName);
         }
 
         $portfolioFileName = null;
         if ($request->hasFile('portfolio')) {
             $portfolioFile = $request->file('portfolio');
             $portfolioFileName = $portfolioFile->getClientOriginalName();
-            $portfolioFile->move(public_path('files/portfolio'), $portfolioFileName);
+            $portfolioFile->move(public_path('uploads/portfolio'), $portfolioFileName);
         }
 
         $photoFileName = null;
         if ($request->hasFile('photo')) {
             $photoFile = $request->file('photo');
             $photoFileName = $photoFile->getClientOriginalName();
-            $photoFile->move(public_path('files/photo'), $photoFileName);
+            $photoFile->move(public_path('uploads/photo'), $photoFileName);
         }
 
-
         $interns = new Intern();
-        // $interns->user_id = null;
         $interns->email = $request->email;
         $interns->full_name = $request->full_name;
         $interns->username = $request->username;
@@ -171,10 +182,8 @@ class InternController extends Controller
 
         if ($interns->save()) {
             if ($interns->status === 'pending') {
-                // Kirim email status e 'pending'
                 Mail::to($interns->email)->send(new InternStatus($interns, 'pending'));
             }
-
             return response()->json(['success' => true]);
         } else {
             return response()->json(['success' => false]);
@@ -182,7 +191,7 @@ class InternController extends Controller
     }
     /**
      * Display the specified resource.
-     */ 
+     */
 
     public function convertDocxToHtml($docxFilePath, $fileType)
 
@@ -201,118 +210,27 @@ class InternController extends Controller
             $fileTypeFolder = 'portfolio/';
         }
 
-        $htmlFilePath = public_path('files/' . $fileTypeFolder . '/convert/' . pathinfo($docxFilePath, PATHINFO_FILENAME) . '.html');
+        $htmlFilePath = public_path('uploads/' . $fileTypeFolder . '/convert/' . pathinfo($docxFilePath, PATHINFO_FILENAME) . '.html');
 
         $htmlWriter->save($htmlFilePath);
 
         // Path Html
-        $htmlFilePath = asset('files/' . $fileTypeFolder . '/convert/' . pathinfo($docxFilePath, PATHINFO_FILENAME) . '.html');
+        $htmlFilePath = asset('uploads/' . $fileTypeFolder . '/convert/' . pathinfo($docxFilePath, PATHINFO_FILENAME) . '.html');
 
         return $htmlFilePath;
-
     }
 
     public function show($id)
     {
         //
         $intern = Intern::find($id);
-        $genders = ['L' => 'Laki - Laki', 'P' => 'Perempuan'];
         $position_id = $intern->position_id;
-        $positions = Position::all();
-        $st = ['diterima' => 'Diterima', 'ditolak' => 'Ditolak', 'pending' => 'Pending'];
+        $positions = $this->internService->getAllPositions();
+        $documentData = $this->internService->processInternDocuments($intern);
 
-        // Mengambil alamat URL untuk file CV dari penyimpanan "public"
-        if ($intern->cv) {
-            $cvUrl = asset('files/cv/' . $intern->cv);
-            $cvExtension = pathinfo($intern->cv, PATHINFO_EXTENSION);
-            if ($cvExtension == 'docx') {
-                // Konversi docx ke html
-                $htmlPath = $this->convertDocxToHtml(public_path('files/cv/' . $intern->cv), 'cv');
-                $cvHtmlPath = $htmlPath;
-            }
-        } else {
-            $cvUrl = null;
-            $cvExtension = null;
-        }
 
-        if ($intern->motivation_letter) {
-            $motivationLetterUrl = asset('files/motivation_letter/' . $intern->motivation_letter);
-            $motivation_letterExtension = pathinfo($intern->motivation_letter, PATHINFO_EXTENSION);
 
-            if ($motivation_letterExtension == 'docx') {
-                $htmlPath = $this->convertDocxToHtml(public_path('files/motivation_letter/' . $intern->motivation_letter), 'motivation_letter');
-                $motivationLetterHtmlPath = $htmlPath;
-            }
-        } else {
-            $motivationLetterUrl = null;
-            $motivation_letterExtension = null;
-        }
-
-        if ($intern->cover_letter) {
-            $coverLetterUrl = asset('files/cover_letter/' . $intern->cover_letter);
-            $cover_letterExtension = pathinfo($intern->cover_letter, PATHINFO_EXTENSION);
-            if ($cover_letterExtension == 'docx') {
-                $htmlPath = $this->convertDocxToHtml(public_path('files/cover_letter/' . $intern->cover_letter), 'cover_letter');
-                $coverLetterHtmlPath = $htmlPath;
-            }
-        } else {
-            $coverLetterUrl = null;
-            $cover_letterExtension = null;
-        }
-
-        if ($intern->portfolio) {
-            $portfolioUrl = asset('files/portfolio/' . $intern->portfolio);
-            $portfolioExtension = pathinfo($intern->portfolio, PATHINFO_EXTENSION);
-            if ($portfolioExtension == 'docx') {
-                $htmlPath = $this->convertDocxToHtml(public_path('files/portfolio/' . $intern->portfolio), 'portfolio');
-                $portfolioHtmlPath = $htmlPath;
-            }
-        } else {
-            $portfolioUrl = null;
-            $portfolioExtension = null;
-        }
-
-        if ($intern->photo) {
-            $photoUrl = asset('files/photo/' . $intern->photo);
-            $photoExtension = pathinfo($intern->photo, PATHINFO_EXTENSION);
-        } else {
-            $photorUrl = null;
-            $photoExtension = null;
-        }
-
-        return view('pages.admin.intern.show', [
-            'id' => $intern->id,
-            'email' => $intern->email,
-            'full_name' => $intern->full_name,
-            'username' => $intern->username,
-            'phone_number' => $intern->phone_number,
-            'gender' => $intern->gender,
-            'address' => $intern->address,
-            'school' => $intern->school,
-            'major' => $intern->major,
-            'start_date' => $intern->start_date,
-            'end_date' => $intern->end_date,
-            'genders' => $genders, // Kirim data jenis kelamin ke tampilan
-            'positions' => $positions,
-            'position_id' => $position_id,
-            'cvExtension' => $cvExtension,
-            'motivation_letterExtension' => $motivation_letterExtension,
-            'cvUrl' => $cvUrl, // Menambahkan URL CV ke tampilan
-            'cover_letterExtension' => $cover_letterExtension,
-            'portfolioExtension' => $portfolioExtension,
-            'photoExtension' => $photoExtension,
-            'motivationLetterUrl' => $motivationLetterUrl,
-            'coverLetterUrl' => $coverLetterUrl,
-            'portfolioUrl' => $portfolioUrl,
-            'photoUrl' => $photoUrl,
-            'cvHtmlPath' => isset($cvHtmlPath) ? $cvHtmlPath : null,
-            'motivationLetterHtmlPath' => isset($motivationLetterHtmlPath) ? $motivationLetterHtmlPath : null,
-            'coverLetterHtmlPath' => isset($coverLetterHtmlPath) ? $coverLetterHtmlPath : null,
-            'portfolioHtmlPath' => isset($portfolioHtmlPath) ? $portfolioHtmlPath : null,
-            'status' => $intern->status,
-            'st' => $st
-        ]);
-        return view('pages.admin.intern.show', compact('intern', 'positions', 'status'));
+        return view('pages.admin.intern.show', array_merge(compact('intern', 'positions', 'position_id'), $documentData));
     }
 
     /**
@@ -320,291 +238,164 @@ class InternController extends Controller
      */
     public function edit($id)
     {
-        //
+        $today = Carbon::now();
         $intern = Intern::find($id);
-        $genders = ['L' => 'Laki - Laki', 'P' => 'Perempuan'];
+        $periodes = Periode::all();
         $position_id = $intern->position_id;
-        $positions = Position::all();
-        $st = ['diterima' => 'Diterima', 'interview' => 'Interview', 'ditolak' => 'Ditolak', 'pending' => 'Pending'];
 
-        $activePositions = Position::whereHas('periode', function ($query) {
-            $today = now()->format('Y-m-d');
-            $query->where('start_date', '<=', $today)
-                ->where('end_date', '>=', $today);
-        })->get();
+        $positions = $this->internService->getAllPositions();
+        $activePositions = $this->internService->getActivePositions($today);
+        $documentData = $this->internService->processInternDocuments($intern);
 
-        if ($intern->cv) {
-            $cvUrl = asset('files/cv/' . $intern->cv);
-            $cvExtension = pathinfo($intern->cv, PATHINFO_EXTENSION);
-            if ($cvExtension == 'docx') {
-                // convert docx -> html
-                $htmlPath = $this->convertDocxToHtml(public_path('files/cv/' . $intern->cv), 'cv');
-                $cvHtmlPath = $htmlPath;
-            }
-        } else {
-            $cvUrl = null;
-            $cvExtension = null;
-        }
+        return view('pages.admin.intern.edit', array_merge(compact(
+            'intern',
+            'positions',
+            'position_id',
+            'activePositions',
+            'periodes'
+        ), $documentData));
 
-        if ($intern->motivation_letter) {
-            $motivationLetterUrl = asset('files/motivation_letter/' . $intern->motivation_letter);
-            $motivation_letterExtension = pathinfo($intern->motivation_letter, PATHINFO_EXTENSION);
-
-            if ($motivation_letterExtension == 'docx') {
-                $htmlPath = $this->convertDocxToHtml(public_path('files/motivation_letter/' . $intern->motivation_letter), 'motivation_letter');
-                $motivationLetterHtmlPath = $htmlPath;
-            }
-        } else {
-            $motivationLetterUrl = null;
-            $motivation_letterExtension = null;
-        }
-
-        if ($intern->cover_letter) {
-            $coverLetterUrl = asset('files/cover_letter/' . $intern->cover_letter);
-            $cover_letterExtension = pathinfo($intern->cover_letter, PATHINFO_EXTENSION);
-            if ($cover_letterExtension == 'docx') {
-                $htmlPath = $this->convertDocxToHtml(public_path('files/cover_letter/' . $intern->cover_letter), 'cover_letter');
-                $coverLetterHtmlPath = $htmlPath;
-            }
-        } else {
-            $coverLetterUrl = null;
-            $cover_letterExtension = null;
-        }
-
-        if ($intern->portfolio) {
-            $portfolioUrl = asset('files/portfolio/' . $intern->portfolio);
-            $portfolioExtension = pathinfo($intern->portfolio, PATHINFO_EXTENSION);
-            if ($portfolioExtension == 'docx') {
-                $htmlPath = $this->convertDocxToHtml(public_path('files/portfolio/' . $intern->portfolio), 'portfolio');
-                $portfolioHtmlPath = $htmlPath;
-            }
-        } else {
-            $portfolioUrl = null;
-            $portfolioExtension = null;
-        }
-
-        if ($intern->photo) {
-            $photoUrl = asset('files/photo/' . $intern->photo);
-            $photoExtension = pathinfo($intern->photo, PATHINFO_EXTENSION);
-        } else {
-            $photorUrl = null;
-            $photoExtension = null;
-        }
-
-
-        return view('pages.admin.intern.edit', [
-            'intern' => $intern,
-            'id' => $intern->id,
-            'email' => $intern->email,
-            'full_name' => $intern->full_name,
-            'username' => $intern->username,
-            'phone_number' => $intern->phone_number,
-            'gender' => $intern->gender,
-            'address' => $intern->address,
-            'school' => $intern->school,
-            'major' => $intern->major,
-            'start_date' => $intern->start_date,
-            'end_date' => $intern->end_date,
-            'genders' => $genders,
-            'positions' => $positions,
-            'position_id' => $position_id,
-            'activePositions' => $activePositions,
-            'cvUrl' => $cvUrl, // Menambahkan URL file ke tampilan
-            'motivationLetterUrl' => $motivationLetterUrl,
-            'coverLetterUrl' => $coverLetterUrl,
-            'portfolioUrl' => $portfolioUrl,
-            'photoUrl' => $photoUrl,
-            'cvExtension' => $cvExtension,
-            'motivation_letterExtension' => $motivation_letterExtension,
-            'cover_letterExtension' => $cover_letterExtension,
-            'portfolioExtension' => $portfolioExtension,
-            'photoExtension' => $photoExtension,
-            'cvHtmlPath' => isset($cvHtmlPath) ? $cvHtmlPath : null,
-            'motivationLetterHtmlPath' => isset($motivationLetterHtmlPath) ? $motivationLetterHtmlPath : null,
-            'coverLetterHtmlPath' => isset($coverLetterHtmlPath) ? $coverLetterHtmlPath : null,
-            'portfolioHtmlPath' => isset($portfolioHtmlPath) ? $portfolioHtmlPath : null,
-            'status' => $intern->status,
-            'st' => $st,
-            'statusChanged' => $intern->status_changed,
-            'messages' => $intern->messages
-
-        ]);
-        return view('pages.admin.intern.edit', compact('intern', 'position', 'activePositions'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-
     public function update(UpdateInternRequest $request, $id)
     {
-        $data = Intern::find($id);
+
+        $data = Intern::findOrFail($id);
         $status = $request->input('status');
         $newPositionId = $request->input('position_id');
-
         $previousStatus = $data->status;
 
-        if ($request->status === 'diterima' || $request->status === 'pending' || $request->status === 'interview' || $request->status === 'ditolak') {
-            $data->messages = $request->messages; // Ambil pesan dari request
+        if (in_array($request->status, ['pending', 'interview', 'accepted', 'rejected'])) {
+            $data->messages = $request->messages;
             $data->save();
         }
 
+        // Cek perubahan status
         if ($data->status !== $status) {
-            // Pindahkan logika pengiriman email ke luar dari kondisi 'diterima'
-            if ($status === 'ditolak') {
-                if ($previousStatus === 'diterima') {
-                    $periodeId = $data->periode_id;
-
-                    $periode = Periode::find($periodeId);
-
-                    if ($periode) {
-                        $periode->quota++;
-                        $periode->save();
-                    }
-
-                    Report::where('intern_id', $data->id)->delete();
-                }
-                // Jika status sekarang adalah 'ditolak', kirim email notifikasi ditolak
-                Mail::to($data->email)->send(new InternStatus($data, 'ditolak', $data->messages));
-            } elseif ($status === 'pending') {
-                if ($previousStatus === 'diterima') {
-                    $periodeId = $data->periode_id;
-
-                    $periode = Periode::find($periodeId);
-
-                    if ($periode) {
-                        $periode->quota++;
-                        $periode->save();
-                    }
-
-                    Report::where('intern_id', $data->id)->delete();
-                }
-                // Jika status sekarang adalah 'pending', kirim email notifikasi pending
-                Mail::to($data->email)->send(new InternStatus($data, 'pending', $data->messages));
-            } elseif ($status === 'interview') {
-                if ($previousStatus === 'diterima') {
-                    $periodeId = $data->periode_id;
-
-                    $periode = Periode::find($periodeId);
-
-                    if ($periode) {
-                        $periode->quota++;
-                        $periode->save();
-                    }
-
-                    Report::where('intern_id', $data->id)->delete();
-                }
-                // Jika status sekarang adalah 'interview', kirim email notifikasi interview
-                Mail::to($data->email)->send(new InternStatus($data, 'interview', $data->messages));
-
-                // UPDATE JADI DITERIMA
-            } elseif ($status === 'diterima') {
-
-                $periodeId = $data->periode_id;
-
-                // Dapatkan periode berdasarkan periode_id dari data intern
-                $periode = Periode::find($periodeId);
-
-                if (!$periode) {
-                    // Jika tidak ada periode yang tersedia
-                    return response()->json(['message' => 'Maaf, periode tidak tersedia untuk posisi ini.'], 400);
-                }
-
-                if ($periode->quota <= 0) {
-                    // Jika kuota sudah habis
-                    return response()->json(['message' => 'Maaf, kuota untuk posisi ini sudah penuh.'], 400);
-                }
-
-                $periode->quota--;
-                $periode->save();
-
-                // CREATE USER
-                $username = $data->username;
-                $password = 'intern' . $username;
-
-
-                $user = User::create([
-                    'name' => $data->username,
-                    'email' => $data->email,
-                    'role' => 'user',
-                    'password' => $password,
-                ]);
-
-                // RELASI USER
-                $data->user_id = $user->id;
-
-                // CREATE REPORT 
-                $startDate = $data->start_date;
-                $endDate = $data->end_date;
-                $internId = $data->id;
-
-                $currentDate = $startDate;
-                while ($currentDate <= $endDate) {
-                    Report::create([
-                        'intern_id' => $internId,
-                        'date' => $currentDate,
-                        'presence' => null,
-                        'attendance_hours' => null,
-                        'agency' => null,
-                        'project_name' => null,
-                        'job' => null,
-                        'description' => null,
-                    ]);
-
-                    $currentDate = date('Y-m-d', strtotime($currentDate . ' +1 day'));
-                }
-
-                Mail::to($data->email)->send(new InternStatus($data, 'diterima', $password, $data->messages));
+            $response = $this->handleStatusChange($data, $previousStatus, $status);
+            if ($response) {
+                return $response;
             }
-
-            // DITOLAK -> USRER ID NULL
-            $relatedInterns = Intern::where('user_id', $data->user_id)->get();
-            foreach ($relatedInterns as $relatedIntern) {
-                $relatedIntern->user_id = null;
-                $relatedIntern->save();
-            }
-
-            // HAPUS USER <- STATUS DITERIMA
-            if ($data->status === 'diterima' && $data->user) {
-                $data->user->delete();
-            }
-
             $data->status = $status;
         }
 
+        // Perbarui posisi jika berbeda
         if ($data->position_id != $newPositionId) {
-            $newPosition = Position::find($newPositionId);
-            $newPeriode = null;
+            $this->updatePosition($data, $newPositionId);
+        }
 
-            if ($newPosition) {
-                // Temukan periode baru yang terkait dengan posisi baru
-                $newPeriode = Periode::where('position_id', $newPositionId)->first();
+        // Update data pemagang
+        $this->updateInternData($data, $request);
 
-                if ($newPeriode) {
-                    $availableQuota = $newPeriode->quota;
+        if ($data->save()) {
+            return response()->json(['success' => true]);
+        } else {
+            return response()->json(['success' => false]);
+        }
+    }
 
-                    // Cek apakah posisi baru memiliki kuota tersedia
-                    if ($availableQuota > 0) {
-                        $data->position_id = $newPositionId;
-                        $data->periode_id = $newPeriode->id;
+    protected function handleStatusChange($data, $previousStatus, $status)
+    {
+        $periodeId = $data->periode_id;
+        $periode = Periode::find($periodeId);
 
-                        // Kurangi kuota yang tersedia karena pemagang pindah posisi
-                        $newPeriode->quota -= 1;
-                        $newPeriode->save();
-
-                        // Simpan perubahan pada data pemagang untuk posisi_id dan periode_id
-                        if ($data->save(['position_id', 'periode_id'])) {
-                            return response()->json(['success' => true]);
-                        }
-                    } else {
-                        return response()->json(['message' => 'Maaf, kuota untuk posisi ini sudah penuh.'], 400);
-                    }
+        if ($status === 'rejected' || $status === 'pending' || $status === 'interview') {
+            if ($previousStatus === 'accepted' && $periode) {
+                $pivotData = $periode->positions()->where('positions.id', $data->position_id)->first();
+                if ($pivotData) {
+                    $pivotData->pivot->quota++;
+                    $pivotData->pivot->save();
                 }
+                Report::where('intern_id', $data->id)->delete();
+            }
+
+            Mail::to($data->email)->send(new InternStatus($data, $status, $data->messages));
+        } elseif ($status === 'accepted') {
+            $pivotData = $periode->positions()->where('positions.id', $data->position_id)->first();
+
+            if (!$pivotData || $pivotData->pivot->quota <= 0) {
+                return response()->json(['message' => 'Maaf, kuota untuk posisi ini sudah penuh.'], 400);
+            }
+
+            $pivotData->pivot->quota--;
+            $pivotData->pivot->save();
+
+            $this->createUserAndReports($data, $periode);
+        }
+    }
+
+    protected function updatePosition($data, $newPositionId)
+    {
+        $newPosition = Position::find($newPositionId);
+        if ($newPosition) {
+            $newPeriode = $newPosition->periodes()->where('start_date', '<=', now())
+                ->where('end_date', '>=', now())->first();
+
+            if ($newPeriode) {
+                $pivotData = $newPeriode->positions()->where('positions.id', $newPositionId)->first();
+
+                if ($pivotData && $pivotData->pivot->quota > 0) {
+                    $pivotData->pivot->quota--;
+                    $pivotData->pivot->save();
+
+                    $data->position_id = $newPositionId;
+                    $data->periode_id = $newPeriode->id;
+                    $data->save();
+
+                    return response()->json(['success' => true]);
+                } else {
+                    return response()->json(['message' => 'Maaf, kuota untuk posisi ini sudah penuh.'], 400);
+                }
+            } else {
+                return response()->json(['message' => 'Periode tidak tersedia untuk posisi ini.'], 400);
             }
         }
 
+        return response()->json(['message' => 'Posisi ini tidak ditemukan.'], 404);
+    }
 
-        // edit input    
+    protected function createUserAndReports($data, $periode)
+    {
+        $username = $data->username;
+        $password = 'intern' . $username;
+
+        $user = User::create([
+            'name' => $data->username,
+            'email' => $data->email,
+            'role' => 'user',
+            'password' => bcrypt($password),
+        ]);
+
+        $data->user_id = $user->id;
+
+        $this->createReports($data->start_date, $data->end_date, $data->id);
+
+        Mail::to($data->email)->send(new InternStatus($data, 'accepted', $password, $data->messages));
+    }
+
+    protected function createReports($startDate, $endDate, $internId)
+    {
+        $currentDate = $startDate;
+        while ($currentDate <= $endDate) {
+            Report::create([
+                'intern_id' => $internId,
+                'date' => $currentDate,
+                'presence' => null,
+                'attendance_hours' => null,
+                'agency' => null,
+                'project_name' => null,
+                'job' => null,
+                'description' => null,
+            ]);
+            $currentDate = date('Y-m-d', strtotime($currentDate . ' +1 day'));
+        }
+    }
+
+    protected function updateInternData($data, $request)
+    {
         $data->update([
             'full_name' => $request->input('full_name'),
             'username' => $request->input('username'),
@@ -616,57 +407,26 @@ class InternController extends Controller
             'major' => $request->input('major'),
             'start_date' => $request->input('start_date'),
             'end_date' => $request->input('end_date'),
-            'position_id' => $request->input('position_id'),
             'messages' => $request->input('messages')
         ]);
 
-        if ($request->hasFile('cv')) {
+        $this->uploadFiles($data, $request);
+    }
 
-            $cvFile = $request->file('cv');
-            $cvFileName = $cvFile->getClientOriginalName();
-            $cvFile->move(public_path('files/cv'), $cvFileName);
-            $data->update(['cv' => $cvFileName]);
-        }
-
-        if ($request->hasFile('motivation_letter')) {
-
-            $motivation_letterFile = $request->file('motivation_letter');
-            $motivation_letterFileName = $motivation_letterFile->getClientOriginalName();
-            $motivation_letterFile->move(public_path('files/motivation_letter'), $motivation_letterFileName);
-            $data->update(['motivation_letter' => $motivation_letterFileName]);
-        }
-
-        if ($request->hasFile('cover_letter')) {
-
-            $cover_letterFile = $request->file('cover_letter');
-            $cover_letterFileName = $cover_letterFile->getClientOriginalName();
-            $cover_letterFile->move(public_path('files/cover_letter'), $cover_letterFileName);
-            $data->update(['cover_letter' => $cover_letterFileName]);
-        }
-
-        if ($request->hasFile('portfolio')) {
-
-            $portfolioFile = $request->file('portfolio');
-            $portfolioFileName = $portfolioFile->getClientOriginalName();
-            $portfolioFile->move(public_path('files/portfolio'), $portfolioFileName);
-            $data->update(['portfolio' => $portfolioFileName]);
-        }
-
-        if ($request->hasFile('photo')) {
-
-            $photoFile = $request->file('photo');
-            $photoFileName = $photoFile->getClientOriginalName();
-            $photoFile->move(public_path('files/photo'), $photoFileName);
-            $data->update(['photo' => $photoFileName]);
-        }
-
-        // Simpan perubahan
-        if ($data->save()) {
-            return response()->json(['success' => true]);
-        } else {
-            return response()->json(['success' => false]);
+    protected function uploadFiles($data, $request)
+    {
+        $files = ['cv', 'motivation_letter', 'cover_letter', 'portfolio', 'photo'];
+        foreach ($files as $file) {
+            if ($request->hasFile($file)) {
+                $fileInstance = $request->file($file);
+                $fileName = $fileInstance->getClientOriginalName();
+                $fileInstance->move(public_path("uploads/{$file}"), $fileName);
+                $data->update([$file => $fileName]);
+            }
         }
     }
+
+
 
 
 
@@ -680,19 +440,19 @@ class InternController extends Controller
 
         // Hapus file CV, motivation letter, cover letter, portfolio, dan photo jika ada
         if ($intern->cv) {
-            Storage::delete('files/cv/' . $intern->cv);
+            Storage::delete('uploads/cv/' . $intern->cv);
         }
         if ($intern->motivation_letter) {
-            Storage::delete('files/motivation_letter/' . $intern->motivation_letter);
+            Storage::delete('uploads/motivation_letter/' . $intern->motivation_letter);
         }
         if ($intern->cover_letter) {
-            Storage::delete('files/cover_letter/' . $intern->cover_letter);
+            Storage::delete('uploads/cover_letter/' . $intern->cover_letter);
         }
         if ($intern->portfolio) {
-            Storage::delete('files/portfolio/' . $intern->portfolio);
+            Storage::delete('uploads/portfolio/' . $intern->portfolio);
         }
         if ($intern->photo) {
-            Storage::delete('files/photo/' . $intern->photo);
+            Storage::delete('uploads/photo/' . $intern->photo);
         }
 
         // Hapus data Interns dari database
@@ -712,21 +472,20 @@ class InternController extends Controller
             return redirect('intern.index')->with('error', 'Pemagang tidak ditemukan');
         }
 
-        $zipFileName = 'intern_' . $username . '_files.zip'; // Nama file zip yang akan diunduh
+        $zipFileName = '['. strtolower($username) .']' . '_files.zip';
         $zip = new ZipArchive;
         $zip->open(public_path($zipFileName), ZipArchive::CREATE);
 
-        $filesToZip = [
-            public_path('files/cv/' . $intern->cv),
-            public_path('files/motivation_letter/' . $intern->motivation_letter),
-            // Pastikan Anda memeriksa apakah cover_letter adalah null sebelum menambahkannya ke dalam zip
-            !is_null($intern->cover_letter) ? public_path('files/cover_letter/' . $intern->cover_letter) : null,
-            public_path('files/portfolio/' . $intern->portfolio),
-            public_path('files/photo/' . $intern->photo),
+        $uploadsToZip = [
+            public_path('uploads/cv/' . $intern->cv),
+            public_path('uploads/motivation_letter/' . $intern->motivation_letter),
+            !is_null($intern->cover_letter) ? public_path('uploads/cover_letter/' . $intern->cover_letter) : null,
+            public_path('uploads/portfolio/' . $intern->portfolio),
+            public_path('uploads/photo/' . $intern->photo),
         ];
 
         // Tambahkan file yang bukan null ke dalam zip
-        foreach ($filesToZip as $file) {
+        foreach ($uploadsToZip as $file) {
             if ($file !== null && file_exists($file)) {
                 $zip->addFile($file, basename($file));
             }

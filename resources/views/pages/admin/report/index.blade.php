@@ -1,23 +1,38 @@
 @extends('layouts.app')
 
 @section('content')
+    <header class="mb-3">
+        <a href="#" class="burger-btn d-block d-xl-none">
+            <i class="bi bi-justify fs-3"></i>
+        </a>
+    </header>
+    <div class="page-title">
+        <div class="row">
+            <div class="col-12 col-md-6 order-md-1 order-last">
+                <h3>Daftar Report</h3>
+                <p class="text-subtitle text-muted">Berikut daftar Report Pemagang Kadang Koding Indonesia</p>
+            </div>
+            <div class="col-12 col-md-6 order-md-2 order-first">
+                <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{ url('admin/dashboard') }}">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('reports.index') }}">Report</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Daftar Report</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
         <section class="content-header">
             <div class="container-fluid">
                 <div class="row mb-2">
-                    <div class="col-sm-6">
-                        <h1>Report Management</h1>
-                    </div>
-                    <div class="col-sm-6">
-                        <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="#">Report</a></li>
-                            <li class="breadcrumb-item active">Report Management</li>
-                        </ol>
-                    </div>
+
                 </div>
             </div><!-- /.container-fluid -->
         </section>
+
         <section class="content">
             <div class="container-fluid">
                 <div class="row">
@@ -27,28 +42,55 @@
                                 @foreach ($interns as $intern)
                                     <a class="btn btn-primary btn-export-pdf display" style="display: none" id="pdfPrint"
                                         data-intern-id="{{ $intern->id }}" data-intern-name="{{ $intern->full_name }}"><i
-                                            class="fas fa-print mr-2"></i>Print PDF</a>
+                                            class="bi bi-printer-fill mr-2" style="margin-right: 10px"></i>Print PDF</a>
                                 @endforeach
 
                                 @foreach ($periode as $periode)
                                     <a class="btn btn-primary btn-export-pdf-intern display" style="display: none"
                                         id="pdfPrintIntern" data-periode-id="{{ $periode->id }}"
-                                        data-periode-name="{{ $periode->name }}"><i class="fas fa-print mr-2"></i>Print
+                                        data-periode-name="{{ $periode->name }}"><i class="bi bi-printer-fill mr-2"
+                                            style="margin-right: 10px;"></i>Print
                                         PDF</a>
                                 @endforeach
 
                                 @foreach ($interns as $intern)
                                     <a class="btn btn-success display verif-all" data-intern-id="{{ $intern->id }}"
-                                        style="display: none" id="verifAll"><i
-                                            class="fas fa-check-double mr-2"></i>Verifikasi
+                                        style="display: none" id="verifAll"><i class="bi bi-check-all mr-2"
+                                            style="margin-right: 10px"></i>Verifikasi
                                         Semua</a>
                                 @endforeach
 
 
                             </div>
                             <!-- /.card-header -->
+                            {{-- <section class="section" id="internInfo" style="display: none">
+
+                            </section> --}}
                             <div class="card-body">
-                                <div class="d-flex justify-content-between mb-4 row">
+                                <div class="row" id="internInfo" style="display: none">
+                                    <div class="col-12">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h5 class="card-title">Detail Pemagang</h5>
+                                            </div>
+                                            <div class="card-body">
+                                                <p>
+                                                    Nama Lengkap :
+                                                    <a href="" id="name" class="text-primary"></a>
+                                                </p>
+                                                <p>
+                                                    Asal Sekolah :
+                                                    <a href="" id="school" class="text-primary"></a>
+                                                </p>
+                                                <p>
+                                                    Posisi Magang :
+                                                    <a href="" id="position" class="text-primary"></a>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {{-- <div class="d-flex justify-content-between mb-4 row">
                                     <div class="col-6">
 
                                         <div class="card px-3 py-3" id="internInfo" style="display: none">
@@ -68,9 +110,9 @@
                                         </div>
                                     </div>
 
-                                </div>
+                                </div> --}}
                                 {{-- <div class="row invoice-info mb-3">
-                                    
+
                                     <div class="col-sm-4 invoice-col">
                                         Detail Pemagang
                                         <address>
@@ -78,23 +120,24 @@
                                             {{$intern->address}}<br>
                                             Phone: {{$intern->phone_number}}<br>
                                             Email: <a href="mail:to{{$intern->email}}">{{$intern->email}}</a>
-                                            
+
                                         </address>
                                     </div>
                                     <!-- /.col -->
-                                   
+
                                     <!-- /.col -->
                                 </div> --}}
 
                                 @include('components.alert')
                                 <div class="table-responsive">
-                                    <table class="table table-bordered table-hover" id="tablePeriode">
+                                    <table class="table table-hover" id="tablePeriode">
                                         <thead>
                                             <tr>
                                                 <th style="width: 10px">No</th>
                                                 <th>Nama</th>
-                                                <th>Tanggal Mulai</th>
-                                                <th>Tanggal Selesai</th>
+                                                <th class="table-fit">Tanggal Mulai</th>
+                                                <th class="table-fit">Tanggal Selesai</th>
+                                                {{-- <th class="table-fit">Posisi</th> --}}
 
                                                 <th style="width: 140px">Action</th>
                                             </tr>
@@ -103,17 +146,15 @@
 
                                         </tbody>
                                     </table>
-                                    <table class="table table-bordered table-hover display" id="internByPeriode"
-                                        style="display: none">
+                                    <table class="table table-hover display" id="internByPeriode" style="display: none">
                                         <thead>
                                             <tr>
                                                 <th style="width: 10px">No</th>
-                                                <th>Nama</th>
-                                                <th>Sekolah</th>
-                                                <th>Posisi</th>
-                                                <th>Tanggal Mulai</th>
-                                                <th>Tanggal Selesai</th>
-                                                <th>Status</th>
+                                                <th >Nama</th>
+                                                <th class="table-fit">Posisi</th>
+                                                <th class="table-fit">Tanggal Mulai</th>
+                                                <th class="table-fit">Tanggal Selesai</th>
+                                                <th class="table-fit">Status</th>
                                                 <th style="width: 140px">Action</th>
                                             </tr>
                                         </thead>
@@ -121,19 +162,18 @@
 
                                         </tbody>
                                     </table>
-                                    <table class="table table-bordered table-hover display" id="reportByIntern"
-                                        style="display: none">
+                                    <table class="table table-hover display" id="reportByIntern" style="display: none">
                                         <thead>
                                             <tr>
                                                 <th style="width: 10px">No</th>
-                                                <th>Tanggal</th>
-                                                <th>Presensi</th>
-                                                <th>Jam Hadir</th>
-                                                <th>Instansi</th>
+                                                <th class="table-fit">Tanggal</th>
+                                                <th class="table-fit">Presensi</th>
+                                                <th class="table-fit">Jam Hadir</th>
+                                                <th class="table-fit">Instansi</th>
                                                 <th>Nama Project</th>
                                                 <th>Pekerjaan</th>
                                                 <th>Keterangan</th>
-                                                <th style="width: 140px">Action</th>
+                                                <th style="width: 140px" class="table-fit">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -170,7 +210,8 @@
                             data: 'DT_RowIndex',
                             name: 'DT_RowIndex',
                             orderable: false,
-                            searchable: false
+                            searchable: false,
+                            class: 'table-fit'
                         },
                         {
                             data: 'name',
@@ -179,6 +220,7 @@
                         {
                             data: 'start_date',
                             name: 'start_date',
+                            class: 'table-fit',
                             render: function(data, type, row) {
                                 let startDatePeriode = new Date(data);
                                 return startDatePeriode.toLocaleDateString(
@@ -193,6 +235,7 @@
                         {
                             data: 'end_date',
                             name: 'end_date',
+                            class: 'table-fit',
                             render: function(data, type, row) {
                                 let endDatePeriode = new Date(data);
                                 return endDatePeriode.toLocaleDateString(
@@ -206,7 +249,9 @@
                         },
                         {
                             data: 'action',
-                            name: 'action'
+                            name: 'action',
+                            class: 'table-fit'
+
                         },
                     ],
                 });
@@ -216,16 +261,16 @@
                 $(document).on('click', '.btn-view-interns', function() {
                     let periodeId = $(this).data('periode-id');
                     let periodeName = $(this).data('periode-name');
-                    console.log(periodeId);
-                    console.log(periodeName);
                     $("#pdfPrintIntern").attr('data-periode-id', periodeId).attr('data-periode-name',
                         periodeName).show();
 
                     $.ajax({
-                        url: '/admin/intern/' + periodeId,
+
+                        url: '{{ route('admin.intern.periode', ':id') }}'.replace(':id', periodeId),
+
                         method: 'GET',
+
                         success: function(response) {
-                            console.log(response)
 
                             tablePeriode.destroy();
 
@@ -234,11 +279,11 @@
                                     let badgeClass = '';
                                     let textColor = 'text-white';
 
-                                    if (data['status'] === 'diterima') {
-                                        badgeClass = 'bg-green';
+                                    if (data['status'] === 'accepted' ) {
+                                        badgeClass = 'bg-success';
                                     }
 
-                                    $(row).find('td:eq(6)').html(
+                                    $(row).find('td:eq(5)').html(
                                         '<span class="badge text-capitalize text-white px-2 ' +
                                         badgeClass + ' ' + textColor + '">' + data[
                                             'status'] + '</span>');
@@ -258,19 +303,18 @@
                                     },
                                     {
                                         data: 'full_name',
-                                        name: 'full_name'
-                                    },
-                                    {
-                                        data: 'school',
-                                        name: 'school'
+                                        name: 'full_name',
                                     },
                                     {
                                         data: 'position.name',
-                                        name: 'position.name'
+                                        name: 'position.name',
+                                        class: 'table-fit'
                                     },
                                     {
                                         data: 'start_date',
                                         name: 'start_date',
+                                        class: 'table-fit',
+
                                         render: function(data, type, row) {
                                             let startDateIntern = new Date(data);
                                             return startDateIntern
@@ -286,6 +330,7 @@
                                     {
                                         data: 'end_date',
                                         name: 'end_date',
+                                        class: 'table-fit',
                                         render: function(data, type, row) {
                                             let endDateIntern = new Date(data);
                                             return endDateIntern.toLocaleDateString(
@@ -299,12 +344,14 @@
                                     },
                                     {
                                         data: 'status',
-                                        name: 'status'
+                                        name: 'status',
+                                        class: 'table-fit'
+
                                     },
                                     {
                                         data: null,
                                         render: function(data, type, row) {
-                                            // console.log(row.id); 
+                                            // console.log(row.id);
                                             return '<a class="btn btn-sm btn-primary btn-view-report" data-intern-id="' +
                                                 row.id +
                                                 '" data-intern-name="' +
@@ -359,13 +406,13 @@
 
                                     if (data['presence'] !== null) {
                                         if (data['presence'] === 'masuk') {
-                                            badgeClass = 'bg-green';
+                                            badgeClass = 'bg-success';
                                         } else if (data['presence'] === 'remote') {
-                                            badgeClass = 'bg-purple';
+                                            badgeClass = 'bg-primary';
                                         } else if (data['presence'] === 'izin') {
-                                            badgeClass = 'bg-orange';
+                                            badgeClass = 'bg-warning';
                                         } else if (data['presence'] === 'libur') {
-                                            badgeClass = 'bg-red';
+                                            badgeClass = 'bg-danger';
                                         }
 
                                         // Tambahkan badge ke dalam sel jika nilai presence tidak null
@@ -394,6 +441,7 @@
                                     {
                                         data: 'date',
                                         name: 'date',
+                                        class: 'table-fit',
                                         render: function(data, type, row) {
                                             let dateReport = new Date(data);
                                             return dateReport.toLocaleDateString(
@@ -407,11 +455,14 @@
                                     },
                                     {
                                         data: 'presence',
-                                        name: 'presence'
+                                        name: 'presence',
+                                        class: 'table-fit',
+
                                     },
                                     {
                                         data: 'attendance_hours',
                                         name: 'attendance_hours',
+                                        class: 'table-fit',
                                         render: function(data, type, row) {
                                             // Jika data adalah format waktu
                                             if (type === 'display' && data) {
@@ -440,24 +491,26 @@
                                         name: 'description'
                                     },
                                     {
+                                        class: 'table-fit',
                                         data: null,
                                         render: function(data, type, row) {
                                             let buttonHtml = '';
 
                                             if (row.status === 'vermin') {
                                                 buttonHtml =
-                                                    '<a class="btn btn-sm btn-success btn-verified"><i class="nav-icon fas fa-check-circle mr-1"></i> Terverifikasi</a>';
+                                                    '<a class="btn btn-sm btn-success btn-verified"><i class="nav-icon bi bi-check-all mr-1"></i> Terverifikasi</a>';
                                             } else {
                                                 buttonHtml =
                                                     '<a class="btn btn-sm btn-primary btn-vermin" data-report-id="' +
                                                     row.id +
-                                                    '"><i class="nav-icon fas fa-check mr-1"></i> Vermin</a>';
+                                                    '"><i class="nav-icon bi bi-check mr-1"></i> Vermin</a>';
                                             }
 
                                             return buttonHtml;
                                         },
                                         orderable: false,
                                         searchable: false
+
                                     }
                                 ],
                                 "drawCallback": function(settings) {
@@ -597,7 +650,7 @@
                                     if ($(this).hasClass('btn-primary')) {
                                         // Hanya ubah tombol yang belum 'Terverifikasi'
                                         $(this).html(
-                                            '<i class="nav-icon fas fa-check-circle mr-1"></i> Terverifikasi'
+                                            '<i class="nav-icon bi bi-check-circle-fill mr-1"></i> Terverifikasi'
                                         );
                                         $(this).removeClass('btn-primary').addClass(
                                             'btn-success');

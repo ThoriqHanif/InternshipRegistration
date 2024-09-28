@@ -18,7 +18,7 @@ class PositionController extends Controller
     {
         if ($request->ajax()) {
             $positions = ($request->showDeleted == 1) ? Position::onlyTrashed() : Position::query();
-    
+
             return DataTables::of($positions)
                 ->addColumn('action', function ($positions) {
                     if ($positions->trashed()) {
@@ -31,14 +31,14 @@ class PositionController extends Controller
                 ->rawColumns(['action'])
                 ->make(true);
         }
-    
+
         return view('pages.admin.position.index');
     }
 
     public function restore($id)
     {
         $positions = Position::onlyTrashed()->find($id);
-        
+
         if ($positions) {
             $positions->restore();
             return response()->json(['success' => true]);
@@ -83,15 +83,15 @@ class PositionController extends Controller
         if (!empty($requirements)) {
             $requirementsString = implode(', ', $requirements);
         } else {
-            $requirementsString = null; // Atau, jika Anda ingin mengisi dengan null jika tidak ada yang dipilih
+            $requirementsString = null;
         }
 
-        
+
         $imageFileName = null;
         if ($request->hasFile('image')) {
             $imageFile = $request->file('image');
             $imageFileName = $imageFile->getClientOriginalName();
-            $imageFile->move(public_path('files/image'), $imageFileName);
+            $imageFile->move(public_path('uploads/image'), $imageFileName);
         }
 
         $positions = new Position();
@@ -99,7 +99,6 @@ class PositionController extends Controller
         $positions->description = $request->input('description');
         $positions->requirements = $requirementsString;
         $positions->image = $imageFileName;
-        // $positions->save();
 
         if ($positions->save()) {
             return response()->json(['success' => true]);
@@ -115,11 +114,9 @@ class PositionController extends Controller
     {
         //
         if ($position->image) {
-            // Jika surat pengantar sudah diunggah, atur $coverLetterUrl
-            $imageUrl = asset('files/image/' . $position->image);
+            $imageUrl = asset('uploads/image/' . $position->image);
             $imageExtension = pathinfo($position->image, PATHINFO_EXTENSION);
         } else {
-            // Jika surat pengantar belum diunggah, atur $coverLetterUrl menjadi null
             $imageUrl = null;
             $imageExtension = null;
         }
@@ -139,17 +136,15 @@ class PositionController extends Controller
      */
     public function edit(Position $position)
     {
-     
+
         $imageUrl = null;
         if ($position->image) {
-            // Jika surat pengantar sudah diunggah, atur $coverLetterUrl
-            $imageUrl = asset('files/image/' . $position->image);
+            $imageUrl = asset('uploads/image/' . $position->image);
             $imageExtension = pathinfo($position->image, PATHINFO_EXTENSION);
         } else {
-            // Jika surat pengantar belum diunggah, atur $coverLetterUrl menjadi null
             $imagerUrl = null;
             $imageExtension = null;
-        }  
+        }
 
         return view('pages.admin.position.edit')->with([
             'position' => $position,
@@ -177,23 +172,18 @@ class PositionController extends Controller
         $data->name = $request->input('name');
         $data->description = $request->input('description');
 
-        // Proses pembaruan kolom "requirements" sesuai kebutuhan Anda
-        // Misalnya, Anda dapat menggunakan implode untuk menggabungkan nilai checkbox
         $requirements = $request->input('requirements', []);
         $requirementsString = implode(', ', $requirements);
         $data->requirements = $requirementsString;
 
         if ($request->hasFile('image')) {
-            // Simpan file gambar yang baru
             $imageFile = $request->file('image');
             $imageFileName = $imageFile->getClientOriginalName();
-            $imageFile->move(public_path('files/image'), $imageFileName);
-    
-            // Update kolom "image" dalam database
+            $imageFile->move(public_path('uploads/image'), $imageFileName);
+
             $data->update(['image' => $imageFileName]);
         }
 
-        // Simpan perubahan
         if ($data->save()) {
             return response()->json(['success' => true]);
         } else {

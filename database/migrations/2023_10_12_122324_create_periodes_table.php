@@ -14,10 +14,8 @@ return new class extends Migration
         Schema::create('periodes', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->unsignedBigInteger('position_id');
             $table->date('start_date');
             $table->date('end_date');
-            $table->integer('quota');
             $table->string('description')->nullable();
             $table->timestamps();
         });

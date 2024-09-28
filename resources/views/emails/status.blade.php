@@ -183,10 +183,10 @@
                                                                     style="line-height:10px"><a
                                                                         href="https://kadangkoding.com"
                                                                         style="outline:none" tabindex="-1"
-                                                                        target="_blank"><img alt="Logo Kadang Koding"
+                                                                        target="_blank"><img
                                                                             src="https://i.imgur.com/eqEKIco.png"
                                                                             style="display: block; height: auto; border: 0; max-width: 140px; width: 100%;"
-                                                                            title="Logo Kadang Koding"
+                                                                            
                                                                             width="140" /></a></div>
                                                             </td>
                                                         </tr>
@@ -217,26 +217,26 @@
                                                                             <td style="padding:0 2px 0 2px;"><a
                                                                                     href="https://www.instagram.com/kadangkoding/"
                                                                                     target="_blank"><img
-                                                                                        alt="Instagram" height="32"
+                                                                                         height="32"
                                                                                         src="https://i.imgur.com/XEEoysj.png"
                                                                                         style="display: block; height: auto; border: 0;"
-                                                                                        title="Instagram"
+                                                                                        
                                                                                         width="32" /></a></td>
                                                                             <td style="padding:0 2px 0 2px;"><a
                                                                                     href="https://www.linkedin.com/company/kadang-koding-indonesia/about/"
                                                                                     target="_blank"><img
-                                                                                        alt="Linkedin" height="32"
+                                                                                         height="32"
                                                                                         src="https://i.imgur.com/crKX2Ej.png"
                                                                                         style="display: block; height: auto; border: 0;"
-                                                                                        title="Linkedin"
+                                                                                        
                                                                                         width="32" /></a></td>
                                                                             <td style="padding:0 2px 0 2px;"><a
                                                                                     href="https://www.facebook.com/kadangkodingindonesia/"
                                                                                     target="_blank"><img
-                                                                                        alt="Facebook" height="32"
+                                                                                        height="32"
                                                                                         src="https://i.imgur.com/jInivuY.png"
                                                                                         style="display: block; height: auto; border: 0;"
-                                                                                        title="Facebook"
+                                                                                        
                                                                                         width="32" /></a></td>
                                                                         </tr>
                                                                     </table>

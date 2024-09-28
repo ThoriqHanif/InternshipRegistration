@@ -1,21 +1,21 @@
 @if (!$intern->trashed())
 <a href="{{ route('intern.download', ['id' => $intern->id]) }}"
     class="btn btn-sm bg-info text-white font-weight-bold text-xs" data-toggle="tooltip" data-placement="top" title="Download Files">
-    <i class="fas fa-download"></i>
+    <i class="bi bi-download"></i>
 </a>
 <a href="{{ route('intern.show', $intern->id) }}"
     class="btn btn-sm bg-primary text-white font-weight-bold text-xs" data-toggle="tooltip" data-placement="top" title="Detail Pemagang">
-    <i class="fas fa-eye"></i>
+    <i class="bi bi-eye"></i>
 </a>
 <a href="{{ route('intern.edit', $intern->id) }}"
     class="btn btn-sm bg-warning text-white font-weight-bold text-xs" data-toggle="tooltip" data-placement="top" title="Edit Pemagang">
-    <i class="fas fa-edit"></i>
+    <i class="bi bi-pencil-square"></i>
 </a>
 <form style="display: inline" action="{{ route('intern.destroy', $intern->id) }}" method="POST">
     @csrf
     @method('DELETE')
     <button type="submit" class="btn btn-sm btn-danger delete-button" data-toggle="tooltip" data-placement="top" title="Hapus Pemagang">
-        <i class="fas fa-trash"></i>
+        <i class="bi bi-trash"></i>
     </button>
 </form>
 @endif
@@ -24,15 +24,14 @@
 <form style="display: inline" action="{{ route('intern.restore', $intern->id) }}" method="POST" id="restoreFormIntern">
     @csrf
     <button type="submit" class="btn btn-sm btn-info restore-button-intern" data-toggle="tooltip" data-placement="top" title="Restore Pemagang">
-        <i class="fas fa-undo"></i>
-    </button>
-    
+        <i class="bi bi-arrow-counterclockwise"></i>    </button>
+
 </form>
 <form style="display: inline" action="{{ route('intern.forceDelete', $intern->id) }}" method="POST" id="forceDeleteFormIntern">
     @csrf
     @method('DELETE')
     <button type="submit" class="btn btn-sm btn-danger delete-button-intern" data-toggle="tooltip" data-placement="top" title="Hapus Permanen Pemagang">
-        <i class="fas fa-trash"></i>
+        <i class="bi bi-trash"></i>
     </button>
 </form>
 @endif

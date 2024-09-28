@@ -1,291 +1,197 @@
 @extends('layouts.app')
 
 @section('content')
+    <header class="mb-3">
+        <a href="#" class="burger-btn d-block d-xl-none">
+            <i class="bi bi-justify fs-3"></i>
+        </a>
+    </header>
+    <div class="page-title">
+        <div class="row">
+            <div class="col-12 col-md-6 order-md-1 order-last">
+                <h3>Profile Account</h3>
+                <p class="text-subtitle text-muted">Pengguna dapat mengubah informasinya</p>
+            </div>
+            <div class="col-12 col-md-6 order-md-2 order-first">
+                <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                    <ol class="breadcrumb">
+                        {{-- <li class="breadcrumb-item"><a href="{{ url('admin/dashboard') }}">Dashboard</a></li> --}}
+                        {{-- <li class="breadcrumb-item"><a href="{{ route('reports.index') }}">Profile</a></li> --}}
+                        <li class="breadcrumb-item active" aria-current="page">Profile</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
         <section class="content-header">
             <div class="container-fluid">
                 <div class="row mb-2">
-                    <div class="col-sm-6">
-                        <h1>Profile</h1>
-                    </div>
-                    <div class="col-sm-6">
-                        <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="#">Home</a></li>
-                            <li class="breadcrumb-item active">User Profile</li>
-                        </ol>
-                    </div>
+
                 </div>
             </div><!-- /.container-fluid -->
         </section>
 
-        <!-- Main content -->
-        <section class="content">
-            <div class="container-fluid">
-                <div class="row">
 
-                    {{-- @foreach ($user->intern as $intern) --}}
-                    <div class="col-md-5">
-                        <!-- Profile Image -->
-                        <div class="card card-primary card-outline">
-                            <div class="card-body box-profile">
-                                <div class="text-center">
-                                    @if ($photoUrl)
-                                        <img src="{{ $photoUrl }}" class="img-fluid elevation-1 mb-2 rounded"
-                                            width="200px" height="200px" alt="User Image">
-                                    @else
-                                        <img src="{{ asset('img/profile1.jpg') }}" class="img-circle elevation-2"
-                                            alt="User Image">
-                                    @endif
-                                </div>
-
-                                <h3 class="profile-username text-center">{{ $user->intern ? $user->intern->full_name : '' }}
-                                </h3>
-
-                                <p class="text-muted text-center">{{ $user->intern ? $user->intern->position->name : '' }}
-                                </p>
-
-                                <ul class="list-group list-group-unbordered mb-3">
-                                    <li class="list-group-item">
-                                        <b>Tanggal Mulai</b> 
-                                        <a class="float-right text-success">
-                                            {{ $user->intern ? \Carbon\Carbon::parse($user->intern->start_date)->locale('id')->translatedFormat('l, j F Y') : '' }}
-
-                                        </a>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <b>Tanggal Selesai</b> 
-                                        <a class="float-right text-danger">
-                                            {{ $user->intern ? \Carbon\Carbon::parse($user->intern->end_date)->locale('id')->translatedFormat('l, j F Y') : '' }}
-                                        </a>
-                                    </li>
-
-                                </ul>
-
-                                {{-- <a href="#" class="btn btn-primary btn-block"><b>Follow</b></a> --}}
-                            </div>
-                            <!-- /.card-body -->
+        <section>
+            <div class="card mt-2">
+                <div class="card-body py-4 px-5">
+                    <div class="d-flex align-items-center">
+                        <div class="avatar avatar-xl">
+                            @if ($photoUrl)
+                                <img src="{{ $photoUrl }}" alt="User Image">
+                            @else
+                                <img src="{{ asset('admin/assets/static/images/2.jpg') }}" alt="User Image">
+                            @endif
                         </div>
-                        <!-- /.card -->
+                        <div class="ms-4 name">
+                            <h4 class="font-bold">{{ $user->intern ? $user->intern->full_name : '' }}</h4>
+                            <p class="text-small">
+                                {{ $user->intern ? $user->intern->position->name ?? '-' :''}}</p>
 
-                        <!-- About Me Box -->
-                        <div class="card card-primary">
-                            <div class="card-header">
-                                <h3 class="card-title">About Me</h3>
-                            </div>
-                            <!-- /.card-header -->
-                            <div class="card-body">
-                                <strong><i class="fas fa-user mr-2"></i> Nama Lengkap</strong>
-
-                                <p class="text-muted">
-                                    {{ $user->intern ? $user->intern->full_name : '' }}
-                                </p>
-
-                                <hr>
-
-                                <strong><i class="fas fa-map-marker-alt mr-2"></i> Alamat</strong>
-
-                                <p class="text-muted">{{ $user->intern ? $user->intern->address : '' }}</p>
-
-                                <hr>
-
-                                <strong><i class="fas fa-phone mr-2"></i> No Telp</strong>
-
-                                <p class="text-muted">
-                                    {{ $user->intern ? $user->intern->phone_number : '' }}
-                                </p>
-
-                                <hr>
-
-                                <strong><i class="fas fa-venus-mars mr-2"></i> Jenis Kelamin</strong>
-
-                                <p class="text-muted">{{ $user->intern ? $user->intern->gender : '' }}</p>
-                                <hr>
-                                <strong><i class="fas fa-school mr-2"></i> Asal Sekolah</strong>
-
-                                <p class="text-muted">
-                                    {{ $user->intern ? $user->intern->school : '' }}
-                                </p>
-
-                                <hr>
-                                <strong><i class="fas fa-graduation-cap mr-2"></i> Jurusan / Prodi</strong>
-
-                                <p class="text-muted">
-                                    {{ $user->intern ? $user->intern->major : '' }}
-                                </p>
-
-                                <hr>
-                            </div>
-                            <!-- /.card-body -->
+                            </h5>
                         </div>
-                        <!-- /.card -->
                     </div>
-                    <!-- /.col -->
-                    <div class="col-md-7">
-                        <div class="card">
-                            <div class="card-header p-2">
-                                <ul class="nav nav-pills">
-                                    <li class="nav-item"><a class="nav-link active" href="#timeline"
-                                            data-toggle="tab">Timeline</a></li>
-                                    <li class="nav-item"><a class="nav-link" href="#settings" data-toggle="tab">Settings</a>
-                                    </li>
-                                </ul>
-                            </div><!-- /.card-header -->
-                            <div class="card-body">
-                                <div class="tab-content">
-                                    <!-- /.tab-pane -->
-                                    <div class="tab-pane active" id="timeline">
-                                        <!-- The timeline -->
-                                        <div class="timeline timeline-inverse">
-                                            <!-- timeline time label -->
-                                            <div class="time-label">
-                                                {{-- <span class="bg-danger"> --}}
-                                                {{-- {{$intern->created_at}} --}}
-                                                </span>
-                                            </div>
-                                            <!-- /.timeline-label -->
-                                            <!-- timeline item -->
-                                            <div>
-                                                <i class="fas fa-envelope bg-primary"></i>
-
-                                                <div class="timeline-item">
-                                                    <span class="time"><i class="far fa-clock"></i>
-                                                        {{ $user->intern ? $user->intern->created_at : '' }}
-                                                    </span>
-
-                                                    <h3 class="timeline-header"><a href="#">Kadang Koding
-                                                            Indonesia </a> sent you an message</h3>
-
-                                                    <div class="timeline-body">
-                                                        Terimakasih {{ $user->intern ? $user->intern->full_name : '' }}
-                                                        telah mendaftarkan diri
-                                                        untuk magang di Kadang Koding Indonesia. Mohon ditunggu untuk
-                                                        Update selanjutnya.
-                                                    </div>
-                                                    <div class="timeline-footer">
-
+                </div>
+            </div>
+        </section>
+        <section class="section">
+            <div class="row">
+                <form class="form-horizontal" method="post" action="{{ url('profile') }}" id="formProfileUser">
+                    @csrf
+                    @method('PUT')
+                    <section id="multiple-column-form">
+                        <div class="row match-height">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4 class="card-title">Link External</h4>
+                                    </div>
+                                    <div class="card-content">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-md-12 col-12">
+                                                    <div class="form-group">
+                                                        <label for="full_name" class="form-label">URL Portolio</label>
+                                                        <input type="text" name="url" id="inputUrl"
+                                                            class="form-control"
+                                                            placeholder="https://internship.kadangkoding.com/name" value="{{ $user->intern ? $user->intern->url : '' }}">
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <!-- END timeline item -->
-                                            <!-- timeline item -->
-
-                                            <!-- timeline item -->
-                                            <div>
-                                                <i class="fas fa-envelope bg-success"></i>
-
-                                                <div class="timeline-item">
-
-                                                    <h3 class="timeline-header"><a href="#">Kadang Koding
-                                                            Indonesia </a> sent you an update</h3>
-
-                                                    <div class="timeline-body">
-                                                        Hii {{ $user->intern ? $user->intern->full_name : '' }},
-                                                        terimakasih telah mendaftar
-                                                        magang di Kadang Koding Indonesia. Status pendaftaran anda <a
-                                                            class="badge badge-success text-capitalize">{{ $user->intern ? $user->intern->status : '' }}</a>
+                                                {{-- @foreach ($social_medias as $sosmed)
+                                                    <div class="col-md-6 col-12">
+                                                        <div class="form-group">
+                                                            <label for="full_name" class="form-label">URL
+                                                                {{ $sosmed->name }}</label>
+                                                            <input type="text" name="" id=""
+                                                                class="form-control"
+                                                                placeholder="https://internship.kadangkoding.com/name"
+                                                                value="{{ $sosmed->url ? $sosmed->url : '' }}">
+                                                        </div>
                                                     </div>
-                                                </div>
+                                                @endforeach --}}
+
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- /.tab-pane -->
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+            </div>
+        </section>
+        <section class="section">
+            <div class="row">
 
-                                    <div class="tab-pane" id="settings">
-                                        <form class="form-horizontal" method="post" action="{{ url('profile') }}"
-                                            id="formProfileUser">
-                                            {{-- @foreach ($user->interns as $intern) --}}
-                                            @csrf
-                                            @method('PUT')
-                                            <div class="form-group row">
-                                                <label for="inputFullName" class="col-sm-3 col-form-label">Nama
-                                                    Lengkap</label>
-                                                <div class="col-sm-9">
-                                                    <input type="text" class="form-control" id="inputFullName"
-                                                        placeholder="Nama Lengkap" name="full_name"
+                <section id="multiple-column-form">
+                    <div class="row match-height">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title">Informasi Pengguna</h4>
+                                </div>
+                                <div class="card-content">
+                                    <div class="card-body">
+
+
+                                        <div class="row">
+                                            <div class="col-md-6 col-12">
+                                                <div class="form-group">
+                                                    <label for="full_name" class="form-label">Nama Lengkap</label>
+                                                    <input type="text" name="full_name" id="inputFullName"
+                                                        class="form-control" placeholder="Your Name"
                                                         value="{{ $user->intern ? $user->intern->full_name : '' }}">
                                                 </div>
                                             </div>
-                                            <div class="form-group row">
-                                                <label for="inputName" class="col-sm-3 col-form-label">Username</label>
-                                                <div class="col-sm-9">
-                                                    <input type="text" class="form-control" id="inputName"
-                                                        placeholder="Username" name="name"
-                                                        value="{{ $name }}">
+                                            <div class="col-md-6 col-12">
+                                                <div class="form-group">
+                                                    <label for="name" class="form-label">Nama Panggilan</label>
+                                                    <input type="text" name="name" id="inputName" class="form-control"
+                                                        placeholder="Username" value="{{ $name }}">
                                                 </div>
                                             </div>
-                                            <div class="form-group row">
-                                                <label for="inputPhoneNumber" class="col-sm-3 col-form-label">No
-                                                    Handphone</label>
-                                                <div class="col-sm-9">
-                                                    <input type="number" class="form-control" id="inputPhoneNumber"
-                                                        placeholder="No Handphone" name="phone_number"
+                                            <div class="col-md-6 col-12">
+                                                <div class="form-group">
+                                                    <label for="inputPhoneNumber" class="form-label">No
+                                                        Handphone</label>
+                                                    <input type="number" name="phone_number" id="inputPhoneNumber"
+                                                        class="form-control" placeholder="No Handphone"
                                                         value="{{ $user->intern ? $user->intern->phone_number : '' }}">
                                                 </div>
                                             </div>
-                                            <div class="form-group row">
-                                                <label for="inputAddress" class="col-sm-3 col-form-label">Alamat</label>
-                                                <div class="col-sm-9">
-                                                    <textarea type="text" class="form-control" id="inputAddress" placeholder="Alamat" name="address"
-                                                        value="">{{ $user->intern ? $user->intern->address : '' }}</textarea>
+                                            <div class="col-md-6 col-12">
+                                                <div class="form-group">
+                                                    <label for="inputAddress" class="form-label">Alamat</label>
+                                                    <textarea type="text" name="address" id="inputAddress" class="form-control" placeholder="Alamat">{{ $user->intern ? $user->intern->address : '' }}</textarea>
                                                 </div>
                                             </div>
-                                            <div class="form-group row">
-                                                <label for="inputSchool" class="col-sm-3 col-form-label">Asal
-                                                    Sekolah</label>
-                                                <div class="col-sm-9">
-                                                    <input type="text" class="form-control" id="inputSchool"
-                                                        placeholder="Asal Sekolah" name="school"
-                                                        value="{{ $user->intern ? $user->intern->school : '' }}">
+                                            <div class="col-md-6 col-12">
+                                                <div class="form-group">
+                                                    <label for="inputSchool" class="form-label">Asal Sekolah</label>
+                                                    <input type="text" name="school" id="inputSchool"
+                                                        class="form-control" placeholder="Asal Sekolah"
+                                                        value="{{ $user->intern ? $user->intern->school : '' }}"></input>
                                                 </div>
                                             </div>
-                                            <div class="form-group row">
-                                                <label for="inputMajor" class="col-sm-3 col-form-label">Jurusan</label>
-                                                <div class="col-sm-9">
-                                                    <input type="text" class="form-control" id="inputMajor"
-                                                        placeholder="Jurusan" name="major"
-                                                        value="{{ $user->intern ? $user->intern->major : '' }}">
+                                            <div class="col-md-6 col-12">
+                                                <div class="form-group">
+                                                    <label for="inputMajor" class="form-label">Jurusan</label>
+                                                    <input type="text" name="major" id="inputMajor"
+                                                        class="form-control" placeholder="Jurusan"
+                                                        value="{{ $user->intern ? $user->intern->major : '' }}"></input>
                                                 </div>
                                             </div>
-                                            <div class="form-group row">
-                                                <label for="inputEmail" class="col-sm-3 col-form-label">Email</label>
-                                                <div class="col-sm-9">
-                                                    <input type="text" class="form-control" id="inputEmail"
-                                                        name="email" placeholder="Email" value="{{ $email }}">
+                                            <div class="col-md-6 col-12">
+                                                <div class="form-group">
+                                                    <label for="email" class="form-label">Email</label>
+                                                    <input type="text" name="email" id="inputEmail"
+                                                        class="form-control" placeholder="Your Email"
+                                                        value="{{ $email }}">
                                                 </div>
                                             </div>
-                                            <div class="form-group row">
-                                                <label for="inputExperience"
-                                                    class="col-sm-3 col-form-label">Password</label>
-                                                <div class="col-sm-9">
-                                                    <div class="input-group">
-                                                        <input type="password" class="form-control" id="inputPassword"
-                                                            name="password" value=""
-                                                            aria-describedby="passwordToggle">
-                                                        <div class="input-group-append" id="togglePassword">
-                                                            <div class="input-group-text bg-white"
-                                                                style="cursor: pointer">
-                                                                <i class="fas fa-eye" id="togglePasswordIcon"></i>
-                                                            </div>
-                                                        </div>
+
+                                            <div class="col-md-6 col-12">
+                                                <label for="password" class="form-label">Password</label>
+
+                                                <div class="form-group position-relative has-icon-right mb-4">
+                                                    <input type="password" name="password" id="inputPassword"
+                                                        class="form-control" value=""
+                                                        aria-describedby="passwordToggle">
+                                                    <div class="form-control-icon px-3" style="margin-bottom: 10px"
+                                                        id="togglePassword">
+                                                        <i class="bi bi-eye" id="togglePasswordIcon"></i>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="form-group row align-items-center">
-                                                <label for="inputFoto" class="col-sm-3 col-form-label">Foto</label>
-                                                <div class="col-sm-9">
-                                                    <div class="custom-file">
-                                                        <input
-                                                            class="custom-file-input form-control @error('photo') is-invalid @enderror"
-                                                            type="file" id="filefoto" name="photo"
-                                                            accept=".jpg, .jpeg, .png, .webp">
-                                                        <label class="custom-file-label" for="fileSurat">Choose
-                                                            file</label>
-                                                    </div>
+                                            <div class="col-md-6 col-12">
+                                                <div class="form-group">
+                                                    <label for="file" class="form-label">Pas Foto</label>
+                                                    <input type="file" accept=".jpg, .jpeg, .png, .webp"
+                                                        name="photo" id="filefoto"
+                                                        class="form-control @error('photo') is-invalid @enderror">
                                                 </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <div class="offset-sm-3 col-sm-5">
+                                                <div class="form-group">
                                                     @if ($photoUrl)
                                                         <a data-fancybox data-caption="Pas Foto"
                                                             href="{{ $photoUrl }}">
@@ -298,29 +204,21 @@
                                                     @endif
                                                 </div>
                                             </div>
-
-                                            <div class="form-group row">
-                                                <div class="offset-sm-3 col-sm-9">
-                                                    <button type="submit" class="btn btn-success">Update</button>
-                                                </div>
+                                            <div class="col-12 d-flex justify-content-end">
+                                                <button type="submit" class="btn btn-primary me-1 mb-1">Save
+                                                    Changes</button>
+                                                {{-- <button type="reset" class="btn btn-light-secondary me-1 mb-1">Reset</button> --}}
                                             </div>
-                                            {{-- @endforeach --}}
+                                        </div>
                                         </form>
                                     </div>
-                                    <!-- /.tab-pane -->
                                 </div>
-                                <!-- /.tab-content -->
-                            </div><!-- /.card-body -->
+                            </div>
                         </div>
-                        <!-- /.card -->
                     </div>
-                    <!-- /.col -->
-                    {{-- @endforeach --}}
-                </div>
-                <!-- /.row -->
-            </div><!-- /.container-fluid -->
+                </section>
+            </div>
         </section>
-        <!-- /.content -->
     </div>
     <!-- /.content-wrapper -->
 
@@ -332,12 +230,12 @@
         togglePassword.addEventListener('click', function() {
             if (passwordField.type === 'password') {
                 passwordField.type = 'text';
-                togglePasswordIcon.classList.remove('fa-eye');
-                togglePasswordIcon.classList.add('fa-eye-slash');
+                togglePasswordIcon.classList.remove('bi-eye');
+                togglePasswordIcon.classList.add('bi-eye-slash');
             } else {
                 passwordField.type = 'password';
-                togglePasswordIcon.classList.remove('fa-eye-slash');
-                togglePasswordIcon.classList.add('fa-eye');
+                togglePasswordIcon.classList.remove('bi-eye-slash');
+                togglePasswordIcon.classList.add('bi-eye');
             }
         });
     </script>
@@ -355,11 +253,10 @@
                 var phone_number = $("#inputPhoneNumber").val();
                 var address = $("#inputAddress").val();
                 var school = $("#inputSchool").val();
+                var url = $("#inputUrl").val();
                 var major = $("#inputMajor").val();
                 var password = $("#inputPassword").val();
-                var photo = $("#filefoto")[0].files[0]; // Ambil foto yang diunggah
-
-                // console.log(name, email, full_name, phone_number, school, major);
+                var photo = $("#filefoto")[0].files[0];
 
                 var emailChanged = email !== "{{ $user->email }}";
                 var passwordChanged = password !== "";
@@ -369,12 +266,14 @@
                 var prevAddress = "{{ $user->intern ? $user->intern->address : '' }}";
                 var prevSchool = "{{ $user->intern ? $user->intern->school : '' }}";
                 var prevMajor = "{{ $user->intern ? $user->intern->major : '' }}";
+                var prevUrl = "{{ $user->intern ? $user->intern->url : '' }}";
                 var prevPhoto = "{{ $photoUrl ?? '' }}";
 
 
                 var internChanged = full_name !== prevFullName || phone_number !== prevPhoneNumber ||
                     address !== prevAddress ||
-                    school !== prevSchool || major !== prevMajor ||
+                    school !== prevSchool ||
+                    url !== prevUrl || major !== prevMajor ||
                     ($("#filefoto")[0].files.length > 0);
 
                 if (name === "{{ $user->name }}" && !emailChanged && !passwordChanged && !
@@ -383,6 +282,7 @@
                         icon: 'info',
                         title: 'Info',
                         text: 'Data tidak ada yang berubah.',
+                        confirmButtonColor: "#435EBE",
                     });
                     return;
                 }
@@ -410,32 +310,29 @@
                     processData: false,
                     contentType: false,
                     success: function(response) {
-                        // Tutup pesan "loading" saat berhasil
-                        // console.log(response);
                         Swal.close();
 
                         if (response.success) {
                             if (emailChanged || passwordChanged) {
-                                // Logout jika email atau password berubah
                                 Swal.fire({
                                     icon: 'success',
                                     title: 'Berhasil!',
                                     text: 'Data berhasil diupdate. Silahkan login ulang.',
+                                    confirmButtonColor: "#435EBE",
                                 }).then(function() {
                                     window.location.href = '{{ route('login') }}';
                                 });
                             } else {
-                                // Redirect ke halaman profile jika hanya nama yang diubah
                                 Swal.fire({
                                     icon: 'success',
                                     title: 'Berhasil!',
                                     text: 'Data berhasil diupdate.',
+                                    confirmButtonColor: "#435EBE",
                                 }).then(function() {
                                     window.location.href = '{{ route('profile') }}';
                                 });
                             }
                         } else {
-                            // Jika validasi gagal, tampilkan pesan-pesan kesalahan
                             if (response.errors) {
                                 var errorMessages = '';
                                 for (var key in response.errors) {
@@ -443,17 +340,25 @@
                                         errorMessages += response.errors[key][0] + '<br>';
                                     }
                                 }
-                                Swal.fire('Gagal', errorMessages, 'error');
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oops...',
+                                    html: errorMessages,
+                                    confirmButtonColor: "#435EBE",
+                                });
                             } else {
-                                Swal.fire('Gagal', 'Terjadi kesalahan saat memperbarui data',
-                                    'error');
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oops...',
+                                    text: 'Terjadi kesalahan saat memperbarui data.',
+                                    confirmButtonColor: "#435EBE",
+                                });
                             }
                         }
                     },
                     error: function(xhr) {
                         Swal.close();
                         if (xhr.status === 422) {
-                            // Menampilkan pesan validasi error SweetAlert
                             var errorMessages = '';
                             var errors = xhr.responseJSON.errors;
                             for (var key in errors) {
@@ -461,9 +366,19 @@
                                     errorMessages += errors[key][0] + '<br>';
                                 }
                             }
-                            Swal.fire('Gagal', errorMessages, 'error');
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                html: errorMessages,
+                                confirmButtonColor: "#435EBE",
+                            });
                         } else {
-                            Swal.fire('Gagal', 'Terjadi kesalahan saat update data.', 'error');
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Terjadi kesalahan saat memperbarui data.',
+                                confirmButtonColor: "#435EBE",
+                            });
                         }
                     },
                 });
