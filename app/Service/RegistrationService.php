@@ -53,7 +53,7 @@ class RegistrationService
     {
         if ($file) {
             $fileName = $file->getClientOriginalName();
-            $file->move(public_path("uploads/{$folder}"), $fileName);
+            $file->move("uploads/{$folder}", $fileName);
             return $fileName;
         }
         return null;

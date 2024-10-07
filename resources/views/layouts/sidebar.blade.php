@@ -81,6 +81,12 @@
                             <span>Data User</span>
                         </a>
                     </li>
+                    <li class="sidebar-item   {{ Request::is('subscriptions*') ? 'active' : '' }}">
+                        <a href="{{ route('subscriptions.index') }}" class='sidebar-link'>
+                            <i class="bi bi-person-check"></i>
+                            <span>Data Pelanggan</span>
+                        </a>
+                    </li>
                     </li>
 
                     <li class="sidebar-title">Blog</li>
@@ -133,7 +139,7 @@
 
                     <li class="sidebar-title mt-5">Logout</li>
 
-                    <form method="POST" action="{{ route('logout') }}">
+                    <form method="POST" action="{{ route('logout', ['locale' => app()->getLocale()]) }}">
                         @csrf
                         <li class="sidebar-item mb-5">
                             <button type="submit" class='btn btn-danger w-100 sidebar-link text-white'>
@@ -188,7 +194,7 @@
 
                     <li class="sidebar-title mt-5">Logout</li>
 
-                    <form method="POST" action="{{ route('logout') }}">
+                    <form method="POST" action="{{ route('logout', ['locale' => app()->getLocale()]) }}">
                         @csrf
                         <li class="sidebar-item mb-5">
                             <button type="submit" class='btn btn-danger w-100 sidebar-link text-white'>

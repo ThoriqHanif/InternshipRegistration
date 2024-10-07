@@ -45,15 +45,18 @@ Route::resource('/register', RegistrationController::class);
 Route::get('/{locale}/apply/{slug}', [RegistrationController::class, 'showBySlug'])->name('register.showBySlug');
 
 // Subscription
-Route::resource('subscriptions', SubscriptionController::class);
+// Route::resource('subscriptions', SubscriptionController::class);
+Route::post('/subscribe', [SubscriptionController::class, 'subscribe'])->name('subscriptions.subscribe');
 Route::get('/unsubscribe/{email}', [SubscriptionController::class, 'unsubscribe'])->name('unsubscribe');
 Route::post('/unsubscribe/{email}', [SubscriptionController::class, 'unsubscribe'])->name('unsubscribe');
 Route::post('/re-subscribe', [SubscriptionController::class, 'reSubscribe'])->name('re-subscribe');
 
 // Authentication
-Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
-Route::post('/login', [LoginController::class, 'login']);
-Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+Route::prefix('/{locale}')->group(function () {
+    Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [LoginController::class, 'login']);
+    Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+});
 
 // Front - Blog
 Route::prefix('/{locale}/blog')->group(function () {
@@ -73,6 +76,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
         'blog-categories' => BlogCategoryController::class,
         'tags' => TagController::class,
         'evaluations' => EvaluationController::class,
+        'subscriptions' => SubscriptionController::class,
     ]);
 
     Route::post('/check-position', [PeriodeController::class, 'checkPosition'])->name('check.position');

@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Laporan Harian Maganger</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    {{-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> --}}
 
     <style>
         *,
@@ -799,7 +799,7 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
                                         @if ($report->attendance_hours)
                                             {{ date('H:i', strtotime($report->attendance_hours)) }}
                                         @else
-                                            
+
                                         @endif
                                     <td class="border-b py-3 pl-2 text-center">{{ $report->agency }}</td>
                                     <td class="border-b py-3 pl-2 text-center">{{ $report->project_name }}</td>

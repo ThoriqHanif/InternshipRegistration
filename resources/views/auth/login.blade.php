@@ -129,7 +129,7 @@
                                 src="{{ asset('img/logo/logofull.png') }}" alt="Logo"></a>
                     </div>
                     @if (Session::has('profile-updated'))
-                        <div class="px-4 mt-3">
+                        <div class=" mt-3">
                             <div class="alert alert-danger ">
                                 {{ Session::get('profile-updated') }}
                             </div>

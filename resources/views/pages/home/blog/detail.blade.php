@@ -11,7 +11,7 @@
     }
 </style>
 @section('content')
-    @include('layouts.front.navbar')
+    @include('layouts.front.navbar-blog')
     @php
         $thumbnail = $blog->image_thumbnail
             ? asset('uploads/image_thumbnail/' . $blog->image_thumbnail)

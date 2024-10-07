@@ -91,7 +91,7 @@ class PositionController extends Controller
         if ($request->hasFile('image')) {
             $imageFile = $request->file('image');
             $imageFileName = $imageFile->getClientOriginalName();
-            $imageFile->move(public_path('uploads/image'), $imageFileName);
+            $imageFile->move('uploads/image', $imageFileName);
         }
 
         $positions = new Position();
@@ -179,7 +179,7 @@ class PositionController extends Controller
         if ($request->hasFile('image')) {
             $imageFile = $request->file('image');
             $imageFileName = $imageFile->getClientOriginalName();
-            $imageFile->move(public_path('uploads/image'), $imageFileName);
+            $imageFile->move('uploads/image', $imageFileName);
 
             $data->update(['image' => $imageFileName]);
         }

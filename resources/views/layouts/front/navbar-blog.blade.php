@@ -37,10 +37,10 @@
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                         <li>
-                            <a class="dropdown-item change-lang" data-lang="id" href="">Indonesia</a>
+                            <a class="dropdown-item change-lang" data-lang="id" href="{{ url('/', 'id') }}">Indonesia</a>
                         </li>
                         <li>
-                            <a class="dropdown-item change-lang" data-lang="en" href="">English</a>
+                            <a class="dropdown-item change-lang" data-lang="en" href="{{ url('/', 'en') }}">English</a>
                         </li>
 
                         {{-- <li><a class="dropdown-item" href="{{ url('/', 'id') }}" data-lang="id">Indonesia</a></li>

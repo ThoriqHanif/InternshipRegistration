@@ -24,10 +24,10 @@ class UpdateProfileRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'full_name' => 'required',
-            'phone_number' => 'required',
-            'school' => 'required',
-            'major' => 'required',
+            // 'full_name' => 'required',
+            // 'phone_number' => 'required',
+            // 'school' => 'required',
+            // 'major' => 'required',
         ];
     }
 
@@ -38,10 +38,10 @@ class UpdateProfileRequest extends FormRequest
             'email.unique' => 'Email sudah pernah digunakan',
             'email.email' => 'Gunakan Email yang valid',
             'name.required' => 'Nama tidak boleh kosong',
-            'full_name.required' => 'Nama Lengkap tidak boleh kosong',
-            'phone_number.required' => 'No Handphone tidak boleh kosong',
-            'school.required' => 'Sekolah tidak boleh kosong',
-            'major.required' => 'Jurusan tidak boleh kosong',
+            // 'full_name.required' => 'Nama Lengkap tidak boleh kosong',
+            // 'phone_number.required' => 'No Handphone tidak boleh kosong',
+            // 'school.required' => 'Sekolah tidak boleh kosong',
+            // 'major.required' => 'Jurusan tidak boleh kosong',
 
         ];
     }

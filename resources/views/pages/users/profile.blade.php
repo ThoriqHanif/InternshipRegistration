@@ -320,7 +320,7 @@
                                     text: 'Data berhasil diupdate. Silahkan login ulang.',
                                     confirmButtonColor: "#435EBE",
                                 }).then(function() {
-                                    window.location.href = '{{ route('login') }}';
+                                    window.location.href = '{{ route('login', ['locale' => app()->getLocale()]) }}';
                                 });
                             } else {
                                 Swal.fire({

@@ -503,7 +503,7 @@
                     <div class="col-lg-6">
                         <h4>@lang('home.news')</h4>
                         <p>@lang('home.news-desc')</p>
-                        <form action="{{ route('subscriptions.store') }}" method="post" class="php-email-form">
+                        <form action="{{ route('subscriptions.subscribe') }}" method="post" class="php-email-form">
                             @csrf
                             <div class="newsletter-form">
                                 <input type="email" name="email">

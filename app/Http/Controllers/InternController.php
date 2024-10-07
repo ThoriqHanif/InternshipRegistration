@@ -128,35 +128,35 @@ class InternController extends Controller
         if ($request->hasFile('cv')) {
             $cvFile = $request->file('cv');
             $cvFileName = $cvFile->getClientOriginalName();
-            $cvFile->move(public_path('uploads/cv'), $cvFileName);
+            $cvFile->move('uploads/cv', $cvFileName);
         }
 
         $motivation_letterFileName = null;
         if ($request->hasFile('motivation_letter')) {
             $motivation_letterFile = $request->file('motivation_letter');
             $motivation_letterFileName = $motivation_letterFile->getClientOriginalName();
-            $motivation_letterFile->move(public_path('uploads/motivation_letter'), $motivation_letterFileName);
+            $motivation_letterFile->move('uploads/motivation_letter', $motivation_letterFileName);
         }
 
         $cover_letterFileName = null;
         if ($request->hasFile('cover_letter')) {
             $cover_letterFile = $request->file('cover_letter');
             $cover_letterFileName = $cover_letterFile->getClientOriginalName();
-            $cover_letterFile->move(public_path('uploads/cover_letter'), $cover_letterFileName);
+            $cover_letterFile->move('uploads/cover_letter', $cover_letterFileName);
         }
 
         $portfolioFileName = null;
         if ($request->hasFile('portfolio')) {
             $portfolioFile = $request->file('portfolio');
             $portfolioFileName = $portfolioFile->getClientOriginalName();
-            $portfolioFile->move(public_path('uploads/portfolio'), $portfolioFileName);
+            $portfolioFile->move('uploads/portfolio', $portfolioFileName);
         }
 
         $photoFileName = null;
         if ($request->hasFile('photo')) {
             $photoFile = $request->file('photo');
             $photoFileName = $photoFile->getClientOriginalName();
-            $photoFile->move(public_path('uploads/photo'), $photoFileName);
+            $photoFile->move('uploads/photo', $photoFileName);
         }
 
         $interns = new Intern();
@@ -210,7 +210,7 @@ class InternController extends Controller
             $fileTypeFolder = 'portfolio/';
         }
 
-        $htmlFilePath = public_path('uploads/' . $fileTypeFolder . '/convert/' . pathinfo($docxFilePath, PATHINFO_FILENAME) . '.html');
+        $htmlFilePath = ('uploads/' . $fileTypeFolder . '/convert/' . pathinfo($docxFilePath, PATHINFO_FILENAME) . '.html');
 
         $htmlWriter->save($htmlFilePath);
 
@@ -420,7 +420,7 @@ class InternController extends Controller
             if ($request->hasFile($file)) {
                 $fileInstance = $request->file($file);
                 $fileName = $fileInstance->getClientOriginalName();
-                $fileInstance->move(public_path("uploads/{$file}"), $fileName);
+                $fileInstance->move("uploads/{$file}", $fileName);
                 $data->update([$file => $fileName]);
             }
         }
@@ -474,14 +474,14 @@ class InternController extends Controller
 
         $zipFileName = '['. strtolower($username) .']' . '_files.zip';
         $zip = new ZipArchive;
-        $zip->open(public_path($zipFileName), ZipArchive::CREATE);
+        $zip->open(($zipFileName), ZipArchive::CREATE);
 
         $uploadsToZip = [
-            public_path('uploads/cv/' . $intern->cv),
-            public_path('uploads/motivation_letter/' . $intern->motivation_letter),
-            !is_null($intern->cover_letter) ? public_path('uploads/cover_letter/' . $intern->cover_letter) : null,
-            public_path('uploads/portfolio/' . $intern->portfolio),
-            public_path('uploads/photo/' . $intern->photo),
+            ('uploads/cv/' . $intern->cv),
+            ('uploads/motivation_letter/' . $intern->motivation_letter),
+            !is_null($intern->cover_letter) ? ('uploads/cover_letter/' . $intern->cover_letter) : null,
+            ('uploads/portfolio/' . $intern->portfolio),
+            ('uploads/photo/' . $intern->photo),
         ];
 
         // Tambahkan file yang bukan null ke dalam zip
@@ -494,6 +494,6 @@ class InternController extends Controller
         $zip->close();
 
         // Berikan tautan unduhan
-        return response()->download(public_path($zipFileName))->deleteFileAfterSend(true);
+        return response()->download(($zipFileName))->deleteFileAfterSend(true);
     }
 }

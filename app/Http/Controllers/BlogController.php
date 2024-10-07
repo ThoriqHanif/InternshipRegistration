@@ -70,10 +70,10 @@ class BlogController extends Controller
             if ($request->hasFile('file')) {
                 $file = $request->file('file');
                 $fileName = Str::random(10) . '.' . $file->getClientOriginalExtension();
-                $filePath = public_path('uploads/post/' . $fileName);
+                $filePath = ('uploads/post/' . $fileName);
 
                 if (!file_exists($filePath)) {
-                    $file->move(public_path('uploads/post'), $fileName);
+                    $file->move('uploads/post', $fileName);
                 }
 
                 $fileUrl = asset('uploads/post/' . $fileName);
@@ -115,9 +115,13 @@ class BlogController extends Controller
             $image_thumbnailFileName = null;
             if ($request->hasFile('image_thumbnail')) {
                 $image_thumbnailFile = $request->file('image_thumbnail');
-                $image_thumbnailFileName = $image_thumbnailFile->getClientOriginalName();
-                $image_thumbnailFile->move(public_path('uploads/image_thumbnail'), $image_thumbnailFileName);
+                $image_thumbnailFileName = Str::random(10) . '.' . $image_thumbnailFile->getClientOriginalExtension();
+                $image_thumbnailFile->move('uploads/image_thumbnail', $image_thumbnailFileName);
             }
+
+            // Shared Hosting
+            // $body = str_replace('../uploads', 'https://internship.kadangkoding.com/thoriq/pendaftaran-magang/uploads', $request->input('body'));
+            // $body_en = str_replace('../uploads', 'https://internship.kadangkoding.com/thoriq/pendaftaran-magang/uploads', $request->input('body_en'));
 
             $author_id = Auth::id();
             $blog = new Blog();
@@ -281,15 +285,15 @@ class BlogController extends Controller
 
         if ($request->hasFile('image_thumbnail')) {
             if ($blog->image_thumbnail) {
-                $oldImagePath = public_path('uploads/image_thumbnail/' . $blog->image_thumbnail);
+                $oldImagePath = ('uploads/image_thumbnail/' . $blog->image_thumbnail);
                 if (file_exists($oldImagePath)) {
                     unlink($oldImagePath);
                 }
             }
 
             $image_thumbnailFile = $request->file('image_thumbnail');
-            $image_thumbnailFileName = $image_thumbnailFile->getClientOriginalName();
-            $image_thumbnailFile->move(public_path('uploads/image_thumbnail'), $image_thumbnailFileName);
+            $image_thumbnailFileName = Str::random(10) . '.' . $image_thumbnailFile->getClientOriginalExtension();
+            $image_thumbnailFile->move('uploads/image_thumbnail', $image_thumbnailFileName);
             $blog->image_thumbnail = $image_thumbnailFileName;
         }
 
@@ -306,9 +310,9 @@ class BlogController extends Controller
 
             $blog->tag()->sync($tagIds);
 
-            if ($request->status === 'published') {
-                $this->notifNewPost($blog);
-            }
+            // if ($request->status === 'published') {
+            //     $this->notifNewPost($blog);
+            // }
 
             return response()->json(['success' => true]);
         } else {
@@ -323,7 +327,7 @@ class BlogController extends Controller
     public function destroy($slug)
     {
         $blog = Blog::where('slug', $slug)->firstOrFail();
-        $thumbnailPath = public_path('uploads/image_thumbnail/' . $blog->image_thumbnail);
+        $thumbnailPath = ('uploads/image_thumbnail/' . $blog->image_thumbnail);
 
         if (file_exists($thumbnailPath)) {
             unlink($thumbnailPath);

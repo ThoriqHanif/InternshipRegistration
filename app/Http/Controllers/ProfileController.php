@@ -165,7 +165,7 @@ class ProfileController extends Controller
 
             $photoFile = $request->file('photo');
             $photoFileName = $photoFile->getClientOriginalName();
-            $photoFile->move(public_path('uploads/photo'), $photoFileName);
+            $photoFile->move('uploads/photo', $photoFileName);
             if ($intern->photo !== $photoFileName) {
                 $intern->photo = $photoFileName;
                 $intern->save();

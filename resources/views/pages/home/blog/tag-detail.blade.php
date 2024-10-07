@@ -9,7 +9,7 @@
         }
     </style>
 
-    @include('layouts.front.navbar')
+    @include('layouts.front.navbar-blog')
     <div class="section search-result-wrap" style="margin-top: 5rem;">
         <div class="container">
             <div class="row">

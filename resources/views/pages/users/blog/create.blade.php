@@ -191,7 +191,8 @@
             <script src="{{ asset('admin/assets/static/js/pages/summernote.js') }}"></script>
         @endpush
 
-        <script>
+        {{-- Non Ajax --}}
+        {{-- <script>
             const image_upload_handler = (blobInfo, progress) => new Promise((resolve, reject) => {
                 const xhr = new XMLHttpRequest();
                 xhr.withCredentials = false;
@@ -225,6 +226,41 @@
                 formData.append('file', blobInfo.blob(), blobInfo.filename());
                 xhr.send(formData);
             });
+        </script> --}}
+
+        <script>
+            const image_upload_handler = (blobInfo, progress) => new Promise((resolve, reject) => {
+                const formData = new FormData();
+                formData.append('file', blobInfo.blob(), blobInfo.filename());
+
+                $.ajax({
+                    url: '{{ route('upload.image') }}',
+                    type: 'POST',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    xhr: function() {
+                        const xhr = new window.XMLHttpRequest();
+                        xhr.upload.addEventListener("progress", function(evt) {
+                            if (evt.lengthComputable) {
+                                progress(evt.loaded / evt.total * 100);
+                            }
+                        }, false);
+                        return xhr;
+                    },
+                    success: function(json) {
+                        if (!json || typeof json.location !== 'string') return reject('Invalid JSON: ' +
+                            json);
+                        resolve(json.location);
+                    },
+                    error: function(xhr) {
+                        reject('HTTP Error: ' + xhr.status);
+                    }
+                });
+            });
 
             tinymce.init({
                 selector: '#body',
@@ -242,7 +278,6 @@
                 file_picker_types: 'image',
                 images_upload_handler: image_upload_handler
             });
-
 
             $(document).ready(function() {
                 $('.tag-input').select2({
@@ -268,7 +303,6 @@
                 });
             });
         </script>
-
 
         {{-- SAVE --}}
         <script>

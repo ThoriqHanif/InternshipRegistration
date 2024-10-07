@@ -10,11 +10,8 @@ use Illuminate\Support\Facades\App;
 class LoginController extends Controller
 {
     //
-    public function showLoginForm()
+    public function showLoginForm($locale)
     {
-        // App::setLocale($locale);
-
-        $locale = session('locale', App::getLocale());
         App::setLocale($locale);
         return view('auth.login');
     }
@@ -24,7 +21,7 @@ class LoginController extends Controller
         $this->validate($request, [
             'email' => 'required|email',
             'password' => 'required|min:6',
-        ],[
+        ], [
             'email.required' => 'Email wajib diisi.',
             'email.email' => 'Email harus valid.',
             'password.required' => 'Password wajib diisi.',
@@ -35,7 +32,7 @@ class LoginController extends Controller
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
-        //    Cek Role
+            //    Cek Role
             $user = Auth::user();
             if ($user->role === 'admin') {
                 return redirect('/admin/dashboard');
@@ -45,7 +42,7 @@ class LoginController extends Controller
         }
 
         // Jika login gagal
-        return back()->withErrors(['email','password' => 'Email atau password salah.'])->withInput($request->only('email'));
+        return back()->withErrors(['email', 'password' => 'Email atau password salah.'])->withInput($request->only('email'));
     }
 
     public function logout(Request $request)
@@ -54,6 +51,7 @@ class LoginController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('/login');
+        return redirect()->route('login', ['locale' => app()->getLocale()]);
+
     }
 }

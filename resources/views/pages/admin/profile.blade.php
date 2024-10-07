@@ -14,11 +14,7 @@
             </div>
             <div class="col-12 col-md-6 order-md-2 order-first">
                 <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ url('admin/dashboard') }}">Dashboard</a></li>
-                        {{-- <li class="breadcrumb-item"><a href="{{ route('reports.index') }}">Profile</a></li> --}}
-                        <li class="breadcrumb-item active" aria-current="page">Profile</li>
-                    </ol>
+                    {{ Breadcrumbs::render('admin.profile') }}
                 </nav>
             </div>
         </div>
@@ -172,7 +168,7 @@
                                     title: 'Berhasil!',
                                     text: 'Data berhasil diupdate. Silahkan login ulang.',
                                 }).then(function() {
-                                    window.location.href = '{{ route('login') }}';
+                                    window.location.href = '{{ route('login', ['locale' => app()->getLocale()]) }}';
                                 });
                             } else {
                                 // Redirect ke halaman profile jika hanya nama yang diubah
@@ -222,171 +218,4 @@
         });
     </script>
     <!-- /.content -->
-    {{-- <script>
-        $(document).ready(function() {
-        $("#formUserEdit").on("submit", function(e) {
-            e.preventDefault();
-    
-            var userId = "{{ $user->id }}";
-            var loggedInUserId = "{{ Auth::user()->id }}"; // ID pengguna yang login
-    
-            // Tampilkan pesan "loading" saat akan mengirim permintaan AJAX
-            Swal.fire({
-                title: 'Mohon Tunggu!',
-                html: 'Sedang memproses data...',
-                allowOutsideClick: false,
-                showConfirmButton: false,
-                willOpen: () => {
-                    Swal.showLoading();
-                },
-            });
-    
-            // Mengambil data yang ada di form
-            var formData = new FormData(this);
-            var name = formData.get('name');
-            var email = formData.get('email');
-            var password = formData.get('password');
-    
-            // Mengecek apakah admin yang sedang login sedang mengedit data pengguna lain
-            if (userId !== loggedInUserId) {
-                // Perubahan data pada pengguna lain, kirim permintaan AJAX dan tampilkan SweetAlert
-                // User yang sedang login mengedit dirinya sendiri
-                $.ajax({
-                    type: 'POST',
-                    url: '{{ route('users.update', ['user' => ':userId']) }}'.replace(':userId', userId),
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    success: function(response) {
-                        // Tutup pesan "loading" saat berhasil
-                        Swal.close();
-    
-                        if (response.success) {
-                            // Tampilkan pesan SweetAlert untuk perubahan data admin yang sedang login
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Berhasil!',
-                                text: 'Data profile telah diperbarui',
-                            }).then(function() {
-                                        window.location.href = '{{ route('login') }}';
-                                        
-                            
-                            });
-                            
-                        } else {
-                                // Jika validasi gagal, tampilkan pesan-pesan kesalahan
-                                if (response.errors) {
-                                    var errorMessages = '';
-                                    for (var key in response.errors) {
-                                        if (response.errors.hasOwnProperty(key)) {
-                                            errorMessages += response.errors[key][0] + '<br>';
-                                        }
-                                    }
-                                    Swal.fire('Gagal', errorMessages, 'error');
-                                } else {
-                                    Swal.fire('Gagal', 'Terjadi kesalahan saat memperbarui data',
-                                        'error');
-                                }
-                            }
-                        },
-                        error: function(xhr) {
-                            Swal.close();
-                            if (xhr.status === 422) {
-                                // Menampilkan pesan validasi error SweetAlert
-                                var errorMessages = '';
-                                var errors = xhr.responseJSON.errors;
-                                for (var key in errors) {
-                                    if (errors.hasOwnProperty(key)) {
-                                        errorMessages += errors[key][0] + '<br>';
-                                    }
-                                }
-                                Swal.fire('Gagal', errorMessages, 'error');
-                            } else {
-                                Swal.fire('Gagal', 'Terjadi kesalahan saat update data.', 'error');
-                            }
-                        },
-                });
-            }
-        });
-    });
-    
-    </script> --}}
-
-    {{-- <script>
-        $(document).ready(function() {
-    $("#formProfileAdmin").on("submit", function(e) {
-        e.preventDefault();
-
-        var adminId = "{{ $admin->id }}";
-        var url = '{{ route('admin.profile.update', ['user' => ':userId']) }}'.replace(':userId', adminId);
-        var formData = new FormData(this);
-
-        // Tampilkan pesan "loading" saat akan mengirim permintaan AJAX
-        Swal.fire({
-            title: 'Mohon Tunggu!',
-            html: 'Sedang memproses data...',
-            allowOutsideClick: false,
-            showConfirmButton: false,
-            willOpen: () => {
-                Swal.showLoading();
-            },
-        });
-
-        // Kirim data ke server menggunakan AJAX
-        $.ajax({
-            type: 'POST',
-            url: url,
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function(response) {
-                // Tutup pesan "loading" saat berhasil
-                Swal.close();
-
-                if (response.success) {
-                    // Tampilkan pesan SweetAlert untuk perubahan data admin yang sedang login
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Berhasil!',
-                        text: 'Data profile telah diperbarui',
-                    }).then(function() {
-                        // Redirect ke halaman login setelah menutup SweetAlert
-                        window.location.href = '{{ route('login') }}';
-                    });
-                } else {
-                    // Jika validasi gagal, tampilkan pesan-pesan kesalahan
-                    if (response.errors) {
-                        var errorMessages = '';
-                        for (var key in response.errors) {
-                            if (response.errors.hasOwnProperty(key)) {
-                                errorMessages += response.errors[key][0] + '<br>';
-                            }
-                        }
-                        Swal.fire('Gagal', errorMessages, 'error');
-                    } else {
-                        Swal.fire('Gagal', 'Terjadi kesalahan saat memperbarui data', 'error');
-                    }
-                }
-            },
-            error: function(xhr) {
-                Swal.close();
-                if (xhr.status === 422) {
-                    // Menampilkan pesan validasi error SweetAlert
-                    var errorMessages = '';
-                    var errors = xhr.responseJSON.errors;
-                    for (var key in errors) {
-                        if (errors.hasOwnProperty(key)) {
-                            errorMessages += errors[key][0] + '<br>';
-                        }
-                    }
-                    Swal.fire('Gagal', errorMessages, 'error');
-                } else {
-                    Swal.fire('Gagal', 'Terjadi kesalahan saat update data.', 'error');
-                }
-            },
-        });
-    });
-});
-
-</script> --}}
 @endsection

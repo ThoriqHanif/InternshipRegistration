@@ -43,7 +43,7 @@ class EvaluationController extends Controller
 
     public function internEvaluation(Request $request)
     {
-        $internId = auth()->user()->id;
+        $internId = auth()->user()->intern->id;
 
         if ($request->ajax()) {
             $evaluations = Evaluation::with('intern')
@@ -63,7 +63,7 @@ class EvaluationController extends Controller
 
     public function internEvaluationDetail($slug)
     {
-        $internId = auth()->user()->id;
+        $internId = auth()->user()->intern->id;
         $evaluation = Evaluation::with('intern')
         ->where('slug', $slug)
         ->where('intern_id', $internId)

@@ -62,10 +62,10 @@
             }
 
             .badge {
-            color: white;
-            padding: 4px 8px;
-            text-align: center;
-            border-radius: 5px;
+                color: white;
+                padding: 4px 8px;
+                text-align: center;
+                border-radius: 5px;
             }
 
             .icons-inner {
@@ -186,7 +186,6 @@
                                                                         target="_blank"><img
                                                                             src="https://i.imgur.com/eqEKIco.png"
                                                                             style="display: block; height: auto; border: 0; max-width: 140px; width: 100%;"
-                                                                            
                                                                             width="140" /></a></div>
                                                             </td>
                                                         </tr>
@@ -217,26 +216,23 @@
                                                                             <td style="padding:0 2px 0 2px;"><a
                                                                                     href="https://www.instagram.com/kadangkoding/"
                                                                                     target="_blank"><img
-                                                                                         height="32"
+                                                                                        height="32"
                                                                                         src="https://i.imgur.com/XEEoysj.png"
                                                                                         style="display: block; height: auto; border: 0;"
-                                                                                        
                                                                                         width="32" /></a></td>
                                                                             <td style="padding:0 2px 0 2px;"><a
                                                                                     href="https://www.linkedin.com/company/kadang-koding-indonesia/about/"
                                                                                     target="_blank"><img
-                                                                                         height="32"
+                                                                                        height="32"
                                                                                         src="https://i.imgur.com/crKX2Ej.png"
-                                                                                        style="display: block; height: auto; border: 0;"
-                                                                                        
-                                                                                        width="32" /></a></td>
+                                                                                        style="display: block; height: auto; border: 0;" width="32" /></a>
+                                                                            </td>
                                                                             <td style="padding:0 2px 0 2px;"><a
                                                                                     href="https://www.facebook.com/kadangkodingindonesia/"
                                                                                     target="_blank"><img
                                                                                         height="32"
                                                                                         src="https://i.imgur.com/jInivuY.png"
                                                                                         style="display: block; height: auto; border: 0;"
-                                                                                        
                                                                                         width="32" /></a></td>
                                                                         </tr>
                                                                     </table>
@@ -406,34 +402,60 @@
                         </tbody>
                     </table>
                     <div class="spacer_block block-1" style="height:20px;line-height:20px;font-size:1px;"> </div>
-                    @if ($newStatus === 'diterima' || $newStatus === 'ditolak' || $newStatus === 'interview' || $newStatus === 'pending')
-                    
-                        <table class="row row-7" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+                    @if ($newStatus === 'accepted' || $newStatus === 'reejected' || $newStatus === 'interview' || $newStatus === 'pending')
+
+                        <table class="row row-7" align="center" width="100%" border="0" cellpadding="0"
+                            cellspacing="0" role="presentation"
+                            style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
                             <tbody>
                                 <tr>
                                     <td>
-                                        <table class="row-content stack" align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; color: #000000; width: 600px; margin: 0 auto;" width="600">
+                                        <table class="row-content stack" align="center" border="0"
+                                            cellpadding="0" cellspacing="0" role="presentation"
+                                            style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; color: #000000; width: 600px; margin: 0 auto;"
+                                            width="600">
                                             <tbody>
                                                 <tr>
-                                                    <td class="column column-1" width="100%" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-top: 5px; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;">
-                                                        <div class="spacer_block block-1" style="height:30px;line-height:30px;font-size:1px;">&#8202;</div>
-                                                        <table class="text_block block-2" width="100%" border="0" cellpadding="10" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
+                                                    <td class="column column-1" width="100%"
+                                                        style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-top: 5px; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;">
+                                                        <div class="spacer_block block-1"
+                                                            style="height:30px;line-height:30px;font-size:1px;">&#8202;
+                                                        </div>
+                                                        <table class="text_block block-2" width="100%"
+                                                            border="0" cellpadding="10" cellspacing="0"
+                                                            role="presentation"
+                                                            style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
                                                             <tr>
                                                                 <td class="pad">
                                                                     <div style="font-family: Arial, sans-serif">
-                                                                        <div class style="font-size: 12px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; mso-line-height-alt: 14.399999999999999px; color: #454562; line-height: 1.2;">
-                                                                            <p style="margin: 0; font-size: 16px; text-align: left; mso-line-height-alt: 19.2px;"><span style="font-size:30px;"><strong>Informasi </strong><strong>Pendaftaran Magang</strong></span></p>
+                                                                        <div class
+                                                                            style="font-size: 12px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; mso-line-height-alt: 14.399999999999999px; color: #454562; line-height: 1.2;">
+                                                                            <p
+                                                                                style="margin: 0; font-size: 16px; text-align: left; mso-line-height-alt: 19.2px;">
+                                                                                <span style="font-size:30px;"><strong>Informasi
+                                                                                    </strong><strong>Pendaftaran
+                                                                                        Magang</strong></span></p>
                                                                         </div>
                                                                     </div>
                                                                 </td>
                                                             </tr>
                                                         </table>
-                                                        <table class="text_block block-3" width="100%" border="0" cellpadding="10" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
+                                                        <table class="text_block block-3" width="100%"
+                                                            border="0" cellpadding="10" cellspacing="0"
+                                                            role="presentation"
+                                                            style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
                                                             <tr>
                                                                 <td class="pad">
-                                                                    <div style="font-family: 'Trebuchet MS', Tahoma, sans-serif">
-                                                                        <div class style="font-family: 'Montserrat', 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif; font-size: 12px; mso-line-height-alt: 14.399999999999999px; color: #454562; line-height: 1.2;">
-                                                                            <p style="margin: 0; font-size: 16px; text-align: left; mso-line-height-alt: 19.2px;"><span style="font-size:22px;"><strong>Halo, <span style="color:#085ff7;">{{$data->full_name}}</span></strong></span></p>
+                                                                    <div
+                                                                        style="font-family: 'Trebuchet MS', Tahoma, sans-serif">
+                                                                        <div class
+                                                                            style="font-family: 'Montserrat', 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif; font-size: 12px; mso-line-height-alt: 14.399999999999999px; color: #454562; line-height: 1.2;">
+                                                                            <p
+                                                                                style="margin: 0; font-size: 16px; text-align: left; mso-line-height-alt: 19.2px;">
+                                                                                <span style="font-size:22px;"><strong>Halo,
+                                                                                        <span
+                                                                                            style="color:#085ff7;">{{ $data->full_name }}</span></strong></span>
+                                                                            </p>
                                                                         </div>
                                                                     </div>
                                                                 </td>
@@ -447,30 +469,46 @@
                                 </tr>
                             </tbody>
                         </table>
-                        <table class="row row-8" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+                        <table class="row row-8" align="center" width="100%" border="0" cellpadding="0"
+                            cellspacing="0" role="presentation"
+                            style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
                             <tbody>
                                 <tr>
                                     <td>
-                                        <table class="row-content stack" align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; color: #000000; border-radius: 0; width: 600px; margin: 0 auto;" width="600">
+                                        <table class="row-content stack" align="center" border="0"
+                                            cellpadding="0" cellspacing="0" role="presentation"
+                                            style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; color: #000000; border-radius: 0; width: 600px; margin: 0 auto;"
+                                            width="600">
                                             <tbody>
                                                 <tr>
-                                                    <td class="column column-1" width="100%" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-top: 5px; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;">
-                                                        <table class="paragraph_block block-1" width="100%" border="0" cellpadding="10" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
+                                                    <td class="column column-1" width="100%"
+                                                        style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-top: 5px; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;">
+                                                        <table class="paragraph_block block-1" width="100%"
+                                                            border="0" cellpadding="10" cellspacing="0"
+                                                            role="presentation"
+                                                            style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
                                                             <tr>
                                                                 <td class="pad">
-                                                                    <div style="color:#454562;direction:ltr;font-family:Roboto, Tahoma, Verdana, Segoe, sans-serif;font-size:16px;font-weight:400;letter-spacing:0px;line-height:120%;text-align:left;mso-line-height-alt:19.2px;">
-                                                                        <p style="margin: 0;"><strong style="margin-right: 5px">Berikut untuk status pendaftaran magang anda</strong>
-                                                                            @if ($newStatus === 'diterima')
-                                                                                <span class="badge" style="background-color: #22c55e; text-transform: capitalize;">{{$newStatus}}</span>
+                                                                    <div
+                                                                        style="color:#454562;direction:ltr;font-family:Roboto, Tahoma, Verdana, Segoe, sans-serif;font-size:16px;font-weight:400;letter-spacing:0px;line-height:120%;text-align:left;mso-line-height-alt:19.2px;">
+                                                                        <p style="margin: 0;"><strong
+                                                                                style="margin-right: 5px">Berikut untuk
+                                                                                status pendaftaran magang anda</strong>
+                                                                            @if ($newStatus === 'accepted')
+                                                                                <span class="badge"
+                                                                                    style="background-color: #22c55e; text-transform: capitalize;">{{ $newStatus }}</span>
                                                                             @endif
                                                                             @if ($newStatus === 'interview')
-                                                                                <span class="badge" style="background-color: rgb(67, 10, 159); text-transform: capitalize;">{{$newStatus}}</span>
+                                                                                <span class="badge"
+                                                                                    style="background-color: rgb(67, 10, 159); text-transform: capitalize;">{{ $newStatus }}</span>
                                                                             @endif
-                                                                            @if ($newStatus === 'ditolak')
-                                                                                <span class="badge" style="background-color: #c42121; text-transform: capitalize;">{{$newStatus}}</span>
+                                                                            @if ($newStatus === 'rejected')
+                                                                                <span class="badge"
+                                                                                    style="background-color: #c42121; text-transform: capitalize;">{{ $newStatus }}</span>
                                                                             @endif
                                                                             @if ($newStatus === 'pending')
-                                                                                <span class="badge" style="background-color: orange; text-transform: capitalize;">{{$newStatus}}</span>
+                                                                                <span class="badge"
+                                                                                    style="background-color: orange; text-transform: capitalize;">{{ $newStatus }}</span>
                                                                             @endif
                                                                         </p>
                                                                     </div>
@@ -485,19 +523,30 @@
                                 </tr>
                             </tbody>
                         </table>
-                        <table class="row row-9" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+                        <table class="row row-9" align="center" width="100%" border="0" cellpadding="0"
+                            cellspacing="0" role="presentation"
+                            style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
                             <tbody>
                                 <tr>
                                     <td>
-                                        <table class="row-content stack" align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; color: #000000; width: 600px; margin: 0 auto;" width="600">
+                                        <table class="row-content stack" align="center" border="0"
+                                            cellpadding="0" cellspacing="0" role="presentation"
+                                            style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; color: #000000; width: 600px; margin: 0 auto;"
+                                            width="600">
                                             <tbody>
                                                 <tr>
-                                                    <td class="column column-1" width="100%" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;">
-                                                        <table class="paragraph_block block-1" width="100%" border="0" cellpadding="10" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
+                                                    <td class="column column-1" width="100%"
+                                                        style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;">
+                                                        <table class="paragraph_block block-1" width="100%"
+                                                            border="0" cellpadding="10" cellspacing="0"
+                                                            role="presentation"
+                                                            style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
                                                             <tr>
                                                                 <td class="pad">
-                                                                    <div style="color:#101112;direction:ltr;font-family:Roboto, Tahoma, Verdana, Segoe, sans-serif;font-size:16px;font-weight:400;letter-spacing:0px;line-height:120%;text-align:justify;mso-line-height-alt:19.2px;">
-                                                                        <p style="margin: 0;">{!! $data->messages !!}</p>
+                                                                    <div
+                                                                        style="color:#101112;direction:ltr;font-family:Roboto, Tahoma, Verdana, Segoe, sans-serif;font-size:16px;font-weight:400;letter-spacing:0px;line-height:120%;text-align:justify;mso-line-height-alt:19.2px;">
+                                                                        <p style="margin: 0;">{!! $data->messages !!}
+                                                                        </p>
                                                                     </div>
                                                                 </td>
                                                             </tr>
@@ -512,166 +561,264 @@
                         </table>
                     @endif
 
-                    <table class="row row-10" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
-						<tbody>
-							<tr>
-								<td>
-									<table class="row-content stack" align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; color: #000000; width: 600px; margin: 0 auto;" width="600">
-										<tbody>
-											<tr>
-												<td class="column column-1" width="100%" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;">
-													<div class="spacer_block block-1" style="height:30px;line-height:30px;font-size:1px;">&#8202;</div>
-												</td>
-											</tr>
-										</tbody>
-									</table>
-								</td>
-							</tr>
-						</tbody>
-					</table>
-					<table class="row row-10" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-size: auto;">
-						<tbody>
-							<tr>
-								<td>
-									<table class="row-content stack" align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-size: auto; background-color: #f2f7ff; border-radius: 24px; color: #000000; width: 600px; margin: 0 auto;" width="600">
-										<tbody>
-											<tr>
-												<td class="column column-1" width="50%" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 20px; padding-left: 5px; padding-right: 5px; padding-top: 35px; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;">
-													<table class="heading_block block-1" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
-														<tr>
-															<td class="pad" style="padding-bottom:10px;padding-left:25px;padding-right:25px;padding-top:5px;text-align:center;width:100%;">
-																<h3 style="margin: 0; color: #454562; direction: ltr; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 22px; font-weight: 700; letter-spacing: normal; line-height: 120%; text-align: left; margin-top: 0; margin-bottom: 0; mso-line-height-alt: 30px;"><span class="tinyMce-placeholder">Informasi Diri</span></h3>
-															</td>
-														</tr>
-													</table>
-													<div class="spacer_block block-2" style="height:20px;line-height:20px;font-size:1px;">&#8202;</div>
-													<table class="paragraph_block block-3" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
-														<tr>
-															<td class="pad" style="padding-bottom:10px;padding-left:25px;padding-right:25px;padding-top:10px;">
-																<div style="color:#454562;direction:ltr;font-family:Roboto, Tahoma, Verdana, Segoe, sans-serif;font-size:16px;font-weight:400;letter-spacing:0px;line-height:120%;text-align:left;mso-line-height-alt:21.599999999999998px;">
-																	<p style="margin: 0;"><strong>Nama</strong></p>
-																</div>
-															</td>
-														</tr>
-													</table>
-													<table class="paragraph_block block-4" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
-														<tr>
-															<td class="pad" style="padding-bottom:10px;padding-left:25px;padding-right:25px;padding-top:10px;">
-																<div style="color:#4e5159;direction:ltr;font-family:Roboto, Tahoma, Verdana, Segoe, sans-serif;font-size:14px;font-weight:400;letter-spacing:0px;line-height:120%;text-align:left;mso-line-height-alt:21.599999999999998px;">
-																	<p style="margin: 0;">{{$data->full_name}}</p>
-																</div>
-															</td>
-														</tr>
-													</table>
-													<table class="paragraph_block block-5" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
-														<tr>
-															<td class="pad" style="padding-bottom:10px;padding-left:25px;padding-right:25px;padding-top:10px;">
-																<div style="color:#454562;direction:ltr;font-family:Roboto, Tahoma, Verdana, Segoe, sans-serif;font-size:16px;font-weight:400;letter-spacing:0px;line-height:120%;text-align:left;mso-line-height-alt:21.599999999999998px;">
-																	<p style="margin: 0;"><strong>Sekolah</strong></p>
-																</div>
-															</td>
-														</tr>
-													</table>
-													<table class="paragraph_block block-6" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
-														<tr>
-															<td class="pad" style="padding-bottom:10px;padding-left:25px;padding-right:25px;padding-top:10px;">
-																<div style="color:#393d47;direction:ltr;font-family:Roboto, Tahoma, Verdana, Segoe, sans-serif;font-size:14px;font-weight:400;letter-spacing:0px;line-height:120%;text-align:left;mso-line-height-alt:21.599999999999998px;">
-																	<p style="margin: 0;">{{$data->school}}</p>
-																</div>
-															</td>
-														</tr>
-													</table>
-													<table class="paragraph_block block-7" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
-														<tr>
-															<td class="pad" style="padding-bottom:10px;padding-left:25px;padding-right:25px;padding-top:10px;">
-																<div style="color:#454562;direction:ltr;font-family:Roboto, Tahoma, Verdana, Segoe, sans-serif;font-size:16px;font-weight:400;letter-spacing:0px;line-height:120%;text-align:left;mso-line-height-alt:21.599999999999998px;">
-																	<p style="margin: 0;"><strong>Jurusan</strong></p>
-																</div>
-															</td>
-														</tr>
-													</table>
-													<table class="paragraph_block block-8" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
-														<tr>
-															<td class="pad" style="padding-bottom:10px;padding-left:25px;padding-right:25px;padding-top:10px;">
-																<div style="color:#393d47;direction:ltr;font-family:Roboto, Tahoma, Verdana, Segoe, sans-serif;font-size:14px;font-weight:400;letter-spacing:0px;line-height:120%;text-align:left;mso-line-height-alt:21.599999999999998px;">
-																	<p style="margin: 0;">{{$data->major}}</p>
-																</div>
-															</td>
-														</tr>
-													</table>
-													<div class="spacer_block block-9" style="height:30px;line-height:30px;font-size:1px;">&#8202;</div>
-												</td>
-												<td class="column column-2" width="50%" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 20px; padding-left: 5px; padding-right: 5px; padding-top: 35px; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;">
-													<table class="heading_block block-1" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
-														<tr>
-															<td class="pad" style="padding-bottom:10px;padding-left:25px;padding-right:25px;padding-top:5px;text-align:center;width:100%;">
-																<h3 style="margin: 0; color: #454562; direction: ltr; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 22px; font-weight: 700; letter-spacing: normal; line-height: 120%; text-align: left; margin-top: 0; margin-bottom: 0; mso-line-height-alt: 30px;"><span class="tinyMce-placeholder">Informasi Maganger</span></h3>
-															</td>
-														</tr>
-													</table>
-													<div class="spacer_block block-2" style="height:20px;line-height:20px;font-size:1px;">&#8202;</div>
-													<table class="paragraph_block block-3" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
-														<tr>
-															<td class="pad" style="padding-bottom:10px;padding-left:25px;padding-right:25px;padding-top:10px;">
-																<div style="color:#454562;direction:ltr;font-family:Roboto, Tahoma, Verdana, Segoe, sans-serif;font-size:16px;font-weight:400;letter-spacing:0px;line-height:120%;text-align:left;mso-line-height-alt:21.599999999999998px;">
-																	<p style="margin: 0;"><strong>Posisi Magang</strong></p>
-																</div>
-															</td>
-														</tr>
-													</table>
-													<table class="paragraph_block block-4" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
-														<tr>
-															<td class="pad" style="padding-bottom:10px;padding-left:25px;padding-right:25px;padding-top:10px;">
-																<div style="color:#393d47;direction:ltr;font-family:Roboto, Tahoma, Verdana, Segoe, sans-serif;font-size:14px;font-weight:400;letter-spacing:0px;line-height:120%;text-align:left;mso-line-height-alt:21.599999999999998px;">
-																	<p style="margin: 0;">{{$data->position->name}}</p>
-																</div>
-															</td>
-														</tr>
-													</table>
-													<table class="paragraph_block block-5" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
-														<tr>
-															<td class="pad" style="padding-bottom:10px;padding-left:25px;padding-right:25px;padding-top:10px;">
-																<div style="color:#454562;direction:ltr;font-family:Roboto, Tahoma, Verdana, Segoe, sans-serif;font-size:16px;font-weight:400;letter-spacing:0px;line-height:120%;text-align:left;mso-line-height-alt:21.599999999999998px;">
-																	<p style="margin: 0;"><strong>Tanggal Mulai</strong></p>
-																</div>
-															</td>
-														</tr>
-													</table>
-													<table class="paragraph_block block-6" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
-														<tr>
-															<td class="pad" style="padding-bottom:10px;padding-left:25px;padding-right:25px;padding-top:10px;">
-																<div style="color:#22c55e;direction:ltr;font-family:Roboto, Tahoma, Verdana, Segoe, sans-serif;font-size:14px;font-weight:400;letter-spacing:0px;line-height:120%;text-align:left;mso-line-height-alt:21.599999999999998px;">
-																	<p style="margin: 0;">{{$data->start_date}}</p>
-																</div>
-															</td>
-														</tr>
-													</table>
-													<table class="paragraph_block block-7" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
-														<tr>
-															<td class="pad" style="padding-bottom:10px;padding-left:25px;padding-right:25px;padding-top:10px;">
-																<div style="color:#454562;direction:ltr;font-family:Roboto, Tahoma, Verdana, Segoe, sans-serif;font-size:16px;font-weight:400;letter-spacing:0px;line-height:120%;text-align:left;mso-line-height-alt:21.599999999999998px;">
-																	<p style="margin: 0;"><strong>Tanggal Selesai</strong></p>
-																</div>
-															</td>
-														</tr>
-													</table>
-													<table class="paragraph_block block-8" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
-														<tr>
-															<td class="pad" style="padding-bottom:10px;padding-left:25px;padding-right:25px;padding-top:10px;">
-																<div style="color:#c42121;direction:ltr;font-family:Roboto, Tahoma, Verdana, Segoe, sans-serif;font-size:14px;font-weight:400;letter-spacing:0px;line-height:120%;text-align:left;mso-line-height-alt:21.599999999999998px;">
-																	<p style="margin: 0;">{{$data->end_date}}</p>
-																</div>
-															</td>
-														</tr>
-													</table>
-												</td>
-											</tr>
-										</tbody>
-									</table>
-								</td>
-							</tr>
-						</tbody>
-					</table>
+                    <table class="row row-10" align="center" width="100%" border="0" cellpadding="0"
+                        cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <table class="row-content stack" align="center" border="0" cellpadding="0"
+                                        cellspacing="0" role="presentation"
+                                        style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; color: #000000; width: 600px; margin: 0 auto;"
+                                        width="600">
+                                        <tbody>
+                                            <tr>
+                                                <td class="column column-1" width="100%"
+                                                    style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;">
+                                                    <div class="spacer_block block-1"
+                                                        style="height:30px;line-height:30px;font-size:1px;">&#8202;
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table class="row row-10" align="center" width="100%" border="0" cellpadding="0"
+                        cellspacing="0" role="presentation"
+                        style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-size: auto;">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <table class="row-content stack" align="center" border="0" cellpadding="0"
+                                        cellspacing="0" role="presentation"
+                                        style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-size: auto; background-color: #f2f7ff; border-radius: 24px; color: #000000; width: 600px; margin: 0 auto;"
+                                        width="600">
+                                        <tbody>
+                                            <tr>
+                                                <td class="column column-1" width="50%"
+                                                    style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 20px; padding-left: 5px; padding-right: 5px; padding-top: 35px; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;">
+                                                    <table class="heading_block block-1" width="100%"
+                                                        border="0" cellpadding="0" cellspacing="0"
+                                                        role="presentation"
+                                                        style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+                                                        <tr>
+                                                            <td class="pad"
+                                                                style="padding-bottom:10px;padding-left:25px;padding-right:25px;padding-top:5px;text-align:center;width:100%;">
+                                                                <h3
+                                                                    style="margin: 0; color: #454562; direction: ltr; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 22px; font-weight: 700; letter-spacing: normal; line-height: 120%; text-align: left; margin-top: 0; margin-bottom: 0; mso-line-height-alt: 30px;">
+                                                                    <span class="tinyMce-placeholder">Informasi
+                                                                        Diri</span></h3>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                    <div class="spacer_block block-2"
+                                                        style="height:20px;line-height:20px;font-size:1px;">&#8202;
+                                                    </div>
+                                                    <table class="paragraph_block block-3" width="100%"
+                                                        border="0" cellpadding="0" cellspacing="0"
+                                                        role="presentation"
+                                                        style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
+                                                        <tr>
+                                                            <td class="pad"
+                                                                style="padding-bottom:10px;padding-left:25px;padding-right:25px;padding-top:10px;">
+                                                                <div
+                                                                    style="color:#454562;direction:ltr;font-family:Roboto, Tahoma, Verdana, Segoe, sans-serif;font-size:16px;font-weight:400;letter-spacing:0px;line-height:120%;text-align:left;mso-line-height-alt:21.599999999999998px;">
+                                                                    <p style="margin: 0;"><strong>Nama</strong></p>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                    <table class="paragraph_block block-4" width="100%"
+                                                        border="0" cellpadding="0" cellspacing="0"
+                                                        role="presentation"
+                                                        style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
+                                                        <tr>
+                                                            <td class="pad"
+                                                                style="padding-bottom:10px;padding-left:25px;padding-right:25px;padding-top:10px;">
+                                                                <div
+                                                                    style="color:#4e5159;direction:ltr;font-family:Roboto, Tahoma, Verdana, Segoe, sans-serif;font-size:14px;font-weight:400;letter-spacing:0px;line-height:120%;text-align:left;mso-line-height-alt:21.599999999999998px;">
+                                                                    <p style="margin: 0;">{{ $data->full_name }}</p>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                    <table class="paragraph_block block-5" width="100%"
+                                                        border="0" cellpadding="0" cellspacing="0"
+                                                        role="presentation"
+                                                        style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
+                                                        <tr>
+                                                            <td class="pad"
+                                                                style="padding-bottom:10px;padding-left:25px;padding-right:25px;padding-top:10px;">
+                                                                <div
+                                                                    style="color:#454562;direction:ltr;font-family:Roboto, Tahoma, Verdana, Segoe, sans-serif;font-size:16px;font-weight:400;letter-spacing:0px;line-height:120%;text-align:left;mso-line-height-alt:21.599999999999998px;">
+                                                                    <p style="margin: 0;"><strong>Sekolah</strong></p>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                    <table class="paragraph_block block-6" width="100%"
+                                                        border="0" cellpadding="0" cellspacing="0"
+                                                        role="presentation"
+                                                        style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
+                                                        <tr>
+                                                            <td class="pad"
+                                                                style="padding-bottom:10px;padding-left:25px;padding-right:25px;padding-top:10px;">
+                                                                <div
+                                                                    style="color:#393d47;direction:ltr;font-family:Roboto, Tahoma, Verdana, Segoe, sans-serif;font-size:14px;font-weight:400;letter-spacing:0px;line-height:120%;text-align:left;mso-line-height-alt:21.599999999999998px;">
+                                                                    <p style="margin: 0;">{{ $data->school }}</p>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                    <table class="paragraph_block block-7" width="100%"
+                                                        border="0" cellpadding="0" cellspacing="0"
+                                                        role="presentation"
+                                                        style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
+                                                        <tr>
+                                                            <td class="pad"
+                                                                style="padding-bottom:10px;padding-left:25px;padding-right:25px;padding-top:10px;">
+                                                                <div
+                                                                    style="color:#454562;direction:ltr;font-family:Roboto, Tahoma, Verdana, Segoe, sans-serif;font-size:16px;font-weight:400;letter-spacing:0px;line-height:120%;text-align:left;mso-line-height-alt:21.599999999999998px;">
+                                                                    <p style="margin: 0;"><strong>Jurusan</strong></p>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                    <table class="paragraph_block block-8" width="100%"
+                                                        border="0" cellpadding="0" cellspacing="0"
+                                                        role="presentation"
+                                                        style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
+                                                        <tr>
+                                                            <td class="pad"
+                                                                style="padding-bottom:10px;padding-left:25px;padding-right:25px;padding-top:10px;">
+                                                                <div
+                                                                    style="color:#393d47;direction:ltr;font-family:Roboto, Tahoma, Verdana, Segoe, sans-serif;font-size:14px;font-weight:400;letter-spacing:0px;line-height:120%;text-align:left;mso-line-height-alt:21.599999999999998px;">
+                                                                    <p style="margin: 0;">{{ $data->major }}</p>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                    <div class="spacer_block block-9"
+                                                        style="height:30px;line-height:30px;font-size:1px;">&#8202;
+                                                    </div>
+                                                </td>
+                                                <td class="column column-2" width="50%"
+                                                    style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 20px; padding-left: 5px; padding-right: 5px; padding-top: 35px; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;">
+                                                    <table class="heading_block block-1" width="100%"
+                                                        border="0" cellpadding="0" cellspacing="0"
+                                                        role="presentation"
+                                                        style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+                                                        <tr>
+                                                            <td class="pad"
+                                                                style="padding-bottom:10px;padding-left:25px;padding-right:25px;padding-top:5px;text-align:center;width:100%;">
+                                                                <h3
+                                                                    style="margin: 0; color: #454562; direction: ltr; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 22px; font-weight: 700; letter-spacing: normal; line-height: 120%; text-align: left; margin-top: 0; margin-bottom: 0; mso-line-height-alt: 30px;">
+                                                                    <span class="tinyMce-placeholder">Informasi
+                                                                        Maganger</span></h3>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                    <div class="spacer_block block-2"
+                                                        style="height:20px;line-height:20px;font-size:1px;">&#8202;
+                                                    </div>
+                                                    <table class="paragraph_block block-3" width="100%"
+                                                        border="0" cellpadding="0" cellspacing="0"
+                                                        role="presentation"
+                                                        style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
+                                                        <tr>
+                                                            <td class="pad"
+                                                                style="padding-bottom:10px;padding-left:25px;padding-right:25px;padding-top:10px;">
+                                                                <div
+                                                                    style="color:#454562;direction:ltr;font-family:Roboto, Tahoma, Verdana, Segoe, sans-serif;font-size:16px;font-weight:400;letter-spacing:0px;line-height:120%;text-align:left;mso-line-height-alt:21.599999999999998px;">
+                                                                    <p style="margin: 0;"><strong>Posisi
+                                                                            Magang</strong></p>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                    <table class="paragraph_block block-4" width="100%"
+                                                        border="0" cellpadding="0" cellspacing="0"
+                                                        role="presentation"
+                                                        style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
+                                                        <tr>
+                                                            <td class="pad"
+                                                                style="padding-bottom:10px;padding-left:25px;padding-right:25px;padding-top:10px;">
+                                                                <div
+                                                                    style="color:#393d47;direction:ltr;font-family:Roboto, Tahoma, Verdana, Segoe, sans-serif;font-size:14px;font-weight:400;letter-spacing:0px;line-height:120%;text-align:left;mso-line-height-alt:21.599999999999998px;">
+                                                                    <p style="margin: 0;">{{ $data->position->name }}
+                                                                    </p>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                    <table class="paragraph_block block-5" width="100%"
+                                                        border="0" cellpadding="0" cellspacing="0"
+                                                        role="presentation"
+                                                        style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
+                                                        <tr>
+                                                            <td class="pad"
+                                                                style="padding-bottom:10px;padding-left:25px;padding-right:25px;padding-top:10px;">
+                                                                <div
+                                                                    style="color:#454562;direction:ltr;font-family:Roboto, Tahoma, Verdana, Segoe, sans-serif;font-size:16px;font-weight:400;letter-spacing:0px;line-height:120%;text-align:left;mso-line-height-alt:21.599999999999998px;">
+                                                                    <p style="margin: 0;"><strong>Tanggal
+                                                                            Mulai</strong></p>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                    <table class="paragraph_block block-6" width="100%"
+                                                        border="0" cellpadding="0" cellspacing="0"
+                                                        role="presentation"
+                                                        style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
+                                                        <tr>
+                                                            <td class="pad"
+                                                                style="padding-bottom:10px;padding-left:25px;padding-right:25px;padding-top:10px;">
+                                                                <div
+                                                                    style="color:#22c55e;direction:ltr;font-family:Roboto, Tahoma, Verdana, Segoe, sans-serif;font-size:14px;font-weight:400;letter-spacing:0px;line-height:120%;text-align:left;mso-line-height-alt:21.599999999999998px;">
+                                                                    <p style="margin: 0;">{{ $data->start_date }}</p>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                    <table class="paragraph_block block-7" width="100%"
+                                                        border="0" cellpadding="0" cellspacing="0"
+                                                        role="presentation"
+                                                        style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
+                                                        <tr>
+                                                            <td class="pad"
+                                                                style="padding-bottom:10px;padding-left:25px;padding-right:25px;padding-top:10px;">
+                                                                <div
+                                                                    style="color:#454562;direction:ltr;font-family:Roboto, Tahoma, Verdana, Segoe, sans-serif;font-size:16px;font-weight:400;letter-spacing:0px;line-height:120%;text-align:left;mso-line-height-alt:21.599999999999998px;">
+                                                                    <p style="margin: 0;"><strong>Tanggal
+                                                                            Selesai</strong></p>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                    <table class="paragraph_block block-8" width="100%"
+                                                        border="0" cellpadding="0" cellspacing="0"
+                                                        role="presentation"
+                                                        style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
+                                                        <tr>
+                                                            <td class="pad"
+                                                                style="padding-bottom:10px;padding-left:25px;padding-right:25px;padding-top:10px;">
+                                                                <div
+                                                                    style="color:#c42121;direction:ltr;font-family:Roboto, Tahoma, Verdana, Segoe, sans-serif;font-size:14px;font-weight:400;letter-spacing:0px;line-height:120%;text-align:left;mso-line-height-alt:21.599999999999998px;">
+                                                                    <p style="margin: 0;">{{ $data->end_date }}</p>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                     <table align="center" border="0" cellpadding="0" cellspacing="0" class="row row-10"
                         role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;" width="100%">
                         <tbody>
@@ -697,7 +844,7 @@
                         </tbody>
                     </table>
 
-                    @if ($newStatus === 'diterima')
+                    @if ($newStatus === 'accepted')
                         <table align="center" border="0" cellpadding="0" cellspacing="0" class="row row-11"
                             role="presentation"
                             style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #ffffff;"
@@ -762,7 +909,7 @@
                                                                             style="color:#393d47;font-family:Roboto, Tahoma, Verdana, Segoe, sans-serif;font-size:16px;line-height:120%;text-align:left;mso-line-height-alt:19.2px;">
                                                                             <p
                                                                                 style="margin: 0; word-break: break-word;">
-                                                                                <span>Karena anda diterima Magang di
+                                                                                <span>Karena anda accepted Magang di
                                                                                     Kadang
                                                                                     Koding Indonesia. Pemagang dapat
                                                                                     Login
@@ -892,7 +1039,7 @@
                                                                         style="padding-bottom:10px;padding-left:25px;padding-right:25px;padding-top:10px;text-align:left;">
                                                                         <div align="left" class="alignment">
                                                                             <!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="https://internship.kadangkoding.com/thoriq/pendaftaran-magang/login" style="height:43px;width:183px;v-text-anchor:middle;" arcsize="10%" strokeweight="0.75pt" strokecolor="#085ff7" fillcolor="#085ff7"><w:anchorlock/><v:textbox inset="0px,0px,0px,0px"><center style="color:#ffffff; font-family:Tahoma, Verdana, sans-serif; font-size:16px"><![endif]--><a
-                                                                                href="https://internship.kadangkoding.com/thoriq/pendaftaran-magang/login"
+                                                                                href="{{ route('login', ['locale' => app()->getLocale()]) }}"
                                                                                 style="text-decoration:none;display:inline-block;color:#ffffff;background-color:#085ff7;border-radius:4px;width:auto;border-top:1px solid transparent;font-weight:400;border-right:1px solid transparent;border-bottom:1px solid transparent;border-left:1px solid transparent;padding-top:5px;padding-bottom:5px;font-family:Roboto, Tahoma, Verdana, Segoe, sans-serif;font-size:16px;text-align:center;mso-border-alt:none;word-break:keep-all;"
                                                                                 target="_blank"><span
                                                                                     style="padding-left:35px;padding-right:35px;font-size:16px;display:inline-block;letter-spacing:normal;"><span
@@ -1073,7 +1220,7 @@
                                                             <td class="pad">
                                                                 <div align="center"
                                                                     style="font-family:Roboto, Tahoma, Verdana, Segoe, sans-serif;text-align:center;">
-                                                                    <div style="height:30px;"> </div>
+                                                                    <div style="height:30px;"></div>
                                                                 </div>
                                                             </td>
                                                         </tr>
@@ -1145,8 +1292,7 @@
                                                                             <td style="padding:0 2px 0 2px;"><a
                                                                                     href="https://www.instagram.com/kadangkoding/"
                                                                                     target="_blank"><img
-                                                                                        alt="Instagram"
-                                                                                        height="32"
+                                                                                        alt="Instagram" height="32"
                                                                                         src="https://i.imgur.com/XEEoysj.png"
                                                                                         style="display: block; height: auto; border: 0;"
                                                                                         title="Instagram"
@@ -1154,8 +1300,7 @@
                                                                             <td style="padding:0 2px 0 2px;"><a
                                                                                     href="https://www.linkedin.com/company/kadang-koding-indonesia/about/"
                                                                                     target="_blank"><img
-                                                                                        alt="Linkedin"
-                                                                                        height="32"
+                                                                                        alt="Linkedin" height="32"
                                                                                         src="https://i.imgur.com/crKX2Ej.png"
                                                                                         style="display: block; height: auto; border: 0;"
                                                                                         title="Linkedin"
@@ -1163,8 +1308,7 @@
                                                                             <td style="padding:0 2px 0 2px;"><a
                                                                                     href="https://www.facebook.com/kadangkodingindonesia/"
                                                                                     target="_blank"><img
-                                                                                        alt="Facebook"
-                                                                                        height="32"
+                                                                                        alt="Facebook" height="32"
                                                                                         src="https://i.imgur.com/jInivuY.png"
                                                                                         style="display: block; height: auto; border: 0;"
                                                                                         title="facebook"
@@ -1185,9 +1329,9 @@
                                                                 <div
                                                                     style="color:#000000;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:12px;font-weight:400;line-height:120%;text-align:center;mso-line-height-alt:14.399999999999999px;">
                                                                     <p style="margin: 0; word-break: break-word;">
-                                                                        Copyright © 2023 Kadang Koding Indonesia, All
+                                                                        Copyright � 2023 Kadang Koding Indonesia, All
                                                                         rights reserved.</p>
-                                                                    <p style="margin: 0;"> </p>
+                                                                    <p style="margin: 0;"></p>
                                                                     <p style="margin: 0; word-break: break-word;">
                                                                     </p>
                                                                 </div>

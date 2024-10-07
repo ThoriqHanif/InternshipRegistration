@@ -393,9 +393,10 @@
                                                             <td class="pad">
                                                                 <div align="center" class="alignment"
                                                                     style="line-height:10px">
-                                                                    <div style="max-width: 162.5px;"><img
+                                                                    <div style="max-width: 162.5px;">
+                                                                        <img
                                                                             alt="{{ $blog->title }}" height="auto"
-                                                                            src="{{ asset('uploads/image_thumbnail/' . $blog->image_thumbnail) }}"
+                                                                            src="{{ url('uploads/image_thumbnail/' . $blog->image_thumbnail) }}"
                                                                             style="display: block; height: auto; border: 0; width: 100%;"
                                                                             title="{{ $blog->title }}" width="162.5" /></div>
                                                                 </div>
@@ -430,7 +431,15 @@
                                                                 style="padding-bottom:10px;padding-left:10px;padding-right:10px;padding-top:5px;">
                                                                 <div
                                                                     style="color:#29311e;direction:ltr;font-family:Arial, Helvetica, sans-serif;font-size:16px;font-weight:400;letter-spacing:0px;line-height:150%;text-align:left;mso-line-height-alt:24px;">
-                                                                    <p style="margin: 0;">{{ $blog->summary }}</p>
+                                                                    <p style="margin: 0;">
+                                                                        @if ($blog->author)
+                                                                            @if ($blog->author->isAdmin())
+                                                                                {{ $blog->author->name }}
+                                                                            @else
+                                                                                {{ $blog->author->intern->full_name }}
+                                                                            @endif
+                                                                        @endif
+                                                                    </p>
                                                                 </div>
                                                             </td>
                                                         </tr>

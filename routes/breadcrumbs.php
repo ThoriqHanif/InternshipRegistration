@@ -8,6 +8,10 @@ Breadcrumbs::for('admin.dashboard', function (BreadcrumbTrail $trail) {
     $trail->push('Dashboard', route('admin.dashboard'));
 });
 
+Breadcrumbs::for('admin.profile', function (BreadcrumbTrail $trail) {
+    $trail->push('Profile', route('admin.profile'));
+});
+
 // INTERN
 Breadcrumbs::for('intern.index', function (BreadcrumbTrail $trail) {
     $trail->parent('admin.dashboard');

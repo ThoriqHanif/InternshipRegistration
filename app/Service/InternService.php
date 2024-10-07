@@ -34,7 +34,7 @@ class InternService
         $htmlWriter = new \PhpOffice\PhpWord\Writer\HTML($phpWord);
 
         $fileTypeFolder = $this->getFileTypeFolder($fileType);
-        $htmlFilePath = public_path("uploads/{$fileTypeFolder}/convert/" . pathinfo($filePath, PATHINFO_FILENAME) . '.html');
+        $htmlFilePath = ("uploads/{$fileTypeFolder}/convert/" . pathinfo($filePath, PATHINFO_FILENAME) . '.html');
         $htmlWriter->save($htmlFilePath);
 
         return asset("uploads/{$fileTypeFolder}/convert/" . pathinfo($filePath, PATHINFO_FILENAME) . '.html');
@@ -46,7 +46,7 @@ class InternService
             return [null, null, null];
         }
 
-        $filePath = public_path("uploads/{$fileType}/{$fileName}");
+        $filePath = ("uploads/{$fileType}/{$fileName}");
         $url = asset("uploads/{$fileType}/{$fileName}");
         $extension = pathinfo($fileName, PATHINFO_EXTENSION);
 

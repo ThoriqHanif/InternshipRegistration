@@ -27,7 +27,7 @@ class InternStatus extends Mailable
         $this->data = $data;
         $this->newStatus = $newStatus;
         $this->password = $password;
-        
+
     }
 
     /**
@@ -65,15 +65,15 @@ class InternStatus extends Mailable
         $status = $this->newStatus;
         $message = '';
 
-        if ($status === 'diterima') {
+        if ($status === 'accepted') {
             $message = 'Pendaftaran Anda sebagai pemagang di Kadang Koding telah diterima.';
-        } elseif ($status === 'ditolak') {
+        } elseif ($status === 'rejected') {
             $message = 'Maaf, pendaftaran Anda sebagai pemagang di Kadang Koding telah ditolak.';
         } else {
             $message = 'Status pendaftaran Anda telah berubah.';
         }
 
-        $mailMessage = (new MailMessage)    
+        $mailMessage = (new MailMessage)
             ->subject('Informasi Pendaftaran Magang di Kadang Koding Indonesia')
             ->line('Terimakasih telah mendaftar Magang di Kadang Koding Indonesia, dan berikut kami lampirkan untuk Status Pendaftaran Anda')
             ->line($message)
@@ -86,7 +86,7 @@ class InternStatus extends Mailable
             ->line('Tanggal Selesai: ' . $this->data->end_date)
             ->line('Status: ' . $this->data->status);
 
-            if ($status === 'diterima') {
+            if ($status === 'accepted') {
                 // Jika status "diterima", tambahkan informasi akun user
                 $mailMessage->line('Berikut adalah detail Akun untuk Login :')
                     ->line('Email: ' . $this->data->email)

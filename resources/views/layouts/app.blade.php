@@ -98,6 +98,7 @@
     @stack('table-blog-categories')
     @stack('table-report-intern')
     @stack('table-evaluations')
+    @stack('table-subscriptions')
     @stack('show-modal-report')
     @stack('script-report')
     @stack('script-blog')

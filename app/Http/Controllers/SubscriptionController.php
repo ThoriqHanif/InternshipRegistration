@@ -5,19 +5,31 @@ namespace App\Http\Controllers;
 use App\Mail\SuccessUnsubscribe;
 use App\Mail\UnsubscribeConfirmation;
 use App\Models\Subscription;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Mail;
-
+use Yajra\DataTables\Facades\DataTables;
 
 class SubscriptionController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        if($request->ajax()) {
+            $subscriptions = Subscription::query();
+            return DataTables::of($subscriptions)
+                ->addColumn('action', function ($subscriptions) {
+                    return view('pages.admin.subscription.action', compact('subscriptions'));
+                })
+                ->addIndexColumn()
+                ->rawColumns(['action'])
+                ->make(true);
+        };
+
+        return view('pages.admin.subscription.index');
     }
 
     /**
@@ -30,6 +42,25 @@ class SubscriptionController extends Controller
     }
 
     public function store(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'status' => 'required',
+        ]);
+
+        $subscription = new Subscription();
+        $subscription->email = $request->email;
+        $subscription->status = $request->status;
+
+        if($subscription->save())
+        {
+            return response()->json(['success' => true]);
+        } else {
+            return response()->json(['success' => false]);
+        }
+    }
+
+    public function subscribe(Request $request)
     {
         $request->validate([
             'email' => 'required|email',
@@ -74,13 +105,6 @@ class SubscriptionController extends Controller
         return response()->json(['success' => false, 'message' => 'Email not found.'], 404);
     }
 
-
-
-    /**
-     * Store a newly created resource in storage.
-     */
-
-
     public function reSubscribe(Request $request)
     {
         $subscription = Subscription::where('email', $request->input('email'))->first();
@@ -104,7 +128,10 @@ class SubscriptionController extends Controller
      */
     public function show(Subscription $subscription)
     {
-        //
+        $subscription->created_at_formatted = Carbon::parse($subscription->created_at)->translatedFormat('d F Y H:i');
+        $subscription->updated_at_formatted = Carbon::parse($subscription->updated_at)->translatedFormat('d F Y H:i');
+
+        return response()->json(['result' => $subscription]);
     }
 
     /**
@@ -113,6 +140,10 @@ class SubscriptionController extends Controller
     public function edit(Subscription $subscription)
     {
         //
+        $subscription->created_at_formatted = Carbon::parse($subscription->created_at)->translatedFormat('d F Y H:i');
+        $subscription->updated_at_formatted = Carbon::parse($subscription->updated_at)->translatedFormat('d F Y H:i');
+
+        return response()->json(['result' => $subscription]);
     }
 
     /**
@@ -121,6 +152,21 @@ class SubscriptionController extends Controller
     public function update(Request $request, Subscription $subscription)
     {
         //
+        $request->validate([
+            'email' => 'required|email',
+            'status' => 'required'
+        ]);
+
+        $subscription->email = $request->email;
+        $subscription->status = $request->status;
+
+        if($subscription->save())
+        {
+            return response()->json(['success' => true]);
+        } else {
+            return response()->json(['success' => false]);
+        }
+
     }
 
     /**
@@ -129,5 +175,11 @@ class SubscriptionController extends Controller
     public function destroy(Subscription $subscription)
     {
         //
+        if($subscription->delete())
+        {
+            return response()->json(['success' => true]);
+        }else{
+            return response()->json(['success' => false]);
+        }
     }
 }

@@ -169,10 +169,12 @@
 
                                 </div>
                                 <div class="col-12 d-flex justify-content-end mt-3">
-                                    <button type="submit" class="btn btn-primary me-1 mb-1" onclick="document.getElementById('status').value='published'">
+                                    <button type="submit" class="btn btn-primary me-1 mb-1"
+                                        onclick="document.getElementById('status').value='published'">
                                         Publish
                                     </button>
-                                    <button type="submit" class="btn btn-light-secondary me-1 mb-1" onclick="document.getElementById('status').value='draft'">
+                                    <button type="submit" class="btn btn-light-secondary me-1 mb-1"
+                                        onclick="document.getElementById('status').value='draft'">
                                         Save as Draft
                                     </button>
                                     <a href="{{ route('blogs.index') }}" class="btn btn-danger me-1 mb-1">Back</a>
@@ -190,6 +192,57 @@
         @endpush
 
         <script>
+            // const image_upload_handler = (blobInfo, progress) => new Promise((resolve, reject) => {
+            //     const xhr = new XMLHttpRequest();
+            //     xhr.withCredentials = false;
+            //     xhr.open('POST', '/upload-image');
+
+            //     const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            //     xhr.setRequestHeader('X-CSRF-TOKEN', token);
+
+            //     xhr.upload.onprogress = e => e.lengthComputable && progress(e.loaded / e.total * 100);
+
+            //     xhr.onload = () => {
+            //         if (xhr.status === 403) return reject({
+            //             message: 'HTTP Error: ' + xhr.status,
+            //             remove: true
+            //         });
+            //         if (xhr.status < 200 || xhr.status >= 300) return reject('HTTP Error: ' + xhr.status);
+
+            //         try {
+            //             const json = JSON.parse(xhr.responseText);
+            //             if (!json || typeof json.location !== 'string') return reject('Invalid JSON: ' + xhr
+            //                 .responseText);
+            //             resolve(json.location);
+            //         } catch (e) {
+            //             reject('Invalid JSON: ' + xhr.responseText);
+            //         }
+            //     };
+
+            //     xhr.onerror = () => reject('Image upload failed due to a XHR Transport error. Code: ' + xhr.status);
+
+            //     const formData = new FormData();
+            //     formData.append('file', blobInfo.blob(), blobInfo.filename());
+            //     xhr.send(formData);
+            // });
+
+            // tinymce.init({
+            //     selector: '#body',
+            //     plugins: 'preview importcss searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image code link media codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount help charmap quickbars emoticons accordion',
+            //     menubar: 'file edit view insert format tools table help',
+            //     toolbar: "undo redo | accordion accordionremove | blocks fontfamily fontsize | bold italic underline strikethrough | align numlist bullist | link image | table media | lineheight outdent indent | forecolor backcolor removeformat | charmap emoticons | code fullscreen preview | save print | pagebreak anchor codesample | ltr rtl",
+            //     autosave_ask_before_unload: true,
+            //     autosave_interval: '30s',
+            //     autosave_prefix: '{path}{query}-{id}-',
+            //     autosave_restore_when_empty: false,
+            //     autosave_retention: '5m',
+            //     automatic_uploads: true,
+            //     image_advtab: true,
+            //     image_title: true,
+            //     file_picker_types: 'image',
+            //     images_upload_handler: image_upload_handler
+            // });
+
             const image_upload_handler = (blobInfo, progress) => new Promise((resolve, reject) => {
                 const xhr = new XMLHttpRequest();
                 xhr.withCredentials = false;
@@ -198,19 +251,32 @@
                 const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
                 xhr.setRequestHeader('X-CSRF-TOKEN', token);
 
-                xhr.upload.onprogress = e => e.lengthComputable && progress(e.loaded / e.total * 100);
+                xhr.upload.onprogress = (e) => {
+                    if (e.lengthComputable) {
+                        progress(e.loaded / e.total * 100);
+                    }
+                };
 
                 xhr.onload = () => {
-                    if (xhr.status === 403) return reject({
-                        message: 'HTTP Error: ' + xhr.status,
-                        remove: true
-                    });
-                    if (xhr.status < 200 || xhr.status >= 300) return reject('HTTP Error: ' + xhr.status);
+                    if (xhr.status === 403) {
+                        reject({
+                            message: 'HTTP Error: ' + xhr.status,
+                            remove: true
+                        });
+                        return;
+                    }
+
+                    if (xhr.status < 200 || xhr.status >= 300) {
+                        reject('HTTP Error: ' + xhr.status);
+                        return;
+                    }
 
                     try {
                         const json = JSON.parse(xhr.responseText);
-                        if (!json || typeof json.location !== 'string') return reject('Invalid JSON: ' + xhr
-                            .responseText);
+                        if (!json || typeof json.location !== 'string') {
+                            reject('Invalid JSON: ' + xhr.responseText);
+                            return;
+                        }
                         resolve(json.location);
                     } catch (e) {
                         reject('Invalid JSON: ' + xhr.responseText);
@@ -221,6 +287,7 @@
 
                 const formData = new FormData();
                 formData.append('file', blobInfo.blob(), blobInfo.filename());
+
                 xhr.send(formData);
             });
 
@@ -229,15 +296,11 @@
                 plugins: 'preview importcss searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image code link media codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount help charmap quickbars emoticons accordion',
                 menubar: 'file edit view insert format tools table help',
                 toolbar: "undo redo | accordion accordionremove | blocks fontfamily fontsize | bold italic underline strikethrough | align numlist bullist | link image | table media | lineheight outdent indent | forecolor backcolor removeformat | charmap emoticons | code fullscreen preview | save print | pagebreak anchor codesample | ltr rtl",
-                autosave_ask_before_unload: true,
-                autosave_interval: '30s',
-                autosave_prefix: '{path}{query}-{id}-',
-                autosave_restore_when_empty: false,
-                autosave_retention: '5m',
+                document_base_url: "https://internship.kadangkoding.com/thoriq/pendaftaran-magang/",
+                convert_urls: false,
+                relative_urls: false,
                 automatic_uploads: true,
                 image_advtab: true,
-                image_title: true,
-                file_picker_types: 'image',
                 images_upload_handler: image_upload_handler
             });
 

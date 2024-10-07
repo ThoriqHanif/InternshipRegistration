@@ -95,8 +95,8 @@
                                             </div>
                                             @if ($imageThumbnailUrl)
                                                 <a data-fancybox data-caption="Thumbnail" href="{{ $imageThumbnailUrl }}">
-                                                    <img src="{{ $imageThumbnailUrl }}" class="mt-3 img-fluid w-100" alt="Thumbnail"
-                                                        >
+                                                    <img src="{{ $imageThumbnailUrl }}" class="mt-3 img-fluid w-100"
+                                                        alt="Thumbnail">
                                                 </a>
                                             @else
                                                 <p class="text-sm text-danger">Belum ada Foto</p>
@@ -207,6 +207,69 @@
         @endpush
 
         <script>
+            // const image_upload_handler = (blobInfo, progress) => new Promise((resolve, reject) => {
+            //     const xhr = new XMLHttpRequest();
+            //     xhr.withCredentials = false;
+            //     xhr.open('POST', '/upload-image');
+
+            //     const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            //     xhr.setRequestHeader('X-CSRF-TOKEN', token);
+
+            //     xhr.upload.onprogress = e => e.lengthComputable && progress(e.loaded / e.total * 100);
+
+            //     xhr.onload = () => {
+            //         if (xhr.status === 403) return reject({
+            //             message: 'HTTP Error: ' + xhr.status,
+            //             remove: true
+            //         });
+            //         if (xhr.status < 200 || xhr.status >= 300) return reject('HTTP Error: ' + xhr.status);
+
+            //         try {
+            //             const json = JSON.parse(xhr.responseText);
+            //             if (!json || typeof json.location !== 'string') return reject('Invalid JSON: ' + xhr
+            //                 .responseText);
+
+            //             // Prevent duplicate image URLs
+            //             const existingImages = tinymce.activeEditor.getContent({
+            //                 format: 'html'
+            //             }).match(/<img[^>]+src="([^">]+)"/g);
+            //             const uploadedImageUrl = json.location;
+
+            //             // Check if the image is already in the content
+            //             if (existingImages && existingImages.some(img => img.includes(uploadedImageUrl))) {
+            //                 resolve(null); // Do nothing if it's a duplicate
+            //             } else {
+            //                 resolve(uploadedImageUrl); // Proceed if it's not a duplicate
+            //             }
+            //         } catch (e) {
+            //             reject('Invalid JSON: ' + xhr.responseText);
+            //         }
+            //     };
+
+            //     xhr.onerror = () => reject('Image upload failed due to a XHR Transport error. Code: ' + xhr.status);
+
+            //     const formData = new FormData();
+            //     formData.append('file', blobInfo.blob(), blobInfo.filename());
+            //     xhr.send(formData);
+            // });
+
+            // tinymce.init({
+            //     selector: '#body',
+            //     plugins: 'preview importcss searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image code link media codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount help charmap quickbars emoticons accordion',
+            //     menubar: 'file edit view insert format tools table help',
+            //     toolbar: "undo redo | accordion accordionremove | blocks fontfamily fontsize | bold italic underline strikethrough | align numlist bullist | link image | table media | lineheight outdent indent | forecolor backcolor removeformat | charmap emoticons | code fullscreen preview | save print | pagebreak anchor codesample | ltr rtl",
+            //     autosave_ask_before_unload: true,
+            //     autosave_interval: '30s',
+            //     autosave_prefix: '{path}{query}-{id}-',
+            //     autosave_restore_when_empty: false,
+            //     autosave_retention: '2m',
+            //     automatic_uploads: true,
+            //     image_advtab: true,
+            //     image_title: true,
+            //     file_picker_types: 'image',
+            //     images_upload_handler: image_upload_handler
+            // });
+
             const image_upload_handler = (blobInfo, progress) => new Promise((resolve, reject) => {
                 const xhr = new XMLHttpRequest();
                 xhr.withCredentials = false;
@@ -215,32 +278,33 @@
                 const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
                 xhr.setRequestHeader('X-CSRF-TOKEN', token);
 
-                xhr.upload.onprogress = e => e.lengthComputable && progress(e.loaded / e.total * 100);
+                xhr.upload.onprogress = (e) => {
+                    if (e.lengthComputable) {
+                        progress(e.loaded / e.total * 100);
+                    }
+                };
 
                 xhr.onload = () => {
-                    if (xhr.status === 403) return reject({
-                        message: 'HTTP Error: ' + xhr.status,
-                        remove: true
-                    });
-                    if (xhr.status < 200 || xhr.status >= 300) return reject('HTTP Error: ' + xhr.status);
+                    if (xhr.status === 403) {
+                        reject({
+                            message: 'HTTP Error: ' + xhr.status,
+                            remove: true
+                        });
+                        return;
+                    }
+
+                    if (xhr.status < 200 || xhr.status >= 300) {
+                        reject('HTTP Error: ' + xhr.status);
+                        return;
+                    }
 
                     try {
                         const json = JSON.parse(xhr.responseText);
-                        if (!json || typeof json.location !== 'string') return reject('Invalid JSON: ' + xhr
-                            .responseText);
-
-                        // Prevent duplicate image URLs
-                        const existingImages = tinymce.activeEditor.getContent({
-                            format: 'html'
-                        }).match(/<img[^>]+src="([^">]+)"/g);
-                        const uploadedImageUrl = json.location;
-
-                        // Check if the image is already in the content
-                        if (existingImages && existingImages.some(img => img.includes(uploadedImageUrl))) {
-                            resolve(null); // Do nothing if it's a duplicate
-                        } else {
-                            resolve(uploadedImageUrl); // Proceed if it's not a duplicate
+                        if (!json || typeof json.location !== 'string') {
+                            reject('Invalid JSON: ' + xhr.responseText);
+                            return;
                         }
+                        resolve(json.location);
                     } catch (e) {
                         reject('Invalid JSON: ' + xhr.responseText);
                     }
@@ -250,24 +314,20 @@
 
                 const formData = new FormData();
                 formData.append('file', blobInfo.blob(), blobInfo.filename());
+
                 xhr.send(formData);
             });
-
 
             tinymce.init({
                 selector: '#body',
                 plugins: 'preview importcss searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image code link media codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount help charmap quickbars emoticons accordion',
                 menubar: 'file edit view insert format tools table help',
                 toolbar: "undo redo | accordion accordionremove | blocks fontfamily fontsize | bold italic underline strikethrough | align numlist bullist | link image | table media | lineheight outdent indent | forecolor backcolor removeformat | charmap emoticons | code fullscreen preview | save print | pagebreak anchor codesample | ltr rtl",
-                autosave_ask_before_unload: true,
-                autosave_interval: '30s',
-                autosave_prefix: '{path}{query}-{id}-',
-                autosave_restore_when_empty: false,
-                autosave_retention: '2m',
+                document_base_url: "https://internship.kadangkoding.com/thoriq/pendaftaran-magang/",
+                convert_urls: false,
+                relative_urls: false,
                 automatic_uploads: true,
                 image_advtab: true,
-                image_title: true,
-                file_picker_types: 'image',
                 images_upload_handler: image_upload_handler
             });
 
