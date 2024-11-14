@@ -16,4 +16,9 @@ class SocialMedia extends Model
     {
         return $this->belongsTo(Intern::class);
     }
+
+    public function routeName()
+    {
+        return 'social-medias';
+    }
 }

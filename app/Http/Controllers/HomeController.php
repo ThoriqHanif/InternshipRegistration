@@ -8,6 +8,7 @@ use App\Models\Intern;
 use App\Models\Position;
 use App\Models\SocialMedia;
 use App\Models\Tag;
+use App\Service\CommentService;
 use App\Service\HomeService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\App;
@@ -17,9 +18,11 @@ use Illuminate\Support\Facades\DB;
 class HomeController extends Controller
 {
     protected $homeService;
-    public function __construct(HomeService $homeService)
+    protected $commentService;
+    public function __construct(HomeService $homeService, CommentService $commentService)
     {
         $this->homeService = $homeService;
+        $this->commentService = $commentService;
     }
     public function index($locale)
     {
@@ -92,11 +95,16 @@ class HomeController extends Controller
         $tagNames = $blog->tag->pluck('name')->toArray();
         $this->homeService->incrementViewCount($blog);
 
+        // Comments
+        $comments = $this->commentService->getAllComments($blog->id);
+
         foreach ($popularBlogs as $popular) {
             $this->homeService->formatBlogDate($popular);
         }
 
-        return view('pages.home.blog.detail', compact('blog', 'popularBlogs', 'categories', 'tags', 'tagNames', 'relatedBlogs', 'socialMedias'));
+        return view('pages.home.blog.detail', compact(
+            'blog', 'popularBlogs', 'categories', 'tags', 'tagNames', 'relatedBlogs', 'socialMedias', 'comments'
+        ));
     }
 
     public function detailCategory($locale, $slug)

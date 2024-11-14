@@ -126,7 +126,7 @@
   display: inline-block;
   vertical-align: top;
   width: 100%;
-  background-color: #f9f9f9;
+  /* background-color: #f9f9f9; */
   padding: 7.5px 7.5px 3.75px;
   border: 1px solid #ddd;
   border-radius: 2.5px;

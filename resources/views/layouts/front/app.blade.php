@@ -14,10 +14,15 @@
 
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    {{-- {!! RecaptchaV3::initJs() !!} --}}
+
+    <script async src="https://www.google.com/recaptcha/api.js"></script>
+
 
     @stack('style-landing')
     @stack('style-blog')
     @stack('style-custom')
+    @stack('recaptcha')
 </head>
 
 <body>

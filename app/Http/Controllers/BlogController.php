@@ -2,25 +2,37 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\NewPostNotification;
+use App\Http\Requests\StoreBlogRequest;
+use App\Http\Requests\UpdateBlogRequest;
 use App\Models\Blog;
 use App\Models\BlogCategory;
-use App\Models\SocialMedia;
-use App\Models\Subscription;
 use App\Models\Tag;
-use Carbon\Carbon;
+use App\Service\BlogService;
+use App\Service\FileService;
+use App\Service\MailService;
+use App\Traits\LogActivityTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Mail;
 
 class BlogController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+    use LogActivityTrait;
+
+    private $fileService;
+    private $blogService;
+    private $mailService;
+
+    public function __construct(FileService $fileService, BlogService $blogService, MailService $mailService)
+    {
+        $this->fileService = $fileService;
+        $this->blogService = $blogService;
+        $this->mailService = $mailService;
+    }
     public function index(Request $request)
     {
         $user = Auth::user();
@@ -60,113 +72,46 @@ class BlogController extends Controller
         return view('pages.users.blog.create', compact('categories', 'tags'));
     }
 
-    public function uploadImage(Request $request)
-    {
-        $request->validate([
-            'file' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
-        ]);
-
-        try {
-            if ($request->hasFile('file')) {
-                $file = $request->file('file');
-                $fileName = Str::random(10) . '.' . $file->getClientOriginalExtension();
-                $filePath = ('uploads/post/' . $fileName);
-
-                if (!file_exists($filePath)) {
-                    $file->move('uploads/post', $fileName);
-                }
-
-                $fileUrl = asset('uploads/post/' . $fileName);
-
-                return response()->json(['location' => $fileUrl], 200);
-            }
-
-            return response()->json(['error' => 'No file uploaded.'], 400);
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'File upload failed.'], 500);
-        }
-    }
-
-    protected function notifNewPost(Blog $blog)
-    {
-        // Ambil semua subscriber yang aktif (status = 1)
-        $subscribers = Subscription::where('status', 1)->get();
-
-        foreach ($subscribers as $subscription) {
-            Mail::to($subscription->email)->send(new NewPostNotification($blog, $subscription));
-        }
-    }
-
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreBlogRequest $request)
     {
-        $validated = $request->validate([
-            'category_id' => 'required',
-            'tags' => 'required|array',
-            'title' => 'required',
-            'body' => 'required',
-            'image_thumbnail' => 'required|mimes:png,jpg,jpeg,webp|max:5120',
-            'status' => 'required'
-        ]);
+        // Shared Hosting
+        // $body = str_replace('../uploads', 'https://internship.kadangkoding.com/thoriq/pendaftaran-magang/uploads', $request->input('body'));
+        // $body_en = str_replace('../uploads', 'https://internship.kadangkoding.com/thoriq/pendaftaran-magang/uploads', $request->input('body_en'));
 
-        try {
-            $image_thumbnailFileName = null;
-            if ($request->hasFile('image_thumbnail')) {
-                $image_thumbnailFile = $request->file('image_thumbnail');
-                $image_thumbnailFileName = Str::random(10) . '.' . $image_thumbnailFile->getClientOriginalExtension();
-                $image_thumbnailFile->move('uploads/image_thumbnail', $image_thumbnailFileName);
-            }
+        $image_thumbnailFileName = $this->fileService->uploadFile($request->file('image_thumbnail'), 'image_thumbnail');
 
-            // Shared Hosting
-            // $body = str_replace('../uploads', 'https://internship.kadangkoding.com/thoriq/pendaftaran-magang/uploads', $request->input('body'));
-            // $body_en = str_replace('../uploads', 'https://internship.kadangkoding.com/thoriq/pendaftaran-magang/uploads', $request->input('body_en'));
+        $author_id = Auth::id();
+        $blog = new Blog();
+        $blog->category_id = $request->category_id;
+        $blog->author_id = $author_id;
+        $blog->title = $request->title;
+        $blog->title_en = $request->title_en ?? null;
+        $blog->body = $request->body;
+        $blog->body_en = $request->body_en ?? null;
+        $blog->image_thumbnail = $image_thumbnailFileName;
+        $blog->status = $request->status;
 
-            $author_id = Auth::id();
-            $blog = new Blog();
-            $blog->category_id = $request->category_id;
-            $blog->author_id = $author_id;
-            $blog->title = $request->title;
-            $blog->title_en = $request->title_en ?? null;
-            $blog->body = $request->body;
-            $blog->body_en = $request->body_en ?? null;
-            $blog->image_thumbnail = $image_thumbnailFileName;
-            $blog->status = $request->status;
+        if ($request->status === 'published') {
+            $blog->published_at = now();
+        }
+
+        if ($blog->save()) {
+            $this->logActivity($blog, 'Menambahkan Blog', $blog->toArray());
+
+            $this->blogService->tagSync($blog, $request['tags']);
 
             if ($request->status === 'published') {
-                $blog->published_at = now();
+                $this->mailService->sendEmailNewPost($blog);
             }
 
-            if ($blog->save()) {
-                $tagIds = [];
-                foreach ($validated['tags'] as $tag) {
-                    if (is_numeric($tag)) {
-                        $tagIds[] = $tag;
-                    } else {
-                        $newTag = Tag::firstOrCreate(['name' => $tag], ['slug' => Str::slug($tag)]);
-                        $tagIds[] = $newTag->id;
-                    }
-                }
-                $blog->tag()->sync($tagIds);
-
-                if ($request->status === 'published') {
-                    $this->notifNewPost($blog);
-                }
-
-                return response()->json(['success' => true], 200);
-            } else {
-                return response()->json(['success' => false, 'message' => 'Failed to save blog'], 500);
-            }
-        } catch (\Exception $e) {
-            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+            return response()->json(['success' => true], 200);
+        } else {
+            return response()->json(['success' => false, 'message' => 'Failed to save blog'], 500);
         }
     }
-
-    // public function preview()
-    // {
-    //     return view('pages.users.blog.preview');
-    // }
 
     /**
      * Display the specified resource.
@@ -174,32 +119,19 @@ class BlogController extends Controller
     public function show($locale, $slug)
     {
         App::setLocale($locale);
-        $blog = Blog::with(['author.intern'])->where('slug', $slug)->orWhere('slug_en', $slug)->firstOrFail();
-        $blog->body = $this->replaceImageUrls($blog->body);
-        $blog->body_en = $this->replaceImageUrls($blog->body_en);
         $categories = BlogCategory::all();
         $tags = Tag::all();
-        $blog->published_at_formatted = Carbon::parse($blog->published_at)->translatedFormat('d F Y');
-        $blog->published_at_formatted_en = Carbon::parse($blog->published_at)->translatedFormat('F d, Y');
+
+        $blog = $this->blogService->getBlogWithAuthorBySlug($slug);
+        $blog = $this->blogService->formatBlogBody($blog);
+        $popularBlogs = $this->blogService->getPopularBlogs($slug);
+
+        $socialMedias = $blog->author->isAdmin() ? [] : $this->blogService->getSocialMediaIntern($blog->author->intern->id);
+
+        $blog = $this->blogService->formatPublishedAt($blog);
+        $popularBlogs = $this->blogService->formatPopularBlogs($popularBlogs);
 
         $tagNames = $blog->tag->pluck('name')->toArray();
-        $popularBlogs = Blog::where('status', 'published')
-            ->where('slug', '!=', $slug)
-            ->orderBy('view_count', 'desc')
-            ->take(3)
-            ->get();
-
-        if ($blog->author->isAdmin()) {
-            $socialMedias = [];
-        } else {
-            $socialMedias = $this->getSocialMediaIntern($blog->author->intern->id);
-        }
-
-        foreach ($popularBlogs as $popular) {
-            $popular->published_at_formatted = Carbon::parse($popular->published_at)->translatedFormat('d F Y');
-            $popular->published_at_formatted_en = Carbon::parse($popular->published_at)->translatedFormat('F d, Y');
-        }
-
 
         return view('pages.users.blog.show', compact('blog', 'categories', 'tags', 'tagNames', 'popularBlogs', 'socialMedias'));
     }
@@ -207,35 +139,18 @@ class BlogController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    protected function getSocialMediaIntern($internId)
-    {
-        return SocialMedia::where('intern_id', $internId)->get();
-    }
-
-    protected function replaceImageUrls($body)
-    {
-        return preg_replace_callback('/<img[^>]+src="([^"]+)"/', function ($matches) {
-            $relativeUrl = $matches[1];
-            return '<img src="' . url($relativeUrl) . '"';
-        }, $body);
-    }
 
     public function edit($locale, $slug)
     {
         App::setLocale($locale);
+
         $blog = Blog::where('slug', $slug)->firstOrFail();
-        $blog->body = $this->replaceImageUrls($blog->body);
-        $blog->body_en = $this->replaceImageUrls($blog->body_en);
         $categories = BlogCategory::all();
         $tags = Tag::all();
 
-        if ($blog->image_thumbnail) {
-            $imageThumbnailUrl = asset('uploads/image_thumbnail/' . $blog->image_thumbnail);
-            $imageThumbnailExtension = pathinfo($blog->image_thumbnail, PATHINFO_EXTENSION);
-        } else {
-            $imageThumbnailUrl = null;
-            $imageThumbnailExtension = null;
-        }
+        $blog = $this->blogService->formatBlogBody($blog);
+
+        [$imageThumbnailUrl, $imageThumbnailExtension] = $this->fileService->getImageDetails($blog->image_thumbnail, 'image_thumbnail');
 
         return view('pages.users.blog.edit', compact('blog', 'categories', 'tags', 'imageThumbnailUrl', 'imageThumbnailExtension'));
     }
@@ -243,32 +158,11 @@ class BlogController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function publish($slug)
+
+    public function update(UpdateBlogRequest $request, $slug)
     {
         $blog = Blog::where('slug', $slug)->firstOrFail();
-        $blog->status = 'published';
-        $blog->published_at = now();
-
-        if ($blog->save()) {
-            $this->notifNewPost($blog);
-            return response()->json(['success' => true]);
-        } else {
-            return response()->json(['success' => false]);
-        }
-    }
-
-    public function update(Request $request, $slug)
-    {
-        $blog = Blog::where('slug', $slug)->firstOrFail();
-
-        $validated = $request->validate([
-            'category_id' => 'required',
-            'tags' => 'required|array',
-            'title' => 'required',
-            'body' => 'required',
-            'image_thumbnail' => 'nullable|mimes:png,jpg,jpeg,webp',
-            'status' => 'required'
-        ]);
+        $before = $blog->toArray();
 
         $blog->category_id = $request->category_id;
         $blog->title = $request->title;
@@ -285,34 +179,22 @@ class BlogController extends Controller
 
         if ($request->hasFile('image_thumbnail')) {
             if ($blog->image_thumbnail) {
-                $oldImagePath = ('uploads/image_thumbnail/' . $blog->image_thumbnail);
-                if (file_exists($oldImagePath)) {
-                    unlink($oldImagePath);
-                }
+                $this->fileService->deleteFile($blog->image_thumbnail, 'image_thumbnail');
             }
 
-            $image_thumbnailFile = $request->file('image_thumbnail');
-            $image_thumbnailFileName = Str::random(10) . '.' . $image_thumbnailFile->getClientOriginalExtension();
-            $image_thumbnailFile->move('uploads/image_thumbnail', $image_thumbnailFileName);
+            $image_thumbnailFileName = $this->fileService->uploadFile($request->file('image_thumbnail'), 'image_thumbnail');
             $blog->image_thumbnail = $image_thumbnailFileName;
         }
 
         if ($blog->save()) {
-            $tagIds = [];
-            foreach ($validated['tags'] as $tag) {
-                if (is_numeric($tag)) {
-                    $tagIds[] = $tag;
-                } else {
-                    $newTag = Tag::firstOrCreate(['name' => $tag], ['slug' => Str::slug($tag)]);
-                    $tagIds[] = $newTag->id;
-                }
-            }
+            $after = $blog->fresh()->toArray();
+            $data = [
+                'before' => $before,
+                'after' => $after,
+            ];
+            $this->logActivity($blog, 'Memperbarui Blog', $data);
 
-            $blog->tag()->sync($tagIds);
-
-            // if ($request->status === 'published') {
-            //     $this->notifNewPost($blog);
-            // }
+            $this->blogService->tagSync($blog, $request['tags']);
 
             return response()->json(['success' => true]);
         } else {
@@ -322,21 +204,72 @@ class BlogController extends Controller
 
 
     /**
+     * Publish the specified resource in storage.
+     */
+
+     public function publish($slug)
+     {
+         $blog = Blog::where('slug', $slug)->firstOrFail();
+         $blog->status = 'published';
+         $blog->published_at = now();
+         $before = $blog->toArray();
+
+         if ($blog->save()) {
+            $after = $blog->fresh()->toArray();
+
+            $data = [
+                'before' => $before,
+                'after' => $after,
+            ];
+            $this->logActivity($blog, 'Menerbitkan Blog', $data);
+
+             $this->mailService->sendEmailNewPost($blog);
+             return response()->json(['success' => true]);
+         } else {
+             return response()->json(['success' => false]);
+         }
+     }
+
+
+    /**
      * Remove the specified resource from storage.
      */
     public function destroy($slug)
     {
         $blog = Blog::where('slug', $slug)->firstOrFail();
-        $thumbnailPath = ('uploads/image_thumbnail/' . $blog->image_thumbnail);
+        $this->fileService->deleteFile($blog->image_thumbnail, 'image_thumbnail');
 
-        if (file_exists($thumbnailPath)) {
-            unlink($thumbnailPath);
-        }
 
         if ($blog->delete()) {
+            $this->logActivity($blog, 'Menghapus Blog', $blog->toArray());
             return response()->json(['success' => true]);
         } else {
             return response()->json(['success' => false]);
         }
     }
+
+    public function uploadImage(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+        ]);
+
+        $fileName = $this->fileService->uploadFile($request->file('file'), 'post');
+
+        if ($fileName) {
+            $fileUrl = asset("uploads/post/{$fileName}");
+
+            return response()->json(['location' => $fileUrl], 200);
+        }
+
+        return response()->json(['error' => 'File upload failed.'], 400);
+    }
+
+    // protected function replaceImageUrls($body)
+    // {
+    //     return preg_replace_callback('/<img[^>]+src="([^"]+)"/', function ($matches) {
+    //         $relativeUrl = $matches[1];
+    //         return '<img src="' . url($relativeUrl) . '"';
+    //     }, $body);
+    // }
 }

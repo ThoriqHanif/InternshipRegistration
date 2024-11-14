@@ -6,6 +6,7 @@ use App\Http\Requests\UpdateProfileRequest;
 use App\Models\Intern;
 use App\Models\SocialMedia;
 use App\Models\User;
+use App\Traits\LogActivityTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -13,7 +14,7 @@ use Illuminate\Support\Facades\Session;
 
 class ProfileController extends Controller
 {
-    //
+    use LogActivityTrait;
     public function admin(User $users)
     {
         $admin = $users->find(Auth::user()->id);
@@ -66,131 +67,140 @@ class ProfileController extends Controller
         return view('pages.users.profile', compact('user'));
     }
 
-    // public function showUserProfile()
-    // {
-    //     $user = Auth::user(); // Mengambil pengguna yang login
-    //     $intern = $user->intern;
-    //     $photoUrl = null;
 
-    //     // Mengecek apakah user dan foto ada
-    //     if ($intern) {
-    //         $photoUrl = asset('public/uploads/photo/' . $intern->photo);
-    //     }
-
-    //     return view('pages.users.profile', compact('user', 'photoUrl'));
-    // }
-
-
-    public function updateAdmin(UpdateProfileRequest $request, User $users)
+    public function updateAdmin(UpdateProfileRequest $request, User $user)
     {
-        $data = $users::findOrFail(Auth::user()->id);
+        $user = User::findOrFail(Auth::id());
+        $before = $user->toArray();
 
         $newName = $request->input('name');
         $newEmail = $request->input('email');
         $newPassword = $request->input('password');
 
-        if ($newName === $data->name && $newEmail === $data->email && empty($newPassword)) {
+        $isUpdated = false;
+        $requiresLogout = false;
+
+        if ($newName !== $user->name) {
+            $user->name = $newName;
+            $isUpdated = true;
+        }
+
+        if ($newEmail !== $user->email) {
+            $user->email = $newEmail;
+            $isUpdated = true;
+            $requiresLogout = true;
+        }
+
+        if (!empty($newPassword)) {
+            $user->password = Hash::make($newPassword);
+            $isUpdated = true;
+            $requiresLogout = true;
+        }
+
+        if (!$isUpdated) {
             return response()->json(['success' => false, 'message' => 'Data tidak ada yang berubah']);
         }
 
-        $data->name = $request->input('name');
+        if ($user->save()) {
+            $after = $user->fresh()->toArray();
+            $data = [
+                'before' => $before,
+                'after' => $after,
+            ];
 
-        $data->save();
+            $this->logActivity($user, 'Memperbarui Profile', $data);
 
-        if ($newEmail !== $data->email || $newPassword) {
-
-            if ($newEmail !== $data->email) {
-                $data->email = $newEmail;
+            if ($requiresLogout) {
+                Session::flash('profile-updated', 'Data profile anda telah berubah.');
+                Auth::logout();
             }
-
-            if ($newPassword) {
-                $data->password = Hash::make($newPassword);
-            }
-
-            $data->save();
-            Session::flash('profile-updated', 'Data profile anda telah berubah.');
-            Auth::logout();
-            return response()->json(['success' => true]);
-        } else {
-            return response()->json(['success' => true]);
+            return response()->json(['success' => true, 'message' => 'Profil berhasil diperbarui']);
         }
+        return response()->json(['success' => false, 'message' => 'Gagal menyimpan perubahan']);
     }
 
-    public function updateUser(UpdateProfileRequest $request, User $users)
+
+    public function updateUser(UpdateProfileRequest $request)
     {
-
         $userId = Auth::id();
-
         $user = User::findOrFail($userId);
-        $intern = Intern::where('user_id', $userId)->first();
+        $intern = Intern::firstOrNew(['user_id' => $userId]);
+        $beforeUser = $user->toArray();
+        $beforeIntern = $intern->toArray();
+        $before = array_merge($beforeUser, $beforeIntern);
 
+        $newData = [
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+            'password' => $request->input('password'),
+            'intern' => [
+                'full_name' => $request->input('full_name'),
+                'phone_number' => $request->input('phone_number'),
+                'address' => $request->input('address'),
+                'school' => $request->input('school'),
+                'major' => $request->input('major'),
+                'url' => $request->input('url'),
+                // 'photo' => $request->file('photo')->getClientOriginalName(),
+            ]
+        ];
 
-        $newName = $request->input('name');
-        $newEmail = $request->input('email');
-        $newPassword = $request->input('password');
-        $newFullName = $request->input('full_name');
-        $newPhoneNumber = $request->input('phone_number');
-        $newSchool = $request->input('school');
-        $newMajor = $request->input('major');
-        $newAddress = $request->input('address');
-        $newUrl = $request->input('url');
-        $newPhoto = $request->file('photo');
-
-
-        if ($newName === $user->name && $newEmail === $user->email && empty($newPassword) && $newFullName === $user->intern->full_name && $newPhoneNumber === $user->intern->phone_number && $newAddress === $user->intern->address && $newUrl === $user->intern->url && $newSchool === $user->intern->school && $newMajor === $user->intern->major && !$newPhoto) {
-            // Tidak ada perubahan, berikan pesan kesalahan
+        if ($this->noChanges($user, $intern, $newData, $request)) {
             return response()->json(['success' => false, 'message' => 'Data tidak ada yang berubah']);
         }
 
-        $user->name = $request->input('name');
+        $user->name = $newData['name'];
+        $intern->fill($newData['intern']);
+
+        // Handle photo upload
+        if ($request->hasFile('photo')) {
+            $photoFileName = $request->file('photo')->getClientOriginalName();
+            $request->file('photo')->move('uploads/photo', $photoFileName);
+            $intern->photo = $photoFileName;
+        }
+
+        if ($newData['email'] !== $user->email) {
+            $user->email = $newData['email'];
+        }
+        if ($newData['password']) {
+            $user->password = Hash::make($newData['password']);
+        }
 
         $user->save();
-
-        $internData = [
-            'full_name' => $request->input('full_name'),
-            'phone_number' => $request->input('phone_number'),
-            'address' => $request->input('address'),
-            'school' => $request->input('school'),
-            'major' => $request->input('major'),
-            'url' => $request->input('url'),
-        ];
-
-        $intern = $user->intern ?? new Intern();
-
-        $intern->fill($internData);
-
         $user->intern()->save($intern);
 
-        if ($request->hasFile('photo')) {
+        $afterUser = $user->fresh()->toArray();
+        $afterIntern = $intern->fresh()->toArray();
+        $after = array_merge($afterUser, $afterIntern);
 
-            $photoFile = $request->file('photo');
-            $photoFileName = $photoFile->getClientOriginalName();
-            $photoFile->move('uploads/photo', $photoFileName);
-            if ($intern->photo !== $photoFileName) {
-                $intern->photo = $photoFileName;
-                $intern->save();
-            }
-        }
+        $data = [
+            'before' => $before,
+            'after' => $after,
+        ];
 
+        $this->logActivity($user, 'Memperbarui Profile', $data);
 
-        if ($newEmail !== $user->email || $newPassword) {
-
-            if ($newEmail !== $user->email) {
-                $user->email = $newEmail;
-            }
-
-            if ($newPassword) {
-                // Update password jika berubah
-                $user->password = Hash::make($newPassword);
-            }
-
-            $user->save();
+        if ($newData['email'] !== $before['email'] || $newData['password']) {
             Session::flash('profile-updated', 'Data profile anda telah berubah.');
             Auth::logout();
-
-            return response()->json(['success' => true]);
-        } else {
-            return response()->json(['success' => true]);
         }
+
+        return response()->json(['success' => true]);
+    }
+
+    /**
+     * Check if there are no changes in user and intern data.
+     */
+    protected function noChanges($user, $intern, $newData, $request)
+    {
+        return $user->name === $newData['name'] &&
+            $user->email === $newData['email'] &&
+            empty($newData['password']) &&
+            $intern->full_name === $newData['intern']['full_name'] &&
+            $intern->phone_number === $newData['intern']['phone_number'] &&
+            $intern->address === $newData['intern']['address'] &&
+            $intern->school === $newData['intern']['school'] &&
+            $intern->major === $newData['intern']['major'] &&
+            $intern->url === $newData['intern']['url'] &&
+            !$request->hasFile('photo');
     }
 }

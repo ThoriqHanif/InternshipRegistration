@@ -7,6 +7,7 @@ use App\Http\Requests\StorePeriodeRequest;
 use App\Http\Requests\UpdatePeriodeRequest;
 use App\Models\PeriodePosition;
 use App\Models\Position;
+use App\Traits\LogActivityTrait;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -14,6 +15,7 @@ use Yajra\DataTables\Facades\DataTables;
 
 class PeriodeController extends Controller
 {
+    use LogActivityTrait;
     /**
      * Display a listing of the resource.
      */
@@ -49,7 +51,6 @@ class PeriodeController extends Controller
      */
     public function store(StorePeriodeRequest $request)
     {
-
         $periode = new Periode();
         $periode->name = $request->name;
         $periode->start_date = $request->start_date;
@@ -57,6 +58,8 @@ class PeriodeController extends Controller
         $periode->description = $request->description;
 
         if ($periode->save()) {
+            $positionsData = [];
+
             foreach ($request->positions as $position) {
                 $existingPeriodePosition = PeriodePosition::where('periode_id', $periode->id)
                     ->where('position_id', $position['id'])
@@ -66,18 +69,32 @@ class PeriodeController extends Controller
                     $existingPeriodePosition->quota += $position['quota'];
                     $existingPeriodePosition->save();
                 } else {
-                    PeriodePosition::create([
+                    $existingPeriodePosition = PeriodePosition::create([
                         'periode_id' => $periode->id,
                         'position_id' => $position['id'],
                         'quota' => $position['quota'],
                     ]);
                 }
+
+                $positionsData[] = [
+                    'position_id' => $existingPeriodePosition->position_id,
+                    'quota' => $existingPeriodePosition->quota,
+                ];
             }
-            return response()->json(['success' => true]);
+
+            $this->logActivity($periode, 'Menambahkan Periode', [
+                'periode' => $periode->toArray(),
+                'positions' => $positionsData,
+            ]);
+
+            // dd(['periode' => $periode, 'positions' => $positionsData]);
+
+            return response()->json(['success' => true, 'data' => $periode, 'positions' => $positionsData]);
         } else {
             return response()->json(['success' => false]);
         }
     }
+
 
     /**
      * Display the specified resource.
@@ -126,6 +143,7 @@ class PeriodeController extends Controller
     {
         $periode = Periode::with('positions')->findOrFail($id);
 
+        $before = $periode->toArray();
         $periode->name = $request->name;
         $periode->start_date = $request->start_date;
         $periode->end_date = $request->end_date;
@@ -146,6 +164,22 @@ class PeriodeController extends Controller
                     $periode->positions()->attach($positionData['id'], ['quota' => $positionData['quota']]);
                 }
             }
+
+            $after = [
+                'periode' => $periode->toArray(),
+                'positions' => $periode->positions->map(function ($position) {
+                    return [
+                        'position_id' => $position->pivot->position_id,
+                        'quota' => $position->pivot->quota,
+                    ];
+                })->toArray(),
+            ];
+
+            $this->logActivity($periode, 'Memperbarui Periode', [
+                'before' => $before,
+                'after' => $after,
+            ]);
+
             return response()->json(['success' => true]);
         } else {
             return response()->json(['success' => false]);
@@ -157,10 +191,13 @@ class PeriodeController extends Controller
      */
     public function destroy($id)
     {
-        //
-        $periode = Periode::find($id);
+        $periode = Periode::with(['positions', 'interns'])->findOrFail($id);
+        $data = [
+            'periode' => $periode->toArray()
+        ];
 
         if ($periode->delete()) {
+            $this->logActivity($periode, 'Menghapus Periode', $data);
             return response()->json(['success' => true, 'message' => 'User berhasil dihapus.']);
         } else {
             return response()->json(['success' => false, 'message' => 'Gagal menghapus User.']);

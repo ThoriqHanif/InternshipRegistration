@@ -1,16 +1,17 @@
 @extends('layouts.front.app')
-<style>
-    .post-content-body img {
-        max-width: 100%;
-        height: auto;
-        display: block;
-        margin: 0 auto;
-        border-radius: 10px;
-        margin-bottom: 50px;
 
-    }
-</style>
 @section('content')
+    <style>
+        .post-content-body img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+            border-radius: 10px;
+            margin-bottom: 50px;
+
+        }
+    </style>
     @include('layouts.front.navbar-blog')
     @php
         $thumbnail = $blog->image_thumbnail
@@ -64,7 +65,6 @@
 
                     <div class="post-content-body">
                         {!! app()->getLocale() == 'en' && $blog->body_en ? $blog->body_en : $blog->body !!}
-
                     </div>
                     <div class="pt-5 d-flex">
                         <p class="me-3">Categories:
@@ -78,14 +78,76 @@
                         </p>
                     </div>
 
-                </div>
+                    <div class="pt-5 comment-wrap">
+                        <h3 class="mb-5 heading">{{ $comments->count() }} Comments</h3>
+                        <ul class="comment-list">
+                            @foreach ($comments as $comment)
+                                @if (is_null($comment->parent_id))
+                                    @include('partials.comment-list', ['comment' => $comment])
+                                @endif
+                            @endforeach
+                        </ul>
 
+
+                        <div class="comment-form-wrap pt-5">
+                            <h3 class="mb-5">Leave a comment</h3>
+                            <form id="commentForm" class="p-5 bg-light">
+                                @csrf
+                                <input type="hidden" name="blog_id" value="{{ $blog->id }}">
+                                <input type="hidden" name="parent_id" value="{{ $parent_id ?? null }}">
+
+                                @if (Auth::check())
+                                    <!-- Show name and email fields as hidden for logged-in users -->
+                                    <input type="hidden" name="name" value="{{ Auth::user()->name }}">
+                                    <input type="hidden" name="email" value="{{ Auth::user()->email }}">
+                                @else
+                                    <div class="form-group @error('name') is-invalid @enderror">
+                                        <label for="name">Name <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="name" name="name" required>
+                                        @error('name')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="form-group @error('email') is-invalid @enderror">
+                                        <label for="email">Email <span class="text-danger">*</span></label>
+                                        <input type="email" class="form-control" id="email" name="email" required>
+                                        @error('email')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                @endif
+
+                                <div class="form-group @error('message') is-invalid @enderror">
+                                    <label for="message">Message <span class="text-danger">*</span></label>
+                                    <textarea name="message" id="message" cols="30" rows="10" class="form-control" required></textarea>
+                                    @error('message')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="g-recaptcha mt-4 mb-4 @error('g-recaptcha-response') is-invalid @enderror"
+                                    data-sitekey="{{ config('services.recaptcha.key') }}">
+                                    @error('g-recaptcha-response')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="form-group">
+                                    <input type="submit" value="Post Comment" class="btn btn-primary">
+                                </div>
+                            </form>
+
+                            <Toaster position="top-right" />
+
+                        </div>
+                    </div>
+
+                </div>
                 <!-- END main-content -->
 
                 <div class="col-md-12 col-lg-4 sidebar">
                     <div class="sidebar-box">
                         <div class="bio text-center">
-
                             @if ($blog->author)
                                 @if ($blog->author->isAdmin())
                                     <img src="{{ asset('img/admin.jpg') }}" alt="{{ $blog->author->name }}"
@@ -277,4 +339,112 @@
     <script src="{{ asset('blog/js/navbar.js') }}"></script>
     <script src="{{ asset('blog/js/counter.js') }}"></script>
     <script src="{{ asset('blog/js/custom.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+    <script>
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'bottom-end',
+            showConfirmButton: false,
+            timer: 1000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            },
+            willClose: () => {
+                window.location.reload();
+            }
+        });
+        document.getElementById('commentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const formData = new FormData(this);
+
+            fetch("{{ route('comment.reply') }}", {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'Comment posted successfully!'
+                        });
+                        document.getElementById('commentForm').reset();
+                    } else {
+                        Toast.fire({
+                            icon: 'error',
+                            title: 'Error posting comment. Please try again.'
+                        });
+                    }
+                })
+                .catch(error => {
+                    Toast.fire({
+                        icon: 'error',
+                        title: 'Network error. Please try again later.'
+                    });
+                });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            const savedName = localStorage.getItem('name');
+            const savedEmail = localStorage.getItem('email');
+
+            $('.reply').on('click', function(e) {
+                e.preventDefault();
+                const commentId = $(this).data('comment-id');
+                const replyForm = $('#reply-form-' + commentId);
+
+                if (savedName && savedEmail) {
+                    replyForm.find('input[name="name"]').val(savedName);
+                    replyForm.find('input[name="email"]').val(savedEmail);
+                }
+
+                replyForm.toggle();
+            });
+
+            $('.replyForm').on('submit', function(e) {
+                e.preventDefault();
+                const parentId = $(this).data('parent-id');
+                const formData = $(this).serialize();
+
+                const name = $(this).find('input[name="name"]').val();
+                const email = $(this).find('input[name="email"]').val();
+
+                localStorage.setItem('name', name);
+                localStorage.setItem('email', email);
+
+                $.ajax({
+                    url: "{{ route('comment.reply') }}",
+                    type: "POST",
+                    data: formData,
+                    success: function(response) {
+                        if (response.success) {
+                            $('#comment-' + parentId + ' .children').append(response.html);
+                            $('#reply-form-' + parentId).hide();
+
+                            Toast.fire({
+                                icon: 'success',
+                                title: 'Reply posted successfully'
+                            });
+                        }
+                    },
+                    error: function(response) {
+                        Toast.fire({
+                            icon: 'error',
+                            title: 'Failed to post reply'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
 @endpush

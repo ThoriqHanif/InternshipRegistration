@@ -56,7 +56,7 @@
                                     confirmButtonColor: "#435EBE",
                                     cancelButtonColor: "#CDD3D8",
                                 }).then(function() {
-                                    tableTag.ajax.reload();
+                                   $('#tableTag').DataTable().ajax.reload(null, false);
                                 });
                             } else {
                                 Swal.fire('Gagal', 'Gagal menghapus data','error');

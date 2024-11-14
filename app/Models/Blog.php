@@ -41,6 +41,11 @@ class Blog extends Model
     {
         return $this->belongsToMany(Tag::class, 'blog_tags');
     }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class, 'blog_id');
+    }
     public function sluggable(): array
     {
         return [
@@ -55,4 +60,8 @@ class Blog extends Model
         ];
     }
 
+    public function routeName()
+    {
+        return 'blog';
+    }
 }

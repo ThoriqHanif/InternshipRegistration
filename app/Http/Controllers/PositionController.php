@@ -6,6 +6,7 @@ use App\Models\Position;
 use App\Http\Requests\StorePositionRequest;
 use App\Http\Requests\UpdatePositionRequest;
 use App\Models\Intern;
+use App\Service\FileService;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -14,6 +15,12 @@ class PositionController extends Controller
     /**
      * Display a listing of the resource.
      */
+    private $fileService;
+    public function __construct(FileService $fileService)
+    {
+        $this->fileService = $fileService;
+    }
+
     public function index(Request $request)
     {
         if ($request->ajax()) {
@@ -35,34 +42,6 @@ class PositionController extends Controller
         return view('pages.admin.position.index');
     }
 
-    public function restore($id)
-    {
-        $positions = Position::onlyTrashed()->find($id);
-
-        if ($positions) {
-            $positions->restore();
-            return response()->json(['success' => true]);
-        } else {
-            return response()->json(['success' => false]);
-        }
-    }
-
-    public function forceDelete($id)
-    {
-        $positions = Position::onlyTrashed()->find($id);
-
-        if ($positions) {
-            try {
-                $positions->forceDelete();
-                return response()->json(['success' => true]);
-            } catch (\Exception $e) {
-                return response()->json(['success' => false, 'message' => 'Gagal menghapus Posisi secara permanen.']);
-            }
-        } else {
-            return response()->json(['success' => false, 'message' => 'Posisi tidak ditemukan atau tidak dalam status terhapus.']);
-        }
-    }
-
     /**
      * Show the form for creating a new resource.
      */
@@ -78,7 +57,6 @@ class PositionController extends Controller
      */
     public function store(StorePositionRequest $request)
     {
-        //
         $requirements = $request->input('requirements', []);
         if (!empty($requirements)) {
             $requirementsString = implode(', ', $requirements);
@@ -86,22 +64,16 @@ class PositionController extends Controller
             $requirementsString = null;
         }
 
+        $imageFileName = $this->fileService->uploadFile($request->file('image'), 'image');
 
-        $imageFileName = null;
-        if ($request->hasFile('image')) {
-            $imageFile = $request->file('image');
-            $imageFileName = $imageFile->getClientOriginalName();
-            $imageFile->move('uploads/image', $imageFileName);
-        }
+        $position = new Position();
+        $position->name = $request->input('name');
+        $position->description = $request->input('description');
+        $position->requirements = $requirementsString;
+        $position->image = $imageFileName;
 
-        $positions = new Position();
-        $positions->name = $request->input('name');
-        $positions->description = $request->input('description');
-        $positions->requirements = $requirementsString;
-        $positions->image = $imageFileName;
-
-        if ($positions->save()) {
-            return response()->json(['success' => true]);
+        if ($position->save()) {
+            return response()->json(['success' => true, 'position' => $position]);
         } else {
             return response()->json(['success' => false]);
         }
@@ -113,13 +85,7 @@ class PositionController extends Controller
     public function show(Position $position)
     {
         //
-        if ($position->image) {
-            $imageUrl = asset('uploads/image/' . $position->image);
-            $imageExtension = pathinfo($position->image, PATHINFO_EXTENSION);
-        } else {
-            $imageUrl = null;
-            $imageExtension = null;
-        }
+        [$imageUrl, $imageExtension] = $this->fileService->getImageDetails($position->image, 'image');
 
         return view('pages.admin.position.show')->with([
             'id' => 'id',
@@ -137,14 +103,7 @@ class PositionController extends Controller
     public function edit(Position $position)
     {
 
-        $imageUrl = null;
-        if ($position->image) {
-            $imageUrl = asset('uploads/image/' . $position->image);
-            $imageExtension = pathinfo($position->image, PATHINFO_EXTENSION);
-        } else {
-            $imagerUrl = null;
-            $imageExtension = null;
-        }
+        [$imageUrl, $imageExtension] = $this->fileService->getImageDetails($position->image, 'image');
 
         return view('pages.admin.position.edit')->with([
             'position' => $position,
@@ -163,29 +122,31 @@ class PositionController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdatePositionRequest $request, $id)
+    public function update(UpdatePositionRequest $request, Position $position)
     {
-        //
-        $data = $request->all();
-        $data = Position::find($id);
+        $before = $position->toArray();
 
-        $data->name = $request->input('name');
-        $data->description = $request->input('description');
+        $position->name = $request->input('name');
+        $position->description = $request->input('description');
 
         $requirements = $request->input('requirements', []);
-        $requirementsString = implode(', ', $requirements);
-        $data->requirements = $requirementsString;
+        $position->requirements = implode(', ', $requirements);
 
         if ($request->hasFile('image')) {
-            $imageFile = $request->file('image');
-            $imageFileName = $imageFile->getClientOriginalName();
-            $imageFile->move('uploads/image', $imageFileName);
-
-            $data->update(['image' => $imageFileName]);
+            if ($position->image) {
+                $this->fileService->deleteFile($position->image, 'image');
+            }
+            $imageFileName = $this->fileService->uploadFile($request->file('image'), 'image');
+            $position->image = $imageFileName;
         }
 
-        if ($data->save()) {
-            return response()->json(['success' => true]);
+        if ($position->save()) {
+            $after = $position->fresh()->toArray();
+            $data = [
+                'before' => $before,
+                'after' => $after,
+            ];
+            return response()->json(['success' => true, 'data' => $data]);
         } else {
             return response()->json(['success' => false]);
         }
@@ -197,19 +158,43 @@ class PositionController extends Controller
     public function destroy($id)
     {
         //
-        $data = Position::findOrFail($id);
+        $position = Position::findOrFail($id);
 
-        $relatedInterns = Intern::where('position_id', $data->position_id)->get();
-                    foreach ($relatedInterns as $relatedIntern) {
-                        // Set user_id menjadi null pada pemagang yang terkait
-                        $relatedIntern->position_id = null;
-                        $relatedIntern->save();
-
-                    }
-        if ($data->delete()) {
-            return response()->json(['success' => true, 'message' => 'Posisi berhasil dihapus.']);
+        $relatedInterns = Intern::where('position_id', $position->position_id)->get();
+        foreach ($relatedInterns as $relatedIntern) {
+            $relatedIntern->position_id = null;
+            $relatedIntern->save();
+        }
+        if ($position->delete()) {
+            return response()->json(['success' => true]);
         } else {
             return response()->json(['success' => false, 'message' => 'Posisi menghapus User.']);
+        }
+    }
+
+    public function restore($id)
+    {
+        $position = Position::onlyTrashed()->find($id);
+
+        if ($position) {
+            $position->restore();
+            return response()->json(['success' => true]);
+        } else {
+            return response()->json(['success' => false]);
+        }
+    }
+
+    public function forceDelete($id)
+    {
+        $position = Position::onlyTrashed()->find($id);
+
+        if ($position) {
+            $position->forceDelete();
+            $this->fileService->deleteFile($position->image, 'image');
+
+            return response()->json(['success' => true]);
+        } else {
+            return response()->json(['success' => false]);
         }
     }
 }

@@ -32,6 +32,7 @@
                 showCancelButton: true,
                 confirmButtonText: 'Ya, Hapus',
                 cancelButtonText: 'Batal',
+                confirmButtonColor: "#435EBE",
             }).then((result) => {
                 if (result.isConfirmed) {
                     Swal.fire({
@@ -59,6 +60,8 @@
                                     icon: 'success',
                                     title: 'Berhasil!',
                                     text: 'Data pengguna berhasil dihapus.',
+                                    confirmButtonColor: "#435EBE",
+
                                 }).then(function() {
                                     tableUser.ajax.reload();
                                     // window.location.href = '{{ route('users.index') }}';

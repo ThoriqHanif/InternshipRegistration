@@ -48,7 +48,7 @@
                         <div class="ms-4 name">
                             <h4 class="font-bold">{{ $user->intern ? $user->intern->full_name : '' }}</h4>
                             <p class="text-small">
-                                {{ $user->intern ? $user->intern->position->name ?? '-' :''}}</p>
+                                {{ $user->intern ? $user->intern->position->name ?? '-' : '' }}</p>
 
                             </h5>
                         </div>
@@ -76,7 +76,8 @@
                                                         <label for="full_name" class="form-label">URL Portolio</label>
                                                         <input type="text" name="url" id="inputUrl"
                                                             class="form-control"
-                                                            placeholder="https://internship.kadangkoding.com/name" value="{{ $user->intern ? $user->intern->url : '' }}">
+                                                            placeholder="https://internship.kadangkoding.com/name"
+                                                            value="{{ $user->intern ? $user->intern->url : '' }}">
                                                     </div>
                                                 </div>
                                                 {{-- @foreach ($social_medias as $sosmed)
@@ -189,12 +190,12 @@
                                                     <label for="file" class="form-label">Pas Foto</label>
                                                     <input type="file" accept=".jpg, .jpeg, .png, .webp"
                                                         name="photo" id="filefoto"
-                                                        class="form-control @error('photo') is-invalid @enderror">
+                                                        class="form-control js-upload-image @error('photo') is-invalid @enderror">
                                                 </div>
                                                 <div class="form-group">
                                                     @if ($photoUrl)
                                                         <a data-fancybox data-caption="Pas Foto"
-                                                            href="{{ $photoUrl }}">
+                                                            href="{{ $photoUrl }}" id="fancybox">
                                                             <img src="{{ $photoUrl }}"
                                                                 class="mt-3 mb-3 elevation-1 mb-2 rounded-lg"
                                                                 alt="PAS Foto" width="200">
@@ -203,6 +204,10 @@
                                                         <p class="text-sm text-danger">Belum ada Foto</p>
                                                     @endif
                                                 </div>
+                                                <img src="" class="img-fluid w-100 mb-1" alt=""
+                                                    id="upload-img-preview">
+                                                <a href="#" class="text-danger" id="upload-img-delete"
+                                                    style="display: none;">Delete Image</a>
                                             </div>
                                             <div class="col-12 d-flex justify-content-end">
                                                 <button type="submit" class="btn btn-primary me-1 mb-1">Save
@@ -222,6 +227,35 @@
     </div>
     <!-- /.content-wrapper -->
 
+    {{-- Preview Image --}}
+    <script>
+        $('.js-upload-image').change(function(event) {
+            makePreview(this);
+            $('#upload-img-preview').show();
+            $('#upload-img-delete').show();
+            $('#fancybox').hide();
+        });
+
+        function makePreview(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    $('#upload-img-preview').attr('src', e.target.result);
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        $('#upload-img-delete').click(function(event) {
+            event.preventDefault();
+
+            $('#upload-img-preview').attr('src', '').hide();
+            $('#filefoto').val(null);
+            $('#fancybox').show();
+
+            $(this).hide();
+        });
+    </script>
     <script>
         const passwordField = document.getElementById('inputPassword');
         const togglePassword = document.getElementById('togglePassword');
@@ -320,7 +354,8 @@
                                     text: 'Data berhasil diupdate. Silahkan login ulang.',
                                     confirmButtonColor: "#435EBE",
                                 }).then(function() {
-                                    window.location.href = '{{ route('login', ['locale' => app()->getLocale()]) }}';
+                                    window.location.href =
+                                        '{{ route('login', ['locale' => app()->getLocale()]) }}';
                                 });
                             } else {
                                 Swal.fire({
