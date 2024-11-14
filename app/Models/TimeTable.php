@@ -9,10 +9,16 @@ class TimeTable extends Model
 {
     use HasFactory;
 
+    protected $table = 'time_tables';
+
     protected $fillable = [
         'day',
-        'morning',
-        'break',
-        'noon'
+        'start_time',
+        'end_time',
     ];
+
+    public function routeName()
+    {
+        return 'time-table';
+    }
 }

@@ -81,12 +81,16 @@
                                             <label for="example-text-input" class="form-control-label mb-2">Thumbnail<span
                                                     class="text-danger">
                                                     *</span></label>
-                                            <div class="custom-file mb-2">
-                                                <input class="form-control @error('image_thumbnail') is-invalid @enderror"
-                                                    type="file" id="thumbnail" name="image_thumbnail"
-                                                    accept=".jpg, .jpeg, .png, .webp">
+                                            <div class="custom-file" >
+                                                <input
+                                                    class="form-control js-upload-image @error('image_thumbnail') is-invalid @enderror"
+                                                    type="file" id="thumbnail" name="image_thumbnail" accept="image/*">
+                                                    <p><small class="text-muted">Maksimal Ukuran Gambar 2 MB</small></p>
                                             </div>
-                                            <span class="text-muted ">Maksimal Ukuran Gambar 2 MB</span>
+                                            <img src="" class="img-fluid w-100 mb-1" alt=""
+                                                id="upload-img-preview">
+                                            <a href="#" class="text-danger" id="upload-img-delete"
+                                                style="display: none;">Delete Image</a>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -143,8 +147,7 @@
                                             <div class="col-md-12">
                                                 <div class="form-group">
                                                     <label for="example-text-input"
-                                                        class="form-control-label mb-2">Article Title<span
-                                                            class="text-danger"> *</span></label>
+                                                        class="form-control-label mb-2">Article Title</label>
                                                     <input class="form-control @error('title_en') is-invalid @enderror"
                                                         type="text" value="" name="title_en"
                                                         placeholder="Input title">
@@ -157,8 +160,7 @@
 
                                             <div class="col-md-12">
                                                 <label for="example-text-input"
-                                                    class="form-control-label mb-2">Content<span class="text-danger">
-                                                        *</span></label>
+                                                    class="form-control-label mb-2">Content</label>
                                                 <div class="form-group">
                                                     <textarea id="body" class="form-control body" name="body_en" style="height: 300px">
                                                 </textarea>
@@ -191,186 +193,180 @@
             <script src="{{ asset('admin/assets/static/js/pages/summernote.js') }}"></script>
         @endpush
 
-        {{-- Non Ajax --}}
-        {{-- <script>
-            const image_upload_handler = (blobInfo, progress) => new Promise((resolve, reject) => {
-                const xhr = new XMLHttpRequest();
-                xhr.withCredentials = false;
-                xhr.open('POST', '/upload-image');
 
-                const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-                xhr.setRequestHeader('X-CSRF-TOKEN', token);
-
-                xhr.upload.onprogress = e => e.lengthComputable && progress(e.loaded / e.total * 100);
-
-                xhr.onload = () => {
-                    if (xhr.status === 403) return reject({
-                        message: 'HTTP Error: ' + xhr.status,
-                        remove: true
-                    });
-                    if (xhr.status < 200 || xhr.status >= 300) return reject('HTTP Error: ' + xhr.status);
-
-                    try {
-                        const json = JSON.parse(xhr.responseText);
-                        if (!json || typeof json.location !== 'string') return reject('Invalid JSON: ' + xhr
-                            .responseText);
-                        resolve(json.location);
-                    } catch (e) {
-                        reject('Invalid JSON: ' + xhr.responseText);
-                    }
-                };
-
-                xhr.onerror = () => reject('Image upload failed due to a XHR Transport error. Code: ' + xhr.status);
-
-                const formData = new FormData();
-                formData.append('file', blobInfo.blob(), blobInfo.filename());
-                xhr.send(formData);
-            });
-        </script> --}}
-
-        <script>
-            const image_upload_handler = (blobInfo, progress) => new Promise((resolve, reject) => {
-                const formData = new FormData();
-                formData.append('file', blobInfo.blob(), blobInfo.filename());
-
-                $.ajax({
-                    url: '{{ route('upload.image') }}',
-                    type: 'POST',
-                    data: formData,
-                    contentType: false,
-                    processData: false,
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    xhr: function() {
-                        const xhr = new window.XMLHttpRequest();
-                        xhr.upload.addEventListener("progress", function(evt) {
-                            if (evt.lengthComputable) {
-                                progress(evt.loaded / evt.total * 100);
-                            }
-                        }, false);
-                        return xhr;
-                    },
-                    success: function(json) {
-                        if (!json || typeof json.location !== 'string') return reject('Invalid JSON: ' +
-                            json);
-                        resolve(json.location);
-                    },
-                    error: function(xhr) {
-                        reject('HTTP Error: ' + xhr.status);
-                    }
+        @push('script-blog-create')
+            {{-- Preview Image --}}
+            <script>
+                $('.js-upload-image').change(function(event) {
+                    makePreview(this);
+                    $('#upload-img-preview').show();
+                    $('#upload-img-delete').show();
                 });
-            });
 
-            tinymce.init({
-                selector: '#body',
-                plugins: 'preview importcss searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image code link media codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount help charmap quickbars emoticons accordion',
-                menubar: 'file edit view insert format tools table help',
-                toolbar: "undo redo | accordion accordionremove | blocks fontfamily fontsize | bold italic underline strikethrough | align numlist bullist | link image | table media | lineheight outdent indent | forecolor backcolor removeformat | charmap emoticons | code fullscreen preview | save print | pagebreak anchor codesample | ltr rtl",
-                autosave_ask_before_unload: true,
-                autosave_interval: '30s',
-                autosave_prefix: '{path}{query}-{id}-',
-                autosave_restore_when_empty: false,
-                autosave_retention: '5m',
-                automatic_uploads: true,
-                image_advtab: true,
-                image_title: true,
-                file_picker_types: 'image',
-                images_upload_handler: image_upload_handler
-            });
-
-            $(document).ready(function() {
-                $('.tag-input').select2({
-                    tags: true,
-                    tokenSeparators: [','],
-                    placeholder: "",
-                    ajax: {
-                        url: '{{ route('api.tags') }}',
-                        dataType: 'json',
-                        delay: 250,
-                        processResults: function(data) {
-                            return {
-                                results: $.map(data, function(tag) {
-                                    return {
-                                        id: tag.id,
-                                        text: tag.name
-                                    };
-                                })
-                            };
-                        },
-                        cache: true
+                function makePreview(input) {
+                    if (input.files && input.files[0]) {
+                        var reader = new FileReader();
+                        reader.onload = function(e) {
+                            $('#upload-img-preview').attr('src', e.target.result);
+                        }
+                        reader.readAsDataURL(input.files[0]);
                     }
+                }
+
+                $('#upload-img-delete').click(function(event) {
+                    event.preventDefault();
+
+                    $('#upload-img-preview').attr('src', '').hide();
+                    $('#thumbnail').val(null);
+                    $(this).hide();
                 });
-            });
-        </script>
+            </script>
 
-        {{-- SAVE --}}
-        <script>
-            $(document).ready(function() {
-                $("#formBlog").on("submit", function(e) {
-                    e.preventDefault();
-
-                    Swal.fire({
-                        title: 'Mohon Tunggu!',
-                        html: 'Sedang memproses data...',
-                        allowOutsideClick: false,
-                        showConfirmButton: false,
-                        willOpen: () => {
-                            Swal.showLoading();
-                        },
-                    });
+            {{-- Config Editor --}}
+            <script>
+                const image_upload_handler = (blobInfo, progress) => new Promise((resolve, reject) => {
+                    const formData = new FormData();
+                    formData.append('file', blobInfo.blob(), blobInfo.filename());
 
                     $.ajax({
+                        url: '{{ route('upload.image') }}',
                         type: 'POST',
-                        url: '{{ route('blogs.store') }}',
-                        data: new FormData(this),
-                        processData: false,
+                        data: formData,
                         contentType: false,
-                        success: function(response) {
-                            Swal.close();
+                        processData: false,
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        xhr: function() {
+                            const xhr = new window.XMLHttpRequest();
+                            xhr.upload.addEventListener("progress", function(evt) {
+                                if (evt.lengthComputable) {
+                                    progress(evt.loaded / evt.total * 100);
+                                }
+                            }, false);
+                            return xhr;
+                        },
+                        success: function(json) {
+                            if (!json || typeof json.location !== 'string') return reject('Invalid JSON: ' +
+                                json);
+                            resolve(json.location);
+                        },
+                        error: function(xhr) {
+                            reject('HTTP Error: ' + xhr.status);
+                        }
+                    });
+                });
 
-                            if (response.success) {
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Berhasil!',
-                                    text: 'Data berhasil disimpan.',
-                                    confirmButtonColor: "#435EBE",
-                                    cancelButtonColor: "#CDD3D8",
-                                }).then(function() {
-                                    window.location.href = '{{ route('blogs.index') }}';
-                                });
-                            } else {
-                                if (response.errors) {
+                tinymce.init({
+                    selector: '#body',
+                    plugins: 'preview importcss searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image code link media codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount help charmap quickbars emoticons accordion',
+                    menubar: 'file edit view insert format tools table help',
+                    toolbar: "undo redo | accordion accordionremove | blocks fontfamily fontsize | bold italic underline strikethrough | align numlist bullist | link image | table media | lineheight outdent indent | forecolor backcolor removeformat | charmap emoticons | code fullscreen preview | save print | pagebreak anchor codesample | ltr rtl",
+                    autosave_ask_before_unload: true,
+                    autosave_interval: '30s',
+                    autosave_prefix: '{path}{query}-{id}-',
+                    autosave_restore_when_empty: false,
+                    autosave_retention: '5m',
+                    automatic_uploads: true,
+                    image_advtab: true,
+                    image_title: true,
+                    file_picker_types: 'image',
+                    images_upload_handler: image_upload_handler
+                });
+
+                $(document).ready(function() {
+                    $('.tag-input').select2({
+                        tags: true,
+                        tokenSeparators: [','],
+                        placeholder: "",
+                        ajax: {
+                            url: '{{ route('api.tags') }}',
+                            dataType: 'json',
+                            delay: 250,
+                            processResults: function(data) {
+                                return {
+                                    results: $.map(data, function(tag) {
+                                        return {
+                                            id: tag.id,
+                                            text: tag.name
+                                        };
+                                    })
+                                };
+                            },
+                            cache: true
+                        }
+                    });
+                });
+            </script>
+
+            {{-- SAVE --}}
+            <script>
+                $(document).ready(function() {
+                    $("#formBlog").on("submit", function(e) {
+                        e.preventDefault();
+
+                        Swal.fire({
+                            title: 'Mohon Tunggu!',
+                            html: 'Sedang memproses data...',
+                            allowOutsideClick: false,
+                            showConfirmButton: false,
+                            willOpen: () => {
+                                Swal.showLoading();
+                            },
+                        });
+
+                        $.ajax({
+                            type: 'POST',
+                            url: '{{ route('blogs.store') }}',
+                            data: new FormData(this),
+                            processData: false,
+                            contentType: false,
+                            success: function(response) {
+                                Swal.close();
+
+                                if (response.success) {
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Berhasil!',
+                                        text: 'Data berhasil disimpan.',
+                                        confirmButtonColor: "#435EBE",
+                                        cancelButtonColor: "#CDD3D8",
+                                    }).then(function() {
+                                        window.location.href = '{{ route('blogs.index') }}';
+                                    });
+                                } else {
+                                    if (response.errors) {
+                                        var errorMessages = '';
+                                        for (var key in response.errors) {
+                                            if (response.errors.hasOwnProperty(key)) {
+                                                errorMessages += response.errors[key][0] + '<br>';
+                                            }
+                                        }
+                                        Swal.fire('Gagal', errorMessages, 'error');
+                                    } else {
+                                        Swal.fire('Gagal', 'Terjadi kesalahan saat menyimpan data',
+                                            'error');
+                                    }
+                                }
+                            },
+                            error: function(xhr) {
+                                Swal.close();
+                                if (xhr.status === 422) {
                                     var errorMessages = '';
-                                    for (var key in response.errors) {
-                                        if (response.errors.hasOwnProperty(key)) {
-                                            errorMessages += response.errors[key][0] + '<br>';
+                                    var errors = xhr.responseJSON.errors;
+                                    for (var key in errors) {
+                                        if (errors.hasOwnProperty(key)) {
+                                            errorMessages += errors[key][0] + '<br>';
                                         }
                                     }
                                     Swal.fire('Gagal', errorMessages, 'error');
                                 } else {
-                                    Swal.fire('Gagal', 'Terjadi kesalahan saat menyimpan data',
-                                        'error');
+                                    Swal.fire('Gagal', 'Terjadi kesalahan saat simpan data.', 'error');
                                 }
-                            }
-                        },
-                        error: function(xhr) {
-                            Swal.close();
-                            if (xhr.status === 422) {
-                                var errorMessages = '';
-                                var errors = xhr.responseJSON.errors;
-                                for (var key in errors) {
-                                    if (errors.hasOwnProperty(key)) {
-                                        errorMessages += errors[key][0] + '<br>';
-                                    }
-                                }
-                                Swal.fire('Gagal', errorMessages, 'error');
-                            } else {
-                                Swal.fire('Gagal', 'Terjadi kesalahan saat simpan data.', 'error');
-                            }
-                        },
+                            },
+                        });
                     });
                 });
-            });
-        </script>
+            </script>
+        @endpush
     @endsection

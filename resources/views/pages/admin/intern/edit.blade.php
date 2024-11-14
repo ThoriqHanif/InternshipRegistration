@@ -185,95 +185,51 @@
                                                     <hr class="horizontal dark">
                                                     <p class="text-uppercase text-sm">Intern Information</p>
                                                     <div class="row">
-                                                        {{-- <div class="col-md-6">
+                                                        <div class="col-md-6">
                                                             <div class="form-group">
-                                                                <label class="form-control-label">Posisi<span
+                                                                <label for="periode_id"
+                                                                    class="form-control-label mb-2">Periode <span
                                                                         class="text-danger"> *</span></label>
-                                                                <select
-                                                                    class="form-select form-control @error('position_id') is-invalid @enderror"
-                                                                    name="position_id">
-                                                                    <option value="" selected>Pilih Posisi Magang
+                                                                <select id="periode_id"
+                                                                    class="form-select form-control @error('periode_id') is-invalid @enderror"
+                                                                    name="periode_id">
+                                                                    <option value="" selected disabled>Pilih Periode
                                                                     </option>
-                                                                    @foreach ($activePositions as $position)
-                                                                        <option value="{{ $position->id }}"
-                                                                            {{ $position_id == $position->id ? 'selected' : '' }}>
-                                                                            {{ $position->name }}
-                                                                            <!-- Ubah sesuai field nama posisi pada model -->
+                                                                    @foreach ($periodes as $periode)
+                                                                        <option value="{{ $periode->id }}"
+                                                                            {{ old('periode_id', $intern->periode_id ?? '') == $periode->id ? 'selected' : '' }}>
+                                                                            {{ $periode->name }}
                                                                         </option>
                                                                     @endforeach
                                                                 </select>
-                                                                @error('position_id')
+                                                                @error('periode_id')
                                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                                 @enderror
                                                             </div>
-                                                        </div> --}}
+                                                        </div>
                                                         <div class="col-md-6">
-
                                                             <div class="form-group">
-
-                                                                <label for="example-text-input"
-                                                                    class="form-control-label mb-2">Posisi<span
+                                                                <label for="position_id"
+                                                                    class="form-control-label mb-2">Posisi <span
                                                                         class="text-danger"> *</span></label>
-
-                                                                <select
+                                                                <select id="position_id"
                                                                     class="form-select form-control @error('position_id') is-invalid @enderror"
                                                                     name="position_id">
-
-                                                                    <!-- Ubah 'position' menjadi 'position_id' -->
-
                                                                     <option value="" selected disabled>Pilih Posisi
-                                                                        Magang</option>
-
-                                                                    {{-- @foreach ($activePositions as $position)
-                                                                        <option value="{{ $position->id }}">{{ $position->name }}</option>
-                                                                    @endforeach --}}
-
-                                                                    @foreach ($positions as $position)
-                                                                        <option value="{{ $position->id }}"
-                                                                            {{ $intern->position_id == $position->id ? 'selected' : '' }}>
-                                                                            {{ $position->name }}</option>
-                                                                    @endforeach
-
-
-
-                                                                </select>
-
-                                                                @error('position_id')
-                                                                    <div class="invalid-feedback">{{ $message }}</div>
-                                                                @enderror
-
-                                                            </div>
-
-                                                        </div>
-
-                                                        <div class="col-md-6">
-
-                                                            <div class="form-group">
-
-                                                                <label for="example-text-input"
-                                                                    class="form-control-label mb-2">Periode<span
-                                                                        class="text-danger"> *</span></label>
-
-                                                                <select
-                                                                    class="form-select form-control @error('periode_id') is-invalid @enderror"
-                                                                    name="periode_id">
-
-                                                                    <option value="" selected disabled>Pilih Periode
                                                                     </option>
-
-                                                                    @foreach ($periodes as $periode)
-                                                                        <option value="{{ $periode->id }}"
-                                                                            {{ $intern->periode_id == $periode->id ? 'selected' : '' }}>
-                                                                            {{ $periode->name }}</option>
-                                                                    @endforeach
+                                                                    @if (isset($intern) && $intern->periode_id)
+                                                                        @foreach ($intern->periode->positions as $position)
+                                                                            <option value="{{ $position->id }}"
+                                                                                {{ old('position_id', $intern->position_id ?? '') == $position->id ? 'selected' : '' }}>
+                                                                                {{ $position->name }} | Kuota ({{ $position->pivot->quota }})
+                                                                            </option>
+                                                                        @endforeach
+                                                                    @endif
                                                                 </select>
-
                                                                 @error('position_id')
                                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                                 @enderror
-
                                                             </div>
-
                                                         </div>
 
                                                         <div class="col-md-6">
@@ -564,7 +520,7 @@
                                                                                     </object>
                                                                                 @elseif ($cover_letterExtension == 'docx')
                                                                                     <iframe
-                                                                                        src="{{ $coverLetterHtmlPath }}"
+                                                                                        src="{{ $cover_letterHtmlPath }}"
                                                                                         style="width: 100%; height: 700px;"></iframe>
                                                                                 @else
                                                                                     <p>File format not supported. <a
@@ -765,6 +721,46 @@
         <script src="{{ asset('admin/assets/static/js/pages/summernote.js') }}"></script>
     @endpush
 
+
+    <script>
+        $(document).ready(function() {
+            $('#periode_id').change(function() {
+                const periodeId = $(this).val();
+                const currentPositionId = "{{ $intern->position_id ?? 0 }}";
+
+                if (periodeId) {
+
+                    const url = `{{ route('available.current.position', ['periode_id' => ':periodeId', 'current_position_id' => ':currentPositionId']) }}`
+                    .replace(':periodeId', periodeId)
+                    .replace(':currentPositionId', currentPositionId);
+
+                    $.ajax({
+                        url: url,
+                        type: 'GET',
+                        success: function(positions) {
+                            $('#position_id').empty().append('<option value="" disabled selected>Pilih Posisi</option>');
+
+                            positions.forEach(position => {
+                            const quota = position.periodes.length > 0 ? position.periodes[0].pivot.quota : 0;
+
+                            $('#position_id').append(`
+                                <option value="${position.id}" ${position.id == currentPositionId ? 'selected' : ''}>
+                                    ${position.name} | Kuota (${quota})
+                                </option>
+                            `);
+                        });
+                        }
+                    });
+                }
+            });
+
+            // Trigger change event on page load if periode_id is preselected
+            if ($('#periode_id').val()) {
+                $('#periode_id').trigger('change');
+            }
+        });
+    </script>
+
     <script>
         $(document).ready(function() {
             var initialStatus = '{{ $intern->status }}';
@@ -813,6 +809,7 @@
                     });
 
                     endDateInput.value = '';
+
                 } else if (endDate < today) {
                     Swal.fire({
                         icon: 'error',
@@ -827,22 +824,22 @@
                 }
             });
 
-            startDateInput.addEventListener('change', function() {
-                var startDate = new Date(startDateInput.value);
+            // startDateInput.addEventListener('change', function() {
+            //     var startDate = new Date(startDateInput.value);
 
-                if (startDate < today) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oopss...',
-                        text: 'Tanggal mulai tidak boleh kurang dari tanggal hari Ini',
-                        confirmButtonText: 'Ok',
-                        confirmButtonColor: '#435EBE',
-                        cancelButtonColor: '#CDD3D8',
-                    });
+            //     if (startDate < today) {
+            //         Swal.fire({
+            //             icon: 'error',
+            //             title: 'Oopss...',
+            //             text: 'Tanggal mulai tidak boleh kurang dari tanggal hari Ini',
+            //             confirmButtonText: 'Ok',
+            //             confirmButtonColor: '#435EBE',
+            //             cancelButtonColor: '#CDD3D8',
+            //         });
 
-                    startDateInput.value = '';
-                }
-            });
+            //         startDateInput.value = '';
+            //     }
+            // });
         });
     </script>
 

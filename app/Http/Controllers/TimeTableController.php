@@ -5,15 +5,31 @@ namespace App\Http\Controllers;
 use App\Models\TimeTable;
 use App\Http\Requests\StoreTimeTableRequest;
 use App\Http\Requests\UpdateTimeTableRequest;
+use App\Traits\LogActivityTrait;
+use Illuminate\Http\Request;
+use Yajra\DataTables\Facades\DataTables;
 
 class TimeTableController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    use LogActivityTrait;
+
+    public function index(Request $request)
     {
-        //
+        if ($request->ajax()) {
+            $time_table = TimeTable::query();
+            return DataTables::of($time_table)
+                ->addColumn('action', function ($time_table) {
+                    return view('pages.admin.time-table.action', compact('time_table'));
+                })
+                ->addIndexColumn()
+                ->rawColumns(['action'])
+                ->make(true);
+        }
+
+        return view('pages.admin.time-table.index');
     }
 
     /**
@@ -45,7 +61,7 @@ class TimeTableController extends Controller
      */
     public function edit(TimeTable $timeTable)
     {
-        //
+        return response()->json(['result' => $timeTable]);
     }
 
     /**
@@ -53,7 +69,25 @@ class TimeTableController extends Controller
      */
     public function update(UpdateTimeTableRequest $request, TimeTable $timeTable)
     {
-        //
+        $before = $timeTable->toArray();
+        $timeTable->update([
+            'start_time' => $request->input('start_time'),
+            'end_time' => $request->input('end_time'),
+        ]);
+
+
+        if ($timeTable->save()) {
+            $after = $timeTable->fresh()->toArray();
+            $data = [
+                'before' => $before,
+                'after' => $after,
+            ];
+            $this->logActivity($timeTable, 'Memperbarui Jam Operasional', $data);
+
+            return response()->json(['success' => true]);
+        } else {
+            return response()->json(['success' => false]);
+        }
     }
 
     /**

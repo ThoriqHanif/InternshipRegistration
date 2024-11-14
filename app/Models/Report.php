@@ -12,16 +12,26 @@ class Report extends Model
     protected $fillable = [
         'intern_id',
         'date',
+        'attendance_time',
         'presence',
-        'attendance_hours',
+        'is_late',
+        'is_consequence_done',
+        'consequence_description',
         'agency',
         'project_name',
         'job',
         'description',
+        'status',
+        'admin_reason',
     ];
 
     public function intern()
     {
         return $this->belongsTo(Intern::class);
+    }
+
+    public function routeName()
+    {
+        return 'daily-report';
     }
 }

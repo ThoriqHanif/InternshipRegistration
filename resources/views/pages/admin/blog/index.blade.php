@@ -45,7 +45,7 @@
                 <div class="card-body">
                     @include('components.alert')
                     {{-- <div class="table-responsive"> --}}
-                    <table class="table table-striped table-sm" id="tableBlog">
+                    <table class="table table-hover" id="tableBlog">
                         <thead>
                             <tr>
                                 <th class="table-fit">No</th>

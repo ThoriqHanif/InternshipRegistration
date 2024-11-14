@@ -57,7 +57,7 @@
                     </div>
                     @include('components.alert')
                     {{-- <div class="table-responsive"> --}}
-                    <table class="table table-striped table-sm" id="tablePosition">
+                    <table class="table table-hover" id="tablePosition">
                         <thead>
                             <tr>
                                 <th class="table-fit">No</th>

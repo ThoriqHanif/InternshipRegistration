@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\LogActivity;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\App;
@@ -32,26 +34,25 @@ class LoginController extends Controller
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
-            //    Cek Role
             $user = Auth::user();
+
             if ($user->role === 'admin') {
-                return redirect('/admin/dashboard');
+                return redirect()->route('admin.dashboard');
             } elseif ($user->role === 'user') {
-                return redirect('/reports');
+                return redirect()->route('daily-reports.index');
             }
         }
 
-        // Jika login gagal
         return back()->withErrors(['email', 'password' => 'Email atau password salah.'])->withInput($request->only('email'));
     }
 
     public function logout(Request $request)
     {
+
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
         return redirect()->route('login', ['locale' => app()->getLocale()]);
-
     }
 }

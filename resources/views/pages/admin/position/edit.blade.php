@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
-<header class="mb-3">
-    <a href="#" class="burger-btn d-block d-xl-none">
-        <i class="bi bi-justify fs-3"></i>
-    </a>
-</header>
-{{-- <div class="page-heading"> --}}
+    <header class="mb-3">
+        <a href="#" class="burger-btn d-block d-xl-none">
+            <i class="bi bi-justify fs-3"></i>
+        </a>
+    </header>
+    {{-- <div class="page-heading"> --}}
     <div class="page-title">
         <div class="row">
             <div class="col-12 col-md-6 order-md-1 order-last">
@@ -40,10 +40,9 @@
             <div class="container-fluid">
                 <div class="row">
                     <!-- left column -->
-                    <div class="col-md-12">
+                    <div class="col-md-8">
                         <!-- general form elements -->
                         <div class="card card-primary">
-
                             <!-- /.card-header -->
                             <!-- form start -->
                             <form method="POST" action="{{ route('position.update', $id) }}" id="formEditPosition">
@@ -59,7 +58,8 @@
                                                         <div class="col-md-6">
                                                             <div class="form-group">
                                                                 <label for="example-text-input"
-                                                                    class="form-control-label">Nama<span class="text-danger"> *</span></label>
+                                                                    class="form-control-label">Nama<span
+                                                                        class="text-danger"> *</span></label>
                                                                 <input
                                                                     class="form-control @error('name') is-invalid @enderror"
                                                                     type="text" value="{{ $name }}"
@@ -80,32 +80,7 @@
                                                                 @enderror
                                                             </div>
                                                         </div>
-                                                        <div class="col-md-6">
-                                                            <div class="form-group">
-                                                                <label for="filefimage" class="form-control-label">Gambar
-                                                                    <span class="text-danger"> *</span></label>
-                                                                <div class="custom-file">
-                                                                    <input
-                                                                        class="form-control @error('image') is-invalid @enderror"
-                                                                        type="file" id="fileimage" name="image"
-                                                                        accept=".jpg, .jpeg, .png, .webp">
-                                                                </div>
 
-                                                                @if ($imageUrl)
-                                                                    <a data-fancybox data-caption="Gambar Posisi "
-                                                                        href="{{ $imageUrl }}">
-                                                                        <img src="{{ $imageUrl }}" class="mt-3"
-                                                                            alt="Gambar Posisi" width="70">
-                                                                    </a>
-                                                                @else
-                                                                    <p class="text-sm text-danger">Belum ada Gambar</p>
-                                                                @endif
-
-                                                                @error('image')
-                                                                    <div class="invalid-feedback">{{ $message }}</div>
-                                                                @enderror
-                                                            </div>
-                                                        </div>
 
                                                     </div>
                                                     <hr class="horizontal dark">
@@ -113,49 +88,123 @@
                                                         <div class="col-md-12">
                                                             <div class="form-group">
                                                                 <label for="example-text-input"
-                                                                    class="form-control-label">Syarat<span class="text-danger"> *</span></label>
+                                                                    class="form-control-label">Syarat<span
+                                                                        class="text-danger"> *</span></label>
                                                                 <div class="row mt-2">
                                                                     @foreach (['HTML', 'CSS', 'Javascript', 'PHP', 'Laravel', 'Figma', 'Photoshop', 'MySQL', 'Bootstrap'] as $requirement)
-                                                                    <div class="col-md-2 mb-2">
-                                                                        <div class="form-check">
-                                                                            <input class="form-check-input" type="checkbox" name="requirements[]" value="{{ $requirement }}"
-                                                                                id="flexCheckDefault{{ $loop->index + 1 }}"
-                                                                                name="requirements[]"
-                                                                                @if(in_array($requirement, explode(', ', $requirements))) checked @endif>
-                                                                            <label class="form-check-label">{{ $requirement }}</label><br>
-                                                                            @error('requirements')
-                                                                                <span class="text-danger">{{ $message }}</span>
-                                                                            @enderror
+                                                                        <div class="col-md-2 mb-2">
+                                                                            <div class="form-check">
+                                                                                <input class="form-check-input"
+                                                                                    type="checkbox" name="requirements[]"
+                                                                                    value="{{ $requirement }}"
+                                                                                    id="flexCheckDefault{{ $loop->index + 1 }}"
+                                                                                    name="requirements[]"
+                                                                                    @if (in_array($requirement, explode(', ', $requirements))) checked @endif>
+                                                                                <label
+                                                                                    class="form-check-label">{{ $requirement }}</label><br>
+                                                                                @error('requirements')
+                                                                                    <span
+                                                                                        class="text-danger">{{ $message }}</span>
+                                                                                @enderror
+                                                                            </div>
                                                                         </div>
-                                                                    </div>
-                                                                    @if(($loop->index + 1) % 5 == 0)
-                                                                        </div><div class="row">
+                                                                        @if (($loop->index + 1) % 5 == 0)
+                                                                </div>
+                                                                <div class="row">
                                                                     @endif
                                                                     @endforeach
 
-                                                    </div>
-                                                    <div class="inline-block mt-3">
-                                                        <a type="button" class="btn btn-md btn-secondary"
-                                                            href="{{ route('position.index') }}">Cancel</a>
-                                                        <button type="submit"
-                                                            class="btn btn-md btn-primary">Simpan</button>
+                                                                </div>
+                                                                <div class="inline-block mt-3">
+                                                                    <a type="button" class="btn btn-md btn-secondary"
+                                                                        href="{{ route('position.index') }}">Cancel</a>
+                                                                    <button type="submit"
+                                                                        class="btn btn-md btn-primary">Simpan</button>
 
 
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
                                                     </div>
 
                                                 </div>
                                             </div>
                                         </div>
+
+                                    </div>
+
+
+                                </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="filefimage" class="form-control-label">Gambar
+                                            <span class="text-danger"> *</span></label>
+                                        <div class="custom-file mb-2">
+                                            <input class="form-control js-upload-image @error('image') is-invalid @enderror" type="file"
+                                                id="fileimage" name="image" accept="image/*">
+                                        </div>
+                                        <img src="" class="img-fluid w-100 mb-1" alt=""
+                                            id="upload-img-preview">
+                                        <a href="#" class="text-danger" id="upload-img-delete"
+                                            style="display: none;">Delete Image</a>
+
+                                        @if ($imageUrl)
+                                            <a data-fancybox data-caption="Gambar Posisi " href="{{ $imageUrl }}" id="fancybox">
+                                                <img src="{{ $imageUrl }}" class="mt-3" alt="Gambar Posisi"
+                                                    width="70">
+                                            </a>
+                                        @else
+                                            <p class="text-sm text-danger">Belum ada Gambar</p>
+                                        @endif
+
+                                        @error('image')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                 </div>
-                            </form>
+                            </div>
                         </div>
-
                     </div>
+                    </form>
                 </div>
-            </div>
         </section>
     </div>
+
+    {{-- Preview Image --}}
+    <script>
+        $('.js-upload-image').change(function(event) {
+            makePreview(this);
+            $('#upload-img-preview').show();
+            $('#upload-img-delete').show();
+            $('#fancybox').hide();
+        });
+
+        function makePreview(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    $('#upload-img-preview').attr('src', e.target.result);
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        $('#upload-img-delete').click(function(event) {
+            event.preventDefault();
+
+            $('#upload-img-preview').attr('src', '').hide();
+            $('#fileimagedb').val(null);
+            $('#fancybox').show();
+
+            $(this).hide();
+        });
+    </script>
 
     <script>
         $(document).ready(function() {
@@ -176,7 +225,8 @@
 
                 $.ajax({
                     type: 'POST',
-                    url: '{{ route('position.update', ['position' => ':positionId']) }}'.replace(':positionId', positionId),
+                    url: '{{ route('position.update', ['position' => ':positionId']) }}'.replace(
+                        ':positionId', positionId),
                     data: new FormData(this),
                     processData: false,
                     contentType: false,

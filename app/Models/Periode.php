@@ -31,5 +31,9 @@ class Periode extends Model
         return $this->hasMany(Intern::class);
     }
 
+    public function routeName()
+    {
+        return 'periode';
+    }
 
 }

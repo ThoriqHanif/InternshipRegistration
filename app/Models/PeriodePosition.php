@@ -11,13 +11,4 @@ class PeriodePosition extends Model
 
     protected $fillable = ['periode_id', 'position_id', 'quota'];
 
-    // public function periode()
-    // {
-    //     return $this->belongsTo(Periode::class);
-    // }
-
-    // public function position()
-    // {
-    //     return $this->belongsTo(Position::class);
-    // }
 }

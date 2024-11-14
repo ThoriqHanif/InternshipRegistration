@@ -14,4 +14,9 @@ class Subscription extends Model
         'email',
         'status'
     ];
+
+    public function routeName()
+    {
+        return 'subscription';
+    }
 }

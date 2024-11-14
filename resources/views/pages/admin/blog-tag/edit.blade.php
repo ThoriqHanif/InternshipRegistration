@@ -28,7 +28,6 @@
                     <span class="d-none d-sm-block">Update</span>
                 </button>
             </div>
-            </form>
         </div>
     </div>
 </div>

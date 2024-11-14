@@ -47,7 +47,7 @@
                         @if (Auth::user()->role === 'admin')
                             <a class="getstarted scrollto" href="{{ route('admin.dashboard', ['locale' => app()->getLocale()]) }}">@lang('home.navbar.dashboard')</a>
                         @else
-                            <a class="getstarted scrollto" href="{{ route('reports.index', ['locale' => app()->getLocale()]) }}">@lang('home.navbar.dashboard')</a>
+                            <a class="getstarted scrollto" href="{{ route('daily-reports.index') }}">@lang('home.navbar.dashboard')</a>
                         @endif
                     @else
                         <a class="getstarted scrollto" href="{{ route('login', ['locale' => app()->getLocale()]) }}">@lang('home.navbar.login')</a>
