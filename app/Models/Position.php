@@ -36,20 +36,7 @@ class Position extends Model
         return $this->belongsToMany(Periode::class, 'periode_positions')->withPivot('quota');
     }
 
-    public function aspects()
-    {
-        return $this->belongsToMany(Aspect::class, 'position_aspects', 'position_id', 'aspect_id');
-    }
 
-    public function positionAspects()
-    {
-        return $this->hasMany(PositionAspect::class, 'position_id');
-    }
-
-    public function technicalAspects()
-    {
-        return $this->aspects()->where('type', 'technical');
-    }
     public function sluggable(): array
     {
         return [
@@ -57,10 +44,5 @@ class Position extends Model
                 'source' => 'name'
             ]
         ];
-    }
-
-    public function routeName()
-    {
-        return 'position';
     }
 }

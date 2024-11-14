@@ -3,10 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\BlogCategory;
-use App\Traits\LogActivityTrait;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use App\Helpers\Utility;
 use Yajra\DataTables\Facades\DataTables;
 
 class BlogCategoryController extends Controller
@@ -14,9 +12,6 @@ class BlogCategoryController extends Controller
     /**
      * Display a listing of the resource.
      */
-
-    use LogActivityTrait;
-
     public function index(Request $request)
     {
         if ($request->ajax()) {
@@ -48,11 +43,12 @@ class BlogCategoryController extends Controller
      */
     public function store(Request $request)
     {
+        //
         $blog_category = new BlogCategory();
         $blog_category->name = $request->name;
 
         if ($blog_category->save()) {
-            return response()->json(['success' => true, 'category' => $blog_category]);
+            return response()->json(['success' => true]);
         } else {
             return response()->json(['success' => false]);
         }
@@ -83,21 +79,14 @@ class BlogCategoryController extends Controller
      */
     public function update(Request $request, BlogCategory $blogCategory)
     {
-        $before = $blogCategory->toArray();
-
         $blogCategory->update([
             'name' => $request->input('name'),
             'slug' => $request->input('slug'),
         ]);
 
+        // Simpan perubahan
         if ($blogCategory->save()) {
-            $after = $blogCategory->fresh()->toArray();
-            $data = [
-                'before' => $before,
-                'after' => $after,
-            ];
-
-            return response()->json(['success' => true, 'data' => $data]);
+            return response()->json(['success' => true]);
         } else {
             return response()->json(['success' => false]);
         }
@@ -109,7 +98,7 @@ class BlogCategoryController extends Controller
     public function destroy(BlogCategory $blogCategory)
     {
         if ($blogCategory->delete()) {
-            return response()->json(['success' => true, 'data' => $blogCategory]);
+            return response()->json(['success' => true]);
         } else {
             return response()->json(['success' => false]);
         }

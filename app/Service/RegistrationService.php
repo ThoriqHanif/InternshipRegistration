@@ -90,4 +90,10 @@ class RegistrationService
         return $intern->save();
     }
 
+    public function sendRegisterEmail(Intern $intern)
+    {
+        if ($intern->status === 'pending') {
+            Mail::to($intern->email)->send(new InternStatus($intern, 'pending'));
+        }
+    }
 }

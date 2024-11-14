@@ -1,35 +1,35 @@
 @extends('layouts.app')
 
 @section('content')
-    <header class="mb-3">
-        <a href="#" class="burger-btn d-block d-xl-none">
-            <i class="bi bi-justify fs-3"></i>
-        </a>
-    </header>
-    <div class="page-title">
-        <div class="row">
-            <div class="col-12 col-md-6 order-md-1 order-last">
-                <h3>Edit User</h3>
-                <p class="text-subtitle text-muted">Masukkan data yang ingin diubah Informasi User</p>
-            </div>
-            <div class="col-12 col-md-6 order-md-2 order-first">
-                <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ url('admin/dashboard') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item"><a href="{{ route('users.index') }}">User</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Edit User</li>
-                    </ol>
-                </nav>
-            </div>
+<header class="mb-3">
+    <a href="#" class="burger-btn d-block d-xl-none">
+        <i class="bi bi-justify fs-3"></i>
+    </a>
+</header>
+<div class="page-title">
+    <div class="row">
+        <div class="col-12 col-md-6 order-md-1 order-last">
+            <h3>Edit User</h3>
+            <p class="text-subtitle text-muted">Masukkan data yang ingin diubah Informasi User</p>
+        </div>
+        <div class="col-12 col-md-6 order-md-2 order-first">
+            <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ url('admin/dashboard') }}">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('users.index') }}">User</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Edit User</li>
+                </ol>
+            </nav>
         </div>
     </div>
+</div>
     <div class="content-wrapper">
 
         <!-- Content Header (Page header) -->
         <section class="content-header">
             <div class="container-fluid">
                 <div class="row mb-2">
-
+                    
                 </div>
             </div><!-- /.container-fluid -->
         </section>
@@ -115,16 +115,13 @@
                                                                 <label for="example-text-input"
                                                                     class="form-control-label">Password<span
                                                                         class="text-danger"> *</span></label>
-                                                                <div class="input-group">
-                                                                    <input
-                                                                        class="form-control @error('password') is-invalid @enderror"
-                                                                        type="password" value="" name="password"
-                                                                        id="password">
-                                                                    <div class="input-group-append" id="togglePassword"
-                                                                        style="cursor: pointer">
+                                                                        <div class="input-group">
+                                                                <input
+                                                                    class="form-control @error('password') is-invalid @enderror"
+                                                                    type="password" value="" name="password" id="password">
+                                                                    <div class="input-group-append" id="togglePassword" style="cursor: pointer">
                                                                         <div class="input-group-text bg-white">
-                                                                            <i class="fas fa-eye"
-                                                                                id="togglePasswordIcon"></i>
+                                                                            <i class="fas fa-eye" id="togglePasswordIcon"></i>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -135,10 +132,10 @@
                                                         </div>
                                                     </div>
                                                     <div class="inline-block mt-3">
-
+                                                       
                                                         <a type="button" class="btn btn-md btn-light-secondary"
                                                             href="{{ route('users.index') }}">Cancel</a>
-                                                        <button type=""
+                                                            <button type=""
                                                             class="btn btn-md btn-primary">Update</button>
                                                     </div>
 
@@ -176,157 +173,149 @@
         });
     </script>
 
-    <script>
-        $(document).ready(function() {
-            $("#formUserEdit").on("submit", function(e) {
-                e.preventDefault();
+<script>
+    $(document).ready(function() {
+    $("#formUserEdit").on("submit", function(e) {
+        e.preventDefault();
 
-                var userId = "{{ $user->id }}";
-                var loggedInUserId = "{{ Auth::user()->id }}"; // ID pengguna yang login
+        var userId = "{{ $user->id }}";
+        var loggedInUserId = "{{ Auth::user()->id }}"; // ID pengguna yang login
 
-                // Tampilkan pesan "loading" saat akan mengirim permintaan AJAX
-                Swal.fire({
-                    title: 'Mohon Tunggu!',
-                    html: 'Sedang memproses data...',
-                    allowOutsideClick: false,
-                    showConfirmButton: false,
-                    willOpen: () => {
-                        Swal.showLoading();
-                    },
-                });
-
-                // Mengambil data yang ada di form
-                var formData = new FormData(this);
-                var name = formData.get('name');
-                var email = formData.get('email');
-                var role = formData.get('role');
-                var password = formData.get('password');
-
-                // Mengecek apakah admin yang sedang login sedang mengedit data pengguna lain
-                if (userId !== loggedInUserId) {
-                    // Perubahan data pada pengguna lain, kirim permintaan AJAX dan tampilkan SweetAlert
-                    $.ajax({
-                        type: 'POST',
-                        url: '{{ route('users.update', ['user' => ':userId']) }}'.replace(
-                            ':userId', userId),
-                        data: formData,
-                        processData: false,
-                        contentType: false,
-                        success: function(response) {
-                            // Tutup pesan "loading" saat berhasil
-                            Swal.close();
-
-                            if (response.success) {
-                                // Tampilkan pesan SweetAlert untuk perubahan data pengguna lain
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Berhasil!',
-                                    text: 'Data pengguna berhasil diupdate.',
-                                    confirmButtonColor: "#435EBE",
-
-                                }).then(function() {
-                                    // Redirect ke halaman indeks setelah menutup SweetAlert
-                                    window.location.href =
-                                    '{{ route('users.index') }}';
-                                });
-                            } else {
-                                // Jika validasi gagal, tampilkan pesan-pesan kesalahan
-                                if (response.errors) {
-                                    var errorMessages = '';
-                                    for (var key in response.errors) {
-                                        if (response.errors.hasOwnProperty(key)) {
-                                            errorMessages += response.errors[key][0] + '<br>';
-                                        }
-                                    }
-                                    Swal.fire('Gagal', errorMessages, 'error');
-                                } else {
-                                    Swal.fire('Gagal',
-                                        'Terjadi kesalahan saat memperbarui data',
-                                        'error');
-                                }
-                            }
-                        },
-                        error: function(xhr) {
-                            Swal.close();
-                            if (xhr.status === 422) {
-                                // Menampilkan pesan validasi error SweetAlert
-                                var errorMessages = '';
-                                var errors = xhr.responseJSON.errors;
-                                for (var key in errors) {
-                                    if (errors.hasOwnProperty(key)) {
-                                        errorMessages += errors[key][0] + '<br>';
-                                    }
-                                }
-                                Swal.fire('Gagal', errorMessages, 'error');
-                            } else {
-                                Swal.fire('Gagal', 'Terjadi kesalahan saat update data.',
-                                    'error');
-                            }
-                        },
-                    });
-                } else {
-                    // Admin yang sedang login mengedit dirinya sendiri
-                    $.ajax({
-                        type: 'POST',
-                        url: '{{ route('users.update', ['user' => ':userId']) }}'.replace(
-                            ':userId', userId),
-                        data: formData,
-                        processData: false,
-                        contentType: false,
-                        success: function(response) {
-                            // Tutup pesan "loading" saat berhasil
-                            Swal.close();
-
-                            if (response.success) {
-                                // Tampilkan pesan SweetAlert untuk perubahan data admin yang sedang login
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Berhasil!',
-                                    text: 'Data profile telah diperbarui',
-                                }).then(function() {
-                                    window.location.href =
-                                        '{{ route('login', ['locale' => app()->getLocale()]) }}';
-
-
-                                });
-
-                            } else {
-                                // Jika validasi gagal, tampilkan pesan-pesan kesalahan
-                                if (response.errors) {
-                                    var errorMessages = '';
-                                    for (var key in response.errors) {
-                                        if (response.errors.hasOwnProperty(key)) {
-                                            errorMessages += response.errors[key][0] + '<br>';
-                                        }
-                                    }
-                                    Swal.fire('Gagal', errorMessages, 'error');
-                                } else {
-                                    Swal.fire('Gagal',
-                                        'Terjadi kesalahan saat memperbarui data',
-                                        'error');
-                                }
-                            }
-                        },
-                        error: function(xhr) {
-                            Swal.close();
-                            if (xhr.status === 422) {
-                                // Menampilkan pesan validasi error SweetAlert
-                                var errorMessages = '';
-                                var errors = xhr.responseJSON.errors;
-                                for (var key in errors) {
-                                    if (errors.hasOwnProperty(key)) {
-                                        errorMessages += errors[key][0] + '<br>';
-                                    }
-                                }
-                                Swal.fire('Gagal', errorMessages, 'error');
-                            } else {
-                                Swal.fire('Gagal', 'Terjadi kesalahan saat update data.',
-                                    'error');
-                            }
-                        },
-                    });
-                }
-            });
+        // Tampilkan pesan "loading" saat akan mengirim permintaan AJAX
+        Swal.fire({
+            title: 'Mohon Tunggu!',
+            html: 'Sedang memproses data...',
+            allowOutsideClick: false,
+            showConfirmButton: false,
+            willOpen: () => {
+                Swal.showLoading();
+            },
         });
-    </script>
+
+        // Mengambil data yang ada di form
+        var formData = new FormData(this);
+        var name = formData.get('name');
+        var email = formData.get('email');
+        var role = formData.get('role');
+        var password = formData.get('password');
+
+        // Mengecek apakah admin yang sedang login sedang mengedit data pengguna lain
+        if (userId !== loggedInUserId) {
+            // Perubahan data pada pengguna lain, kirim permintaan AJAX dan tampilkan SweetAlert
+            $.ajax({
+                type: 'POST',
+                url: '{{ route('users.update', ['user' => ':userId']) }}'.replace(':userId', userId),
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    // Tutup pesan "loading" saat berhasil
+                    Swal.close();
+
+                    if (response.success) {
+                        // Tampilkan pesan SweetAlert untuk perubahan data pengguna lain
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil!',
+                            text: 'Data pengguna berhasil diupdate.',
+                        }).then(function() {
+                            // Redirect ke halaman indeks setelah menutup SweetAlert
+                            window.location.href = '{{ route('users.index') }}';
+                        });
+                    } else {
+                            // Jika validasi gagal, tampilkan pesan-pesan kesalahan
+                            if (response.errors) {
+                                var errorMessages = '';
+                                for (var key in response.errors) {
+                                    if (response.errors.hasOwnProperty(key)) {
+                                        errorMessages += response.errors[key][0] + '<br>';
+                                    }
+                                }
+                                Swal.fire('Gagal', errorMessages, 'error');
+                            } else {
+                                Swal.fire('Gagal', 'Terjadi kesalahan saat memperbarui data',
+                                    'error');
+                            }
+                        }
+                    },
+                    error: function(xhr) {
+                        Swal.close();
+                        if (xhr.status === 422) {
+                            // Menampilkan pesan validasi error SweetAlert
+                            var errorMessages = '';
+                            var errors = xhr.responseJSON.errors;
+                            for (var key in errors) {
+                                if (errors.hasOwnProperty(key)) {
+                                    errorMessages += errors[key][0] + '<br>';
+                                }
+                            }
+                            Swal.fire('Gagal', errorMessages, 'error');
+                        } else {
+                            Swal.fire('Gagal', 'Terjadi kesalahan saat update data.', 'error');
+                        }
+                    },
+            });
+        } else {
+            // Admin yang sedang login mengedit dirinya sendiri
+            $.ajax({
+                type: 'POST',
+                url: '{{ route('users.update', ['user' => ':userId']) }}'.replace(':userId', userId),
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    // Tutup pesan "loading" saat berhasil
+                    Swal.close();
+
+                    if (response.success) {
+                        // Tampilkan pesan SweetAlert untuk perubahan data admin yang sedang login
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil!',
+                            text: 'Data profile telah diperbarui',
+                        }).then(function() {
+                                    window.location.href = '{{ route('login') }}';
+                                    
+                        
+                        });
+                        
+                    } else {
+                            // Jika validasi gagal, tampilkan pesan-pesan kesalahan
+                            if (response.errors) {
+                                var errorMessages = '';
+                                for (var key in response.errors) {
+                                    if (response.errors.hasOwnProperty(key)) {
+                                        errorMessages += response.errors[key][0] + '<br>';
+                                    }
+                                }
+                                Swal.fire('Gagal', errorMessages, 'error');
+                            } else {
+                                Swal.fire('Gagal', 'Terjadi kesalahan saat memperbarui data',
+                                    'error');
+                            }
+                        }
+                    },
+                    error: function(xhr) {
+                        Swal.close();
+                        if (xhr.status === 422) {
+                            // Menampilkan pesan validasi error SweetAlert
+                            var errorMessages = '';
+                            var errors = xhr.responseJSON.errors;
+                            for (var key in errors) {
+                                if (errors.hasOwnProperty(key)) {
+                                    errorMessages += errors[key][0] + '<br>';
+                                }
+                            }
+                            Swal.fire('Gagal', errorMessages, 'error');
+                        } else {
+                            Swal.fire('Gagal', 'Terjadi kesalahan saat update data.', 'error');
+                        }
+                    },
+            });
+        }
+    });
+});
+
+</script>
+
 @endsection

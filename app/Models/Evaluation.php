@@ -2,41 +2,36 @@
 
 namespace App\Models;
 
+use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Evaluation extends Model
 {
-    use HasFactory;
+    use HasFactory, Sluggable;
 
+    protected $table = 'evaluations';
     protected $fillable = [
         'intern_id',
-        'task_id',
-        'aspect_id',
-        'total_score',
-        'total_inputted',
-        'average_score',
-        'final_score'
+        'name',
+        'slug',
+        'file',
+        'comment'
+
     ];
 
     public function intern()
     {
-        return $this->belongsTo(Intern::class, 'intern_id');
+        return $this->belongsTo(Intern::class);
     }
 
-    public function task()
+    public function sluggable(): array
     {
-        return $this->belongsTo(Task::class, 'task_id');
+        return [
+            'slug' => [
+                'source' => 'name'
+            ]
+        ];
     }
 
-    public function aspect()
-    {
-        return $this->belongsTo(Aspect::class, 'aspect_id');
-    }
-
-
-    public function evaluationDetails()
-    {
-        return $this->hasMany(EvaluationDetail::class, 'evaluation_id');
-    }
 }

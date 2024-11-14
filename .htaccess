@@ -6,7 +6,6 @@ SetHandler application/x-httpd-alt-php81___lsphp
         Options -MultiViews -Indexes
     </IfModule>
 
-
     RewriteEngine On
 
     # Handle Authorization Header

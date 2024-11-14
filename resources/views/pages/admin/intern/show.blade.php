@@ -60,7 +60,7 @@
                                                                 <input
                                                                     class="form-control @error('email') is-invalid @enderror"
                                                                     type="email" value="{{ $intern->email }}"
-                                                                    name="email" placeholder="Masukkan Email" readonly>
+                                                                    name="email" placeholder="Masukkan Email" disabled>
                                                                 @error('email')
                                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                                 @enderror
@@ -74,7 +74,7 @@
                                                                     class="form-control  @error('full_name') is-invalid @enderror"
                                                                     type="text" value="{{ $intern->full_name }}"
                                                                     name="full_name" placeholder="Masukkan Nama Lengkap"
-                                                                    readonly>
+                                                                    disabled>
                                                                 @error('full_name')
                                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                                 @enderror
@@ -88,7 +88,7 @@
                                                                     class="form-control  @error('username') is-invalid @enderror"
                                                                     type="text" value="{{ $intern->username }}"
                                                                     name="username" placeholder="Masukkan Nama Panggilan"
-                                                                    readonly>
+                                                                    disabled>
                                                                 @error('username')
                                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                                 @enderror
@@ -102,7 +102,7 @@
                                                                     class="form-control @error('phone_number') is-invalid @enderror"
                                                                     type="number" value="{{ $intern->phone_number }}"
                                                                     name="phone_number" placeholder="Masukkan Telp"
-                                                                    readonly>
+                                                                    disabled>
                                                                 @error('phone_number')
                                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                                 @enderror
@@ -142,7 +142,7 @@
                                                                     class="form-control @error('school') is-invalid @enderror"
                                                                     type="text" value="{{ $intern->school }}"
                                                                     name="school" placeholder="Masukkan Asal Sekolah"
-                                                                    readonly>
+                                                                    disabled>
                                                                 @error('school')
                                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                                 @enderror
@@ -156,7 +156,7 @@
                                                                     class="form-control @error('major') is-invalid @enderror"
                                                                     type="text" value="{{ $intern->major }}"
                                                                     name="major" placeholder="Masukkan Jurusan"
-                                                                    readonly>
+                                                                    disabled>
                                                                 @error('major')
                                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                                 @enderror
@@ -171,7 +171,7 @@
                                                                 <label for="example-text-input"
                                                                     class="form-control-label">Alamat</label>
                                                                 <textarea class="form-control @error('address') is-invalid @enderror" type="text"
-                                                                    name="address" placeholder="Masukkan Alamat" readonly>{{ $intern->address }}</textarea>
+                                                                    name="address" placeholder="Masukkan Alamat" disabled>{{ $intern->address }}</textarea>
                                                                 @error('address')
                                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                                 @enderror
@@ -189,7 +189,7 @@
                                                                 <select
                                                                     class="form-select form-control @error('position_id') is-invalid @enderror"
                                                                     name="position_id" disabled>
-                                                                    <option value="" selected readonly></option>
+                                                                    <option value="" selected disabled></option>
                                                                     @foreach ($positions as $position)
                                                                         <option value="{{ $position->id }}"
                                                                             {{ $position_id == $position->id ? 'selected' : '' }}>
@@ -210,7 +210,7 @@
                                                                     <input type="date" id="start_date"
                                                                         class=" form-control @error('start_date') is-invalid @enderror"
                                                                         id="date" name="start_date"
-                                                                        value="{{ $intern->start_date }}" readonly />
+                                                                        value="{{ $intern->start_date }}" disabled />
                                                                     @error('start_date')
                                                                         <div class="invalid-feedback">{{ $message }}
                                                                         </div>
@@ -226,7 +226,7 @@
                                                                     <input type="date" id="end_date"
                                                                         class="form-control  @error('end_date') is-invalid @enderror"
                                                                         id="date" name="end_date"
-                                                                        value="{{ $intern->end_date }}" readonly />
+                                                                        value="{{ $intern->end_date }}" disabled />
                                                                     @error('end_date')
                                                                         <div class="invalid-feedback">{{ $message }}
                                                                         </div>
@@ -246,7 +246,7 @@
                                                                     <input
                                                                         class="form-control @error('cv') is-invalid @enderror"
                                                                         type="file" id="fileCV" name="cv"
-                                                                        accept=".pdf, .docx, .png" readonly>
+                                                                        accept=".pdf, .docx, .png" disabled>
 
                                                                 </div>
 
@@ -330,7 +330,7 @@
                                                                         class="form-control @error('motivation_letter') is-invalid @enderror"
                                                                         type="file" id="fileMotivation"
                                                                         name="motivation_letter"
-                                                                        accept=".pdf, .docx, .png" readonly>
+                                                                        accept=".pdf, .docx, .png" disabled>
 
                                                                 </div>
                                                                 @if ($motivation_letterUrl)
@@ -423,7 +423,7 @@
                                                                     <input
                                                                         class="form-control @error('cover_letter') is-invalid @enderror"
                                                                         type="file" id="fileSurat" name="cover_letter"
-                                                                        accept=".pdf, .docx, .png" readonly>
+                                                                        accept=".pdf, .docx, .png" disabled>
                                                                 </div>
 
                                                                 @if ($cover_letterUrl)
@@ -514,7 +514,7 @@
                                                                         class="form-control @error('portfolio') is-invalid @enderror"
                                                                         type="file" id="filePortfolio"
                                                                         name="portfolio" accept=".pdf, .docx, .png"
-                                                                        readonly>
+                                                                        disabled>
                                                                 </div>
 
                                                                 @if ($portfolioUrl)
@@ -571,6 +571,7 @@
                                                                                             instead.</p>
                                                                                     </object>
                                                                                 @elseif ($portfolioExtension == 'docx')
+                                                                                    <!-- Tampilkan sesuai dengan format DOCX, misalnya dengan iframe -->
                                                                                     <iframe src="{{ $portfolioHtmlPath }}"
                                                                                         width="100%" height="600px"
                                                                                         frameborder="0"></iframe>
@@ -595,7 +596,7 @@
                                                                     <input
                                                                         class="form-control @error('photo') is-invalid @enderror"
                                                                         type="file" id="filefoto" name="photo"
-                                                                        accept=".pdf, .docx, .png" readonly>
+                                                                        accept=".pdf, .docx, .png" disabled>
                                                                 </div>
 
                                                                 @if ($photoUrl)

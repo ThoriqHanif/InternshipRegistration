@@ -51,7 +51,7 @@
 
                 <div class="card-body">
                     @include('components.alert')
-                    <table class="table table-hover" id="tablePeriode">
+                    <table class="table table-striped table-sm" id="tablePeriode">
                         <thead>
                             <tr>
                                 <th class="table-fit">No</th>

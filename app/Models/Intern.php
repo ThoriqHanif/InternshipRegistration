@@ -64,29 +64,14 @@ class Intern extends Model
         return $this->belongsTo(Periode::class, 'periode_id');
     }
 
-    public function document()
+    public function evaluation()
     {
-        return $this->hasMany(Document::class);
+        return $this->hasMany(Evaluation::class);
     }
 
     public function social_medias()
     {
         return $this->hasMany(SocialMedia::class);
-    }
-
-    public function evaluations()
-    {
-        return $this->hasMany(Evaluation::class);
-    }
-
-    public function tasks()
-    {
-        return $this->hasMany(Task::class);
-    }
-
-    public function finalScores()
-    {
-        return $this->hasMany(FinalScore::class);
     }
 
     protected static function boot()
@@ -113,10 +98,5 @@ class Intern extends Model
                 $intern->reg_number = $regNumber;
             });
         });
-    }
-
-    public function routeName()
-    {
-        return 'interns';
     }
 }

@@ -7,7 +7,6 @@ use App\Mail\InternStatus;
 use App\Models\Intern;
 use App\Models\Periode;
 use App\Models\Position;
-use App\Service\MailService;
 use App\Service\RegistrationService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -21,12 +20,10 @@ class RegistrationController extends Controller
      * Display a listing of the resource.
      */
     private $registrationService;
-    private $mailService;
 
-    public function __construct(RegistrationService $registrationService, MailService $mailService)
+    public function __construct(RegistrationService $registrationService)
     {
         $this->registrationService = $registrationService;
-        $this->mailService = $mailService;
     }
 
     public function index(Request $request)
@@ -84,9 +81,7 @@ class RegistrationController extends Controller
             $intern = $this->registrationService->createIntern($request);
 
             if ($this->registrationService->saveIntern($intern)) {
-                if ($intern->status === 'pending') {
-                    $this->mailService->sendEmailRegister($intern);
-                }
+                $this->registrationService->sendRegisterEmail($intern);
                 DB::commit();
                 return response()->json(['success' => true]);
             } else {

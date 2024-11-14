@@ -318,6 +318,7 @@
                         },
                         error: function(xhr) {
                             if (xhr.status === 422) {
+                                // Menampilkan pesan validasi error SweetAlert
                                 var errorMessages = '';
                                 var errors = xhr.responseJSON.errors;
                                 for (var key in errors) {

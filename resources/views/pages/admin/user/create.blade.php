@@ -97,28 +97,21 @@
                                                         </div>
                                                         <div class="col-md-6">
                                                             <div class="form-group">
-                                                                <label for="example-text-input"
-                                                                    class="form-control-label">Password<span
-                                                                        class="text-danger"> *</span></label>
+                                                                <label for="example-text-input" class="form-control-label">Password<span class="text-danger"> *</span></label>
                                                                 <div class="input-group">
-                                                                    <input
-                                                                        class="form-control @error('password') is-invalid @enderror"
-                                                                        type="password" value="" name="password"
-                                                                        id="password" placeholder="Masukkan Password">
-                                                                    <div class="input-group-append" id="togglePassword"
-                                                                        style="cursor: pointer">
+                                                                    <input class="form-control @error('password') is-invalid @enderror" type="password" value="" name="password" id="password" placeholder="Masukkan Password">
+                                                                    <div class="input-group-append" id="togglePassword" style="cursor: pointer">
                                                                         <div class="input-group-text bg-white">
-                                                                            <i class="fas fa-eye"
-                                                                                id="togglePasswordIcon"></i>
+                                                                            <i class="fas fa-eye" id="togglePasswordIcon"></i>
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                                 @error('password')
-                                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                                <div class="invalid-feedback">{{ $message }}</div>
                                                                 @enderror
                                                             </div>
                                                         </div>
-
+                                                        
 
                                                     </div>
                                                     <div class="inline-block mt-3">
@@ -196,8 +189,6 @@
                                 icon: 'success',
                                 title: 'Berhasil!',
                                 text: 'Data berhasil disimpan.',
-                                confirmButtonColor: "#435EBE",
-                                cancelButtonColor: "#CDD3D8",
                             }).then(function() {
                                 // Redirect ke halaman indeks setelah menutup SweetAlert
                                 window.location.href = '{{ route('users.index') }}';

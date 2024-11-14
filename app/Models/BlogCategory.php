@@ -30,9 +30,4 @@ class BlogCategory extends Model
             ]
         ];
     }
-
-    public function routeName()
-    {
-        return 'blog-categories';
-    }
 }

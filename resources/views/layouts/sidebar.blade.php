@@ -3,7 +3,8 @@
         <div class="sidebar-header position-relative">
             <div class="d-flex justify-content-between align-items-center">
                 <div class="logo">
-                    <a href="{{ url('dashboard') }}"><img src="{{ asset('img/logo/logo2.png') }}" alt="Logo" srcset="" style="width: 100px; height: 80px;"></a>
+                    <a href="{{ url('dashboard') }}"><img src="{{ asset('img/logo/logo2.png') }}" alt="Logo"
+                            srcset="" style="width: 100px; height: 80px;"></a>
                 </div>
                 <div class="theme-toggle d-flex gap-2  align-items-center mt-2">
                     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -40,39 +41,20 @@
             </div>
         </div>
         <div class="sidebar-menu">
-            <?php $currentUrl = Request::url(); ?>
+            <?php
+            $currentUrl = Request::url();
+            ?>
             @if (auth()->check() && auth()->user()->role == 'admin')
-
                 <ul class="menu">
                     <li class="sidebar-title">Menu</li>
+
                     <li class="sidebar-item {{ Request::is('admin/dashboard') ? 'active' : '' }} ">
                         <a href="{{ url('admin/dashboard') }}" class='sidebar-link'>
                             <i class="bi bi-grid-fill"></i>
                             <span>Dashboard</span>
                         </a>
-                    </li>
 
-                    <li class="sidebar-title">Manage</li>
-                    <li class="sidebar-item   {{ Request::is('time-tables*') ? 'active' : '' }}">
-                        <a href="{{ route('time-tables.index') }}" class='sidebar-link'>
-                            <i class="bi bi-alarm"></i>
-                            <span>Jam Operasional</span>
-                        </a>
                     </li>
-                    <li class="sidebar-item   {{ Request::is('reports*') ? 'active' : '' }}">
-                        <a href="{{ route('reports.index') }}" class='sidebar-link'>
-                            <i class="bi bi-calendar-week"></i>
-                            <span>Laporan Harian</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item   {{ Request::is('documents*') ? 'active' : '' }}">
-                        <a href="{{ route('documents.index') }}" class='sidebar-link'>
-                            <i class="bi bi-folder-fill"></i>
-                            <span>Dokumen</span>
-                        </a>
-                    </li>
-
-
 
                     <li class="sidebar-title">Master Data</li>
                     <li class="sidebar-item   {{ Request::is('intern*') ? 'active' : '' }}">
@@ -105,6 +87,7 @@
                             <span>Data Pelanggan</span>
                         </a>
                     </li>
+                    </li>
 
                     <li class="sidebar-title">Blog</li>
                     <li class="sidebar-item {{ Request::is('blog-categories*') ? 'active' : '' }}">
@@ -125,107 +108,73 @@
                             <span>Blog</span>
                         </a>
                     </li>
-                    <li class="sidebar-item   {{ Request::is('comments*') ? 'active' : '' }}">
-                        <a href="{{ route('comments.index') }}" class='sidebar-link'>
-                            <i class="bi bi-chat-left-dots-fill"></i>
-                            <span>Komentar</span>
-                        </a>
-                    </li>
 
-                    <li class="sidebar-title">Penilaian</li>
-                    <li class="sidebar-item   {{ Request::is('aspects*') || Request::is('technical*') || Request::is('non-technical*') ? 'active' : '' }}">
-                        <a href="{{ route('aspects.index') }}" class='sidebar-link'>
-                            <i class="bi bi-gear-wide-connected"></i>
-                            <span>Aspek Penilaian</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item   {{ Request::is('tasks*') ? 'active' : '' }}">
-                        <a href="{{ route('tasks.index') }}" class='sidebar-link'>
-                            <i class="bi bi-list"></i>
-                            <span>Tugas</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item   {{ Request::is('evaluators*') ? 'active' : '' }}">
-                        <a href="{{ route('evaluators.index') }}" class='sidebar-link'>
-                            <i class="bi bi-person-lines-fill"></i>
-                            <span>Penilai</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item   {{ Request::is('grade-ranges*') ? 'active' : '' }}">
-                        <a href="{{ route('grade-ranges.index') }}" class='sidebar-link'>
-                            <i class="bi bi-sort-numeric-down"></i>
-                            <span>Skala Penilaian</span>
+                    <li class="sidebar-title">Report</li>
+
+                    <li class="sidebar-item   {{ Request::is('admin/report*') ? 'active' : '' }}">
+                        <a href="{{ route('admin.report.index') }}" class='sidebar-link'>
+                            <i class="bi bi-calendar-week"></i>
+                            <span>Report Management</span>
                         </a>
                     </li>
                     <li class="sidebar-item   {{ Request::is('evaluations*') ? 'active' : '' }}">
                         <a href="{{ route('evaluations.index') }}" class='sidebar-link'>
-                            <i class="bi bi-pencil-square"></i>
+                            <i class="bi bi-clipboard-check-fill"></i>
                             <span>Penilaian</span>
                         </a>
                     </li>
-                    <li class="sidebar-item   {{ Request::is('certificates*') ? 'active' : '' }}">
-                        <a href="{{ route('certificates.index') }}" class='sidebar-link'>
-                            <i class="bi bi-patch-check"></i>
-                            <span>Serfitikat</span>
-                        </a>
+
                     </li>
 
+                    <li class="sidebar-title">Account Page</li>
 
-                    <li class="sidebar-title">Settings</li>
-                    <li class="sidebar-item {{ Request::is('log-activities*') ? 'active' : '' }}">
-                        <a href="{{ route('log-activities.index') }}" class='sidebar-link'>
-                            <i class="bi bi-eye"></i>
-                            <span>Log Aktivitas</span>
-                        </a>
-                    </li>
+
                     <li class="sidebar-item {{ Request::is('admin/profile*') ? 'active' : '' }}">
                         <a href="{{ url('admin/profile') }}" class='sidebar-link'>
                             <i class="bi bi-person-fill-gear"></i>
                             <span>Profile</span>
                         </a>
+
                     </li>
 
                     <li class="sidebar-title mt-5">Logout</li>
+
                     <form method="POST" action="{{ route('logout', ['locale' => app()->getLocale()]) }}">
                         @csrf
-
                         <li class="sidebar-item mb-5">
                             <button type="submit" class='btn btn-danger w-100 sidebar-link text-white'>
                                 <i class="bi bi-box-arrow-left"></i>
                                 <span>Logout</span>
                             </button>
+
+
                         </li>
                     </form>
-                </ul>
             @endif
-            @if (auth()->check() && auth()->user()->role == 'user')
 
+
+            @if (auth()->check() && auth()->user()->role == 'user')
                 <ul class="menu">
+
                     <li class="sidebar-title">Menu</li>
-                    <li class="sidebar-item   {{ Request::is('daily-reports*') ? 'active' : '' }}">
-                        <a href="{{ route('daily-reports.index') }}" class='sidebar-link'>
+                    <li class="sidebar-item   {{ Request::is('report*') ? 'active' : '' }}">
+                        <a href="{{ url('reports') }}" class='sidebar-link'>
                             <i class="bi bi-calendar-week"></i>
                             <span>Daily Report</span>
                         </a>
                     </li>
-                    <li class="sidebar-item   {{ Request::is('document*') ? 'active' : '' }}">
-                        <a href="{{ route('document') }}" class='sidebar-link'>
-                            <i class="bi bi-folder-fill"></i>
-                            <span>Dokumen</span>
+                    <li class="sidebar-item   {{ Request::is('evaluation*') ? 'active' : '' }}">
+                        <a href="{{ url('evaluation') }}" class='sidebar-link'>
+                            <i class="bi bi-clipboard-check-fill"></i>
+                            <span>Penilaian</span>
                         </a>
                     </li>
-
                     <li class="sidebar-title">Manage</li>
+
                     <li class="sidebar-item   {{ Request::is('blog*') ? 'active' : '' }}">
                         <a href="{{ url('blogs') }}" class='sidebar-link'>
                             <i class="bi bi-stickies-fill"></i>
                             <span>Blogs</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item   {{ Request::is('comments*') ? 'active' : '' }}">
-                        <a href="{{ route('comments.index') }}" class='sidebar-link'>
-                            <i class="bi bi-chat-left-dots-fill"></i>
-                            <span>Komentar</span>
                         </a>
                     </li>
                     <li class="sidebar-item   {{ Request::is('social-medias*') ? 'active' : '' }}">
@@ -234,16 +183,17 @@
                             <span>Social Media</span>
                         </a>
                     </li>
-
                     <li class="sidebar-title">Account Page</li>
                     <li class="sidebar-item {{ Request::is('profile*') ? 'active' : '' }}">
                         <a href="{{ url('profile') }}" class='sidebar-link'>
                             <i class="bi bi-person-fill-gear"></i>
                             <span>Profile</span>
                         </a>
+
                     </li>
 
                     <li class="sidebar-title mt-5">Logout</li>
+
                     <form method="POST" action="{{ route('logout', ['locale' => app()->getLocale()]) }}">
                         @csrf
                         <li class="sidebar-item mb-5">
@@ -251,11 +201,18 @@
                                 <i class="bi bi-box-arrow-left"></i>
                                 <span>Logout</span>
                             </button>
+
+
                         </li>
                     </form>
                 </ul>
             @endif
 
+            {{-- <ul class="menu"> --}}
+
+            {{-- </ul> --}}
+
+            </ul>
         </div>
     </div>
 </div>

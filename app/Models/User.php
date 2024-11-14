@@ -17,7 +17,7 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $table = 'users';
+    protected $table = "users";
 
     protected $fillable = [
         'name',
@@ -49,7 +49,7 @@ class User extends Authenticatable
 
     public function isAdmin()
     {
-        return $this->role === 'admin';
+        return $this->role === 'admin'; // Sesuaikan dengan cara Anda menyimpan peran (role)
     }
 
     public function intern()
@@ -60,15 +60,5 @@ class User extends Authenticatable
     public function position()
     {
         return $this->hasOne(Position::class);
-    }
-
-    public function comments()
-    {
-        return $this->hasMany(Comment::class, 'user_id');
-    }
-
-    public function routeName()
-    {
-        return 'users';
     }
 }

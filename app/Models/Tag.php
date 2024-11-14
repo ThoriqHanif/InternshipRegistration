@@ -30,9 +30,4 @@ class Tag extends Model
             ]
         ];
     }
-
-    public function routeName()
-    {
-        return 'tags';
-    }
 }

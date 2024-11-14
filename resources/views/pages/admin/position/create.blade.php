@@ -32,7 +32,7 @@
         <section class="content">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-md-8">
+                    <div class="col-md-12">
                         <div class="card card-primary">
                             <form method="POST" action="{{ route('position.store') }}" id="formPosition">
                                 @csrf
@@ -57,7 +57,21 @@
                                                                 @enderror
                                                             </div>
                                                         </div>
-
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="filefoto" class="form-control-label">Gambar<span
+                                                                        class="text-danger"> *</span></label>
+                                                                <div class="custom-file">
+                                                                    <input
+                                                                        class="form-control @error('image') is-invalid @enderror"
+                                                                        type="file" id="filefoto" name="image"
+                                                                        accept=".jpg, .jpeg, .png, .webp">
+                                                                </div>
+                                                                @error('image')
+                                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                                @enderror
+                                                            </div>
+                                                        </div>
                                                         <div class="col-md-6">
                                                             <div class="form-group">
                                                                 <label for="example-text-input"
@@ -79,7 +93,7 @@
                                                                     class="form-control-label">Syarat<span
                                                                         class="text-danger"> *</span></label>
                                                                 <div class="row mt-2">
-                                                                    <div class="col-md-3">
+                                                                    <div class="col-md-2">
                                                                         <div class="form-check">
                                                                             <input class="form-check-input" type="checkbox"
                                                                                 value="HTML" id="flexCheckDefault1"
@@ -92,7 +106,7 @@
                                                                             @enderror
                                                                         </div>
                                                                     </div>
-                                                                    <div class="col-md-3">
+                                                                    <div class="col-md-2">
                                                                         <div class="form-check">
                                                                             <input class="form-check-input" type="checkbox"
                                                                                 value="CSS" id="flexCheckDefault2"
@@ -101,7 +115,7 @@
                                                                                 for="flexCheckDefault2">CSS</label>
                                                                         </div>
                                                                     </div>
-                                                                    <div class="col-md-3">
+                                                                    <div class="col-md-2">
                                                                         <div class="form-check">
                                                                             <input class="form-check-input" type="checkbox"
                                                                                 value="Javascript" id="flexCheckDefault3"
@@ -110,7 +124,7 @@
                                                                                 for="flexCheckDefault3">JavaScript</label>
                                                                         </div>
                                                                     </div>
-                                                                    <div class="col-md-3">
+                                                                    <div class="col-md-2">
                                                                         <div class="form-check">
                                                                             <input class="form-check-input" type="checkbox"
                                                                                 value="PHP" id="flexCheckDefault4"
@@ -119,16 +133,17 @@
                                                                                 for="flexCheckDefault4">PHP</label>
                                                                         </div>
                                                                     </div>
-                                                                    <div class="col-md-3">
+                                                                    <div class="col-md-2">
                                                                         <div class="form-check">
-                                                                            <input class="form-check-input" type="checkbox"
-                                                                                value="Laravel" id="flexCheckDefault5"
+                                                                            <input class="form-check-input"
+                                                                                type="checkbox" value="Laravel"
+                                                                                id="flexCheckDefault5"
                                                                                 name="requirements[]>
                                                     <label class="form-check-label"
                                                                                 for="flexCheckDefault5">Laravel</label>
                                                                         </div>
                                                                     </div>
-                                                                    <div class="col-md-3">
+                                                                    <div class="col-md-2">
                                                                         <div class="form-check">
                                                                             <input class="form-check-input"
                                                                                 type="checkbox" value="Figma"
@@ -138,7 +153,7 @@
                                                                                 for="flexCheckDefault5">Figma</label>
                                                                         </div>
                                                                     </div>
-                                                                    <div class="col-md-3">
+                                                                    <div class="col-md-2">
                                                                         <div class="form-check">
                                                                             <input class="form-check-input"
                                                                                 type="checkbox" value="Photoshop"
@@ -148,7 +163,7 @@
                                                                                 for="flexCheckDefault5">Photoshop</label>
                                                                         </div>
                                                                     </div>
-                                                                    <div class="col-md-3">
+                                                                    <div class="col-md-2">
                                                                         <div class="form-check">
                                                                             <input class="form-check-input"
                                                                                 type="checkbox" value="MySQL"
@@ -158,7 +173,7 @@
                                                                                 for="flexCheckDefault5">MySQL</label>
                                                                         </div>
                                                                     </div>
-                                                                    <div class="col-md-3">
+                                                                    <div class="col-md-2">
                                                                         <div class="form-check">
                                                                             <input class="form-check-input"
                                                                                 type="checkbox" value="Bootstrap"
@@ -184,68 +199,13 @@
                                         </div>
                                     </div>
                                 </div>
+                            </form>
                         </div>
                     </div>
-                    <div class="col-md-4">
-                        <div class="card">
-                            <div class="card-body mt-2">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label for="filefoto" class="form-control-label">Gambar<span class="text-danger">
-                                                *</span></label>
-                                        <div class="custom-file">
-                                            <input
-                                                class="form-control js-upload-image @error('image') is-invalid @enderror"
-                                                type="file" id="filefoto" name="image"
-                                                accept="image/*">
-                                            <p><small class="text-muted">Maksimal Ukuran Gambar 2
-                                                    MB</small></p>
-                                        </div>
-                                        <img src="" class="img-fluid w-100 mb-1" alt=""
-                                            id="upload-img-preview">
-                                        <a href="#" class="text-danger" id="upload-img-delete"
-                                            style="display: none;">Delete Image</a>
-                                        @error('image')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    </form>
-
                 </div>
             </div>
         </section>
     </div>
-
-    {{-- Preview Image --}}
-    <script>
-        $('.js-upload-image').change(function(event) {
-            makePreview(this);
-            $('#upload-img-preview').show();
-            $('#upload-img-delete').show();
-        });
-
-        function makePreview(input) {
-            if (input.files && input.files[0]) {
-                var reader = new FileReader();
-                reader.onload = function(e) {
-                    $('#upload-img-preview').attr('src', e.target.result);
-                }
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
-
-        $('#upload-img-delete').click(function(event) {
-            event.preventDefault();
-
-            $('#upload-img-preview').attr('src', '').hide();
-            $('#filefoto').val(null);
-            $(this).hide();
-        });
-    </script>
 
     <script>
         $(document).ready(function() {

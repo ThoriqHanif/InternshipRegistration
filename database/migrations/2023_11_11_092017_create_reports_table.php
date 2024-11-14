@@ -15,17 +15,13 @@ return new class extends Migration
             $table->id();
             $table->foreignId('intern_id')->constrained('interns')->onDelete('cascade');
             $table->date('date');
-            $table->time('attendance_time');
-            $table->enum('presence', ['Masuk', 'Izin', 'Alpa', 'Libur']);
-            $table->boolean('is_late')->default(false);
-            $table->boolean('is_consequence_done')->default(false);
-            $table->text('consequence_description')->nullable();
+            $table->string('presence')->nullable();
+            $table->time('attendance_hours')->nullable();
             $table->string('agency')->nullable();
             $table->string('project_name')->nullable();
             $table->string('job')->nullable();
             $table->text('description')->nullable();
-            $table->enum('status', ['Pending', 'Verified', 'Rejected'])->default('Pending');
-            $table->text('admin_reason')->nullable();
+            $table->string('status')->nullable();
             $table->timestamps();
         });
     }

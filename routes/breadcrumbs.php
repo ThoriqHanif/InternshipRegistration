@@ -77,21 +77,6 @@ Breadcrumbs::for('periode.edit', function (BreadcrumbTrail $trail) {
     $trail->push('Edit Periode');
 });
 
-// Aspek
-
-Breadcrumbs::for('aspects.index', function (BreadcrumbTrail $trail) {
-    $trail->parent('admin.dashboard');
-    $trail->push('Aspek Penilaian', route('aspects.index'));
-});
-Breadcrumbs::for('technical-aspects.create', function (BreadcrumbTrail $trail) {
-    $trail->parent('aspects.index');
-    $trail->push('Tambah Aspek Teknis', route('technical-aspects.create'));
-});
-Breadcrumbs::for('technical-aspects.edit', function (BreadcrumbTrail $trail) {
-    $trail->parent('aspects.index');
-    $trail->push('Edit Aspek Teknis');
-});
-
 // USER
 
 Breadcrumbs::for('users.index', function (BreadcrumbTrail $trail) {

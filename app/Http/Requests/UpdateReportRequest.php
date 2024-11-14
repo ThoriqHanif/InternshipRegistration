@@ -24,10 +24,10 @@ class UpdateReportRequest extends FormRequest
         return [
             //
             'presence' => 'required',
-            // 'attendance_time' => 'required',
-            // 'agency' => 'required',
-            // 'project_name' => 'required',
-            // 'job' => 'required',
+            'attendance_hours' => 'required',
+            'agency' => 'required',
+            'project_name' => 'required',
+            'job' => 'required',
 
         ];
     }
@@ -36,10 +36,10 @@ class UpdateReportRequest extends FormRequest
     {
         return [
             'presence.required' => "Harus memilih Presensi",
-            // 'attendance_time.required' => "Jam kehadiran tidak boleh kosong",
-            // 'agency.required' => "Instansi tidak boleh kosong",
-            // 'project_name.required' => "Nama Project tidak boleh kosong",
-            // 'job.required' => "Pekerjaan tidak boleh kosong",
+            'attendance_hours.required' => "Jam kehadiran tidak boleh kosong",
+            'agency.required' => "Instansi tidak boleh kosong",
+            'project_name.required' => "Nama Project tidak boleh kosong",
+            'job.required' => "Pekerjaan tidak boleh kosong",
         ];
     }
 }

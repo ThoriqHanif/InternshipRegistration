@@ -58,7 +58,7 @@
                                         <div
                                             class="col-xs-1 col-sm-3 col-md-2 col-lg-3 col-xl-3 col-xxl-3 d-flex justify-content-start ">
                                             <div class="stats-icon purple mb-2">
-                                                <i class="iconly-boldAdd-User"></i>
+                                                <i class="iconly-boldBuy"></i>
                                             </div>
                                         </div>
                                         <div class="col-xs-3 col-sm-9 col-md-10 col-lg-9 col-xl-9 col-xxl-9">
@@ -76,8 +76,8 @@
                                     <div class="row">
                                         <div
                                             class="col-xs-1 col-sm-3 col-md-2 col-lg-3 col-xl-3 col-xxl-3 d-flex justify-content-start ">
-                                            <div class="stats-icon blue mb-2">
-                                                <i class="iconly-boldProfile"></i>
+                                            <div class="stats-icon red mb-2">
+                                                <i class="iconly-boldTime-Circle"></i>
                                             </div>
                                         </div>
                                         <div class="col-xs-3 col-sm-9 col-md-10 col-lg-9 col-xl-9 col-xxl-9">
@@ -97,7 +97,7 @@
                                         <div
                                             class="col-xs-1 col-sm-3 col-md-2 col-lg-3 col-xl-3 col-xxl-3 d-flex justify-content-start ">
                                             <div class="stats-icon green mb-2">
-                                                <i class="iconly-boldBookmark"></i>
+                                                <i class="iconly-boldSend"></i>
                                             </div>
                                         </div>
                                         <div class="col-xs-3 col-sm-9 col-md-10 col-lg-9 col-xl-9 col-xxl-9">
@@ -118,7 +118,7 @@
                                         <div
                                             class="col-xs-1 col-sm-3 col-md-2 col-lg-3 col-xl-3 col-xxl-3 d-flex justify-content-start ">
                                             <div class="stats-icon red mb-2">
-                                                <i class="iconly-boldTime-Circle"></i>
+                                                <i class="iconly-boldDanger"></i>
                                             </div>
                                         </div>
                                         <div class="col-xs-3 col-sm-9 col-md-10 col-lg-9 col-xl-9 col-xxl-9">

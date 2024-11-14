@@ -46,7 +46,7 @@ class InternStatus extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.intern-status',
+            view: 'emails.status',
         );
     }
 

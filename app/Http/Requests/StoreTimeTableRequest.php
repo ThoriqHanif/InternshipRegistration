@@ -23,16 +23,21 @@ class StoreTimeTableRequest extends FormRequest
     {
         return [
             'day' => 'required',
-            'start_time' => 'required',
-            'end_time' => 'required',
+            'morning' => 'required',
+            'break' => 'required',
+            'noon' => 'required',
+            'home' => 'required',
         ];
     }
 
     public function messages(): array
     {
         return [
-            'start_time.required' => 'Masukkan Jam Mulai Kerja',
-            'end_time.required' => 'Masukkan Jam Selesai Kerja',
+            'day.required' => 'Harus memilih hari',
+            'morning.required' => 'Harus memamasukkan jam kerja pagi',
+            'break.required' => 'Harus memamasukkan jam istitahat',
+            'noon.required' => 'Harus memamasukkan jam kerja siang',
+            'home.required' => 'Harus memamasukkan jam pulang',
         ];
     }
 }

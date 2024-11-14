@@ -24,8 +24,8 @@
 <form style="display: inline" action="{{ route('intern.restore', $intern->id) }}" method="POST" id="restoreFormIntern">
     @csrf
     <button type="submit" class="btn btn-sm btn-info restore-button-intern" data-toggle="tooltip" data-placement="top" title="Restore Pemagang">
-        <i class="bi bi-arrow-counterclockwise"></i>
-    </button>
+        <i class="bi bi-arrow-counterclockwise"></i>    </button>
+
 </form>
 <form style="display: inline" action="{{ route('intern.forceDelete', $intern->id) }}" method="POST" id="forceDeleteFormIntern">
     @csrf
@@ -38,6 +38,7 @@
 
 <script>
     $(document).ready(function() {
+        // Event handler untuk tombol restore
         $('.restore-button-intern').on('click', function(e) {
             e.preventDefault();
             var restoreButton = $(this);
@@ -50,7 +51,6 @@
                 showCancelButton: true,
                 confirmButtonText: 'Ya, Restore',
                 cancelButtonText: 'Batal',
-                confirmButtonColor: "#435EBE",
             }).then((result) => {
                 if (result.isConfirmed) {
                     Swal.fire({
@@ -75,7 +75,6 @@
                                     icon: 'success',
                                     title: 'Berhasil!',
                                     text: 'Pemagang berhasil di-restore.',
-                                    confirmButtonColor: "#435EBE",
                                 }).then(function() {
                                     // Refresh DataTable
                                     tableIntern.ajax.reload();
@@ -110,7 +109,6 @@
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Ya, Hapus Permanen',
-            confirmButtonColor: "#435EBE",
             cancelButtonText: 'Batal',
         }).then((result) => {
             if (result.isConfirmed) {
@@ -136,8 +134,6 @@
                                 icon: 'success',
                                 title: 'Berhasil!',
                                 text: 'Pemagang berhasil dihapus secara permanen.',
-                                confirmButtonColor: "#435EBE",
-
                             }).then(function() {
                                 // Refresh DataTable or redirect to another page
                                 tableIntern.ajax.reload();
@@ -172,7 +168,6 @@
                 showCancelButton: true,
                 confirmButtonText: 'Ya, Hapus',
                 cancelButtonText: 'Batal',
-                confirmButtonColor: "#435EBE",
             }).then((result) => {
                 if (result.isConfirmed) {
                     Swal.fire({
@@ -200,7 +195,6 @@
                                     icon: 'success',
                                     title: 'Berhasil!',
                                     text: 'Data pemagang berhasil dihapus.',
-                                    confirmButtonColor: "#435EBE",
                                 }).then(function() {
                                     tableIntern.ajax.reload();
                                     // window.location.href = '{{ route('intern.index') }}';
